@@ -81,6 +81,13 @@
         </a>
     </li>
 
+    <li class="nav-item<?= isset($fine_active) ? ' active' : '';?>">
+        <a class="nav-link" href="<?=(isset($inside_folder) ? '../fine/list' : 'fine/list');?>">
+            <i class="fas fa-fw fa-money-bill-alt"></i>
+            <span>Fine</span>
+        </a>
+    </li>
+
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
 
