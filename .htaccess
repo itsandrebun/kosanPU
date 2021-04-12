@@ -1,0 +1,7 @@
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-f
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([^\.]+)$ $1.php [NC,L]
+RedirectMatch 301 "/admin/index.php" "/kosan/admin/dashboard.php"
+RedirectMatch 301 "/admin/index" "/kosan/admin/dashboard"
+Redirect /admin/ /kosan/admin/dashboard
