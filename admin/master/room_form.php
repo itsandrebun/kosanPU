@@ -46,18 +46,11 @@
   
                   $rooms = $con->query($room_sql);
                   $room_data = $rooms->fetch_assoc();
-                  // echo $room_sql;
-                  // print_r($rooms['num_rows']);
-                  // if($admins->num_rows > 0){
-                  //     while($row = $admins->fetch_assoc()) {
-                  //         array_push($admin_data, $row);
-                  //     }
-                  // }
                 }
                 $con->close();
             ?>
             <div class="data-list">
-                <form action="../admin_validation" method="POST">
+                <form action="../room_validation" method="POST">
                   <?php if(!empty($_GET['id'])):?>
                       <input type="hidden" name="room_id" value="<?= $_GET['id'];?>">
                   <?php endif;?>
@@ -68,27 +61,34 @@
                   </div>
                   <div class="form-group">
                       <label for="room_name" class="col-form-label font-weight-bold">Room Floor</label>
-                      <input class="form-control <?= (!empty($_SESSION['room_floor_validation']) ? ('is-invalid') : '') ;?>" name="room_floor" value="<?= (!empty($_GET['id'])) ? (!empty($_SESSION['room_floor_error']) ? $_SESSION['room_floor_error'] : $room_data['room_floor']) : (!empty($_SESSION['room_floor_error']) ? $_SESSION['room_floor_error'] : '') ;?>">
+                      <input type="number" class="form-control <?= (!empty($_SESSION['room_floor_validation']) ? ('is-invalid') : '') ;?>" name="room_floor" value="<?= (!empty($_GET['id'])) ? (!empty($_SESSION['room_floor_error']) ? $_SESSION['room_floor_error'] : $room_data['room_floor']) : (!empty($_SESSION['room_floor_error']) ? $_SESSION['room_floor_error'] : '') ;?>">
                       <?= (!empty($_SESSION['room_floor_validation']) ? ('<div class="invalid-feedback">'.$_SESSION['room_floor_validation'].'</div>') : '') ;?>
                   </div>
                   <div class="form-group">
-                      <label for="tenant_gender" class="col-form-label font-weight-bold">Gender</label>
+                      <label for="tenant_gender" class="col-form-label font-weight-bold">Available for</label>
                       <div>
                           <div class="form-check form-check-inline">
-                              <input class="form-check-input <?= !empty($_SESSION['gender_validation']) ? 'is-invalid' : '';?>" type="radio" name="gender" id="male_gender" value="1" <?= (!empty($_GET['id']) && $room_data['gender'] == 1) ? 'checked' : (!empty($_SESSION['gender_error']) && $_SESSION['gender_error'] == 1 ? 'checked' : '') ;?>>
+                              <input class="form-check-input <?= !empty($_SESSION['room_gender_validation']) ? 'is-invalid' : '';?>" type="radio" name="gender" id="male_gender" value="1" <?= (!empty($_GET['id']) && $room_data['gender'] == 1) ? 'checked' : (!empty($_SESSION['room_gender_error']) && $_SESSION['room_gender_error'] == 1 ? 'checked' : '') ;?>>
                               <label class="form-check-label" for="male">Male</label>
                           </div>
                           <div class="form-check form-check-inline">
 
-                              <input class="form-check-input <?= !empty($_SESSION['gender_validation']) ? 'is-invalid' : '';?>" type="radio" name="gender" id="female_gender" value="2" <?= (!empty($_GET['id']) && $room_data['gender'] == 2) ? 'checked' : (!empty($_SESSION['gender_error']) && $_SESSION['gender_error'] == 2 ? 'checked' : '') ;?>>
+                              <input class="form-check-input <?= !empty($_SESSION['room_gender_validation']) ? 'is-invalid' : '';?>" type="radio" name="gender" id="female_gender" value="2" <?= (!empty($_GET['id']) && $room_data['gender'] == 2) ? 'checked' : (!empty($_SESSION['room_gender_error']) && $_SESSION['room_gender_error'] == 2 ? 'checked' : '') ;?>>
                               <label class="form-check-label" for="female">Female</label>
                           </div>
-                          <?= (!empty($_SESSION['gender_validation']) ? ('<div class="invalid-feedback d-block">'.$_SESSION['gender_validation'].'</div>') : '') ;?>
+                          <?= (!empty($_SESSION['room_gender_validation']) ? ('<div class="invalid-feedback d-block">'.$_SESSION['room_gender_validation'].'</div>') : '') ;?>
                       </div>
                   </div>
                   <input type="submit" name="submitRoomForm" value="Submit" class="btn btn-primary">
                 </form>
-                
+                <?php
+                  unset($_SESSION['room_name_error']);
+                  unset($_SESSION['room_floor_error']);
+                  unset($_SESSION['room_gender_error']);
+                  unset($_SESSION['room_name_validation']);
+                  unset($_SESSION['room_floor_validation']);
+                  unset($_SESSION['room_gender_validation']);
+                ?>
             </div>
 
         </div>

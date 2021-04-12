@@ -43,7 +43,7 @@
           <?php
               $room_data = array();
 
-              $room_sql = "SELECT * FROM room";
+              $room_sql = "SELECT * FROM room ORDER BY room_floor ASC";
 
               $rooms = $con->query($room_sql);
 
@@ -61,23 +61,23 @@
               <table class="table">
                   <thead>
                       <tr>
-                          <th>Room Name</th>
-                          <th>Room Floor</th>
-                          <th>Gender</th>
+                          <th class="text-center">Room Name</th>
+                          <th class="text-center">Room Floor</th>
+                          <th class="text-center">Gender</th>
                           <th></th>
                       </tr>
                   </thead>
                   <tbody>
                       <?php if(count($room_data) == 0):?>
                           <tr>
-                            <td colspan="4">No data found!</td>
+                            <td colspan="4" style="text-align:center">No data found!</td>
                           </tr>
                       <?php else:?>
                         <?php for($k = 0; $k < count($room_data); $k++):?>
                           <tr>
-                              <td><?= $room_data[$k]['room_name'];?></td>
-                              <td><?= $room_data[$k]['room_floor'];?></td>
-                              <td><?= $room_data[$k]['gender'] == 1 ? 'Male' : 'Female';?></td>
+                              <td class="text-center"><?= $room_data[$k]['room_name'];?></td>
+                              <td class="text-center"><?= $room_data[$k]['room_floor'];?></td>
+                              <td class="text-center"><?= $room_data[$k]['gender'] == 1 ? 'Male' : 'Female';?></td>
                               <td><a href="room_form?id=<?= $room_data[$k]['room_id']?>" class="ml-1 btn btn-primary">Edit</a></td>
                           </tr>
                         <?php endfor;?>

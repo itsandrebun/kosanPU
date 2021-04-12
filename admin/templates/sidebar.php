@@ -68,7 +68,7 @@
     </div>
 
     <li class="nav-item<?= isset($invoice_active) ? ' active' : '';?>">
-        <a class="nav-link" href="<?=(isset($invoice_folder) ? '../invoice/list' : '../invoice/list');?>">
+        <a class="nav-link" href="<?=(isset($inside_folder) ? '../invoice/list' : 'invoice/list');?>">
             <i class="fas fa-fw fa-money-bill"></i>
             <span>Invoice</span>
         </a>

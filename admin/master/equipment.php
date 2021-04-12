@@ -39,19 +39,39 @@
             <h1 class="h3 mb-0 text-gray-800">Equipment List</h1>
             <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-plus fa-sm text-white-50"></i> Add Equipment</a>
           </div>
+          <?php
+              $equipment_data = array();
+
+              $equipment_sql = "SELECT * FROM equipment ORDER BY equipment_name ASC";
+
+              $equipments = $con->query($equipment_sql);
+
+                // echo $room_sql;
+                // print_r($rooms['num_rows']);
+              if($equipments->num_rows > 0){
+                  while($row = $equipments->fetch_assoc()) {
+                      array_push($equipment_data, $row);
+                  }
+              }
+              $con->close();
+          ?>
           <div class="data-list">
               <table class="table">
                   <thead>
                       <tr>
+                          <th>No</th>
                           <th>Equipment Name</th>
                           <th></th>
                       </tr>
                   </thead>
                   <tbody>
+                      <?php for($r = 0; $r < count($equipment_data); $r++):?>
                       <tr>
-                          <td>Private Bed</td>
-                          <td><button type="button" class="btn btn-danger">Delete</button><button type="button" class="ml-1 btn btn-primary">Edit</button></td>
+                          <td><?= ($r+1) ;?></td>
+                          <td><?= $equipment_data[$r]['equipment_name'];?></td>
+                          <td><a href="equipment_form?id=<?= $equipment_data[$r]['equipment_id'];?>" class="ml-1 btn btn-primary">Edit</a></td>
                       </tr>
+                      <?php endfor;?>
                   </tbody>
               </table>
           </div>
