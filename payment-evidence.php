@@ -19,7 +19,8 @@
 
 ?>
 <div class="image-login-register d-flex justify-content-end">
-<div class="container login-container d-flex justify-content-center align-items-center">
+<img src="photo/kosan.jpg" class="card-img-top" alt="...">
+<div class="container login-container d-flex justify-content-center align-items-center position-fixed" style="top: 50%;left: 50%;transform: translate(-50%, -50%); background:white; width: 500px; height: 300px">
     <form class="form-horizontal" enctype="multipart/form-data">
         <div class="form-group">
             <label class="control-label col-sm-2">Name:</label>
