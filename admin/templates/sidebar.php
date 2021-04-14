@@ -97,7 +97,7 @@
 
     <li class="nav-item<?= isset($internal_active) ? ' active' : '';?>">
         <a class="nav-link" href="<?=(isset($inside_folder) ? '../settings/internal' : 'settings/internal');?>">
-            <i class="fas fa-fw fa-money-bill"></i>
+            <i class="fas fa-fw fa-cog"></i>
             <span>Internal Parameter</span>
         </a>
     </li>
