@@ -87,6 +87,20 @@
             <span>Fine</span>
         </a>
     </li>
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+    Settings
+    </div>
+
+    <li class="nav-item<?= isset($internal_active) ? ' active' : '';?>">
+        <a class="nav-link" href="<?=(isset($inside_folder) ? '../settings/internal' : 'settings/internal');?>">
+            <i class="fas fa-fw fa-money-bill"></i>
+            <span>Internal Parameter</span>
+        </a>
+    </li>
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">

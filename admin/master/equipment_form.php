@@ -66,7 +66,7 @@
                   <?php endif;?>
                   <div class="form-group">
                       <label for="equipment_name" class="col-form-label font-weight-bold">Equipment Name</label>
-                      <input class="form-control <?= (!empty($_SESSION['room_name_validation']) ? ('is-invalid') : '') ;?>" name="equipment_name" value="<?= (!empty($_GET['id'])) ? (!empty($_SESSION['equipment_name_error']) ? $_SESSION['equipment_name_error'] : $equipment_data['equipment_name']) : (!empty($_SESSION['equipment_name_error']) ? $_SESSION['equipment_name_error'] : '') ;?>">
+                      <input class="form-control <?= (!empty($_SESSION['equipment_name_validation']) ? ('is-invalid') : '') ;?>" name="equipment_name" value="<?= (!empty($_GET['id'])) ? (!empty($_SESSION['equipment_name_error']) ? $_SESSION['equipment_name_error'] : $equipment_data['equipment_name']) : (!empty($_SESSION['equipment_name_error']) ? $_SESSION['equipment_name_error'] : '') ;?>">
                       <?= (!empty($_SESSION['equipment_name_validation']) ? ('<div class="invalid-feedback">'.$_SESSION['equipment_name_validation'].'</div>') : '') ;?>
                   </div>
                   <input type="submit" name="submitEquipmentForm" value="Submit" class="btn btn-primary">
