@@ -24,7 +24,7 @@
     ?>
     <img src="photo/kosan.jpg" class="card-img-top" alt="...">
         <div class="position-fixed d-flex justify-content-center p-3" style="top: 50%;left: 50%;transform: translate(-50%, -50%);background:white">
-            <div style="height: 400px;overflow-y:auto">
+            <div style="height: 500px;overflow-y:auto">
                 <h3 class="text-center"> Payment Detail</h3>
                     <table class="table table-dark table-borderless">
                             <thead>
@@ -67,6 +67,16 @@
                                     <td>0868768757656</td>
                                     <td>Male</td>
                                     <td>18/04/2002</td>
+                                </tr>
+                            </tbody>
+                            <thead>
+                                <tr>
+                                    <th scope="col">Total Payment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Rp.2.000.000,00</td>
                                 </tr>
                             </tbody>
                             <!-- <div>
