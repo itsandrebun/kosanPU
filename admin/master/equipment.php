@@ -25,7 +25,7 @@
     <?php include "../templates/sidebar.php";?>
 
     <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
+    <div id="content-wrapper" class="d-flex flex-column mykosan-content-wrapper">
 
       <!-- Main Content -->
       <div id="content">
@@ -38,7 +38,7 @@
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Equipment List</h1>
-            <a href="equipment_form" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-plus fa-sm text-white-50"></i> Add Equipment</a>
+            <a href="equipment_form" class="d-none d-sm-inline-block btn btn-sm btn-primary mykosan-signature-button-color shadow-sm"><i class="fas fa-plus fa-sm text-white-50"></i> Add Equipment</a>
           </div>
           <?php
               $equipment_data = array();
@@ -70,7 +70,7 @@
                       <tr>
                           <td><?= ($r+1) ;?></td>
                           <td><?= $equipment_data[$r]['equipment_name'];?></td>
-                          <td><a href="equipment_form?id=<?= $equipment_data[$r]['equipment_id'];?>" class="ml-1 btn btn-primary">Edit</a></td>
+                          <td><a href="equipment_form?id=<?= $equipment_data[$r]['equipment_id'];?>" class="ml-1 btn btn-primary mykosan-signature-button-color">Edit</a></td>
                       </tr>
                       <?php endfor;?>
                   </tbody>

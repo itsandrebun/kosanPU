@@ -20,7 +20,7 @@
             <div class="input-group">
             <input type="text" class="form-control bg-light border-0 small" placeholder="Search for..." aria-label="Search" aria-describedby="basic-addon2">
             <div class="input-group-append">
-                <button class="btn btn-primary" type="button">
+                <button class="btn btn-primary mykosan-signature-button-color" type="button">
                 <i class="fas fa-search fa-sm"></i>
                 </button>
             </div>
@@ -59,9 +59,21 @@
         </a>
         <!-- Dropdown - Alerts -->
         <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
-            <h6 class="dropdown-header">
+            <h6 class="dropdown-header mykosan-alert-header">
                 Alerts Center
             </h6>
+            <?php if(count($notification_data) == 0):?>
+            <a class="dropdown-item d-flex align-items-center" href="#">
+                <div class="mr-3">
+                    <div class="icon-circle bg-primary mykosan-icon-background-color">
+                        <i class="fas fa-file-alt text-white"></i>
+                    </div>
+                </div>
+                <div>
+                    <div class="small text-gray-500">No data found!</div>
+                </div>
+            </a>
+            <?php else:?>
             <?php for($k = 0; $k < count($notification_data); $k++):?>
             <a class="dropdown-item d-flex align-items-center" href="#">
                 <div class="mr-3">
@@ -75,7 +87,7 @@
                 </div>
             </a>
             <?php endfor;?>
-            
+            <?php endif;?>
             <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
         </div>
     </li>

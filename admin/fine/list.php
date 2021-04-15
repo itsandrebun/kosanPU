@@ -25,7 +25,7 @@
     <?php include "../templates/sidebar.php";?>
 
     <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
+    <div id="content-wrapper" class="d-flex flex-column mykosan-content-wrapper">
 
       <!-- Main Content -->
       <div id="content">
@@ -75,7 +75,7 @@
                               <td><?= $fine[$k]['last_name'];?></td>
                               <td><?= $fine[$k]['email'];?></td>
                               <td><?= $fine[$k]['phone_number'];?></td>
-                              <td><a href="tenant_detail?id=<?= $fine[$k]['user_id'];?>" class="ml-1 btn btn-primary">View</a></td>
+                              <td><a href="tenant_detail?id=<?= $fine[$k]['user_id'];?>" class="ml-1 btn btn-primary mykosan-signature-button-color">View</a></td>
                           </tr>
                         <?php endfor;?>
                     </tbody>

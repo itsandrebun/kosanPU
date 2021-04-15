@@ -7,7 +7,7 @@
     session_start();
 ?>
 
-<body class="bg-gradient-primary">
+<body class="bg-gradient-primary mykosan-background">
 
   <div class="container">
 
@@ -41,7 +41,7 @@
                         <label class="custom-control-label" for="customCheck">Remember Me</label>
                       </div>
                     </div>
-                    <input type="submit" class="btn btn-primary btn-user btn-block" id="loginButton" name="loginButton" value="Login">
+                    <input type="submit" class="btn btn-primary mykosan-signature-button-color btn-user btn-block mykosan-signature-button-color" id="loginButton" name="loginButton" value="Login">
                     <!-- <hr> -->
                   </form>
                   <hr>

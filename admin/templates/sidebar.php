@@ -59,6 +59,13 @@
         </a>
     </li>
 
+    <li class="nav-item<?= isset($bank_active) ? ' active' : '';?>">
+        <a class="nav-link" href="<?=(isset($inside_folder) ? '../master/bank' : 'master/bank');?>">
+            <i class="fas fa-fw fa-money-check"></i>
+            <span>Bank</span>
+        </a>
+    </li>
+
     <!-- Divider -->
     <hr class="sidebar-divider">
 
@@ -106,9 +113,9 @@
     <hr class="sidebar-divider d-none d-md-block">
 
     <!-- Sidebar Toggler (Sidebar) -->
-    <div class="text-center d-none d-md-inline">
+    <!-- <div class="text-center d-none d-md-inline">
         <button class="rounded-circle border-0" id="sidebarToggle"></button>
-    </div>
+    </div> -->
 
 </ul>
 <!-- End of Sidebar -->

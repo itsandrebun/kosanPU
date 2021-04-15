@@ -14,7 +14,7 @@
                 <form id="adminLogoutForm" method="POST">
                     <input type="hidden" name="logout_flag" value="1">
                 </form>
-                <a class="btn btn-primary" onclick="document.getElementById('adminLogoutForm').submit()">Logout</a>
+                <a class="btn btn-primary mykosan-signature-button-color color-white" onclick="document.getElementById('adminLogoutForm').submit()">Logout</a>
             </div>
         </div>
     </div>

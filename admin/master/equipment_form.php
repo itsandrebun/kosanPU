@@ -25,7 +25,7 @@
     <?php include "../templates/sidebar.php";?>
 
     <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
+    <div id="content-wrapper" class="d-flex flex-column mykosan-content-wrapper">
 
       <!-- Main Content -->
       <div id="content">
@@ -70,14 +70,14 @@
                       <input class="form-control <?= (!empty($_SESSION['equipment_name_validation']) ? ('is-invalid') : '') ;?>" name="equipment_name" value="<?= (!empty($_GET['id'])) ? (!empty($_SESSION['equipment_name_error']) ? $_SESSION['equipment_name_error'] : $equipment_data['equipment_name']) : (!empty($_SESSION['equipment_name_error']) ? $_SESSION['equipment_name_error'] : '') ;?>">
                       <?= (!empty($_SESSION['equipment_name_validation']) ? ('<div class="invalid-feedback">'.$_SESSION['equipment_name_validation'].'</div>') : '') ;?>
                   </div>
-                  <input type="submit" name="submitEquipmentForm" value="Submit" class="btn btn-primary">
+                  <input type="submit" name="submitEquipmentForm" value="Submit" class="btn btn-primary mykosan-signature-button-color">
                 </form>
                 <?php if(isset($_GET['id'])):?>
                     <hr>
                     <!-- <h5 class="mt-4 font-weight-bold">Available in</h5> -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-3 mt-3">
                         <h4 class="h4 mb-0 text-gray-800">Dashboard</h4>
-                        <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm" data-toggle="modal" data-target="#equipmentAvailabilityPopup"><i class="fas fa-edit fa-sm text-white-50"></i> Edit Available Rooms</button>
+                        <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary mykosan-signature-button-color shadow-sm" data-toggle="modal" data-target="#equipmentAvailabilityPopup"><i class="fas fa-edit fa-sm text-white-50"></i> Edit Available Rooms</button>
                     </div>
                     <?php if(count($room_mapping_array) == 0):?>
                         <span class="font-size:11px">No data found!</span>
@@ -159,7 +159,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button type="button" class="btn btn-primary" onclick="document.getElementById('mappingWithRoomForm').submit();">Submit</button>
+                    <button type="button" class="btn btn-primary mykosan-signature-button-color" onclick="document.getElementById('mappingWithRoomForm').submit();">Submit</button>
                 </div>
             </div>
         </div>

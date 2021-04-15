@@ -25,7 +25,7 @@
     <?php include "../templates/sidebar.php";?>
 
     <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
+    <div id="content-wrapper" class="d-flex flex-column mykosan-content-wrapper">
 
       <!-- Main Content -->
       <div id="content">
@@ -123,7 +123,7 @@
                             <button type="button" class="btn btn-danger" onclick="window.location.href = 'list'">Reset</button>
                         </div>
                         <div class="btn-group ml-2" role="group" aria-label="Second group">
-                            <button type="submit" class="btn btn-primary">Search</button>
+                            <button type="submit" class="btn btn-primary mykosan-signature-button-color">Search</button>
                         </div>
                     </div>
                   </div>
@@ -152,7 +152,7 @@
                                 <td><?= $invoice_data[$k]['payment_status_name'];?></td>
                                 <td><?= $invoice_data[$k]['payment_date'] == null ? "-" : date("Y-m-d H:i:s",strtotime($invoice_data[$k]['payment_date']));?></td>
                                 <td><?= $invoice_data[$k]['total_payment'];?></td>
-                                <td><a href="detail?id=<?= $invoice_data[$k]['invoice_id'];?>" class="ml-1 btn btn-primary">View</a></td>
+                                <td><a href="detail?id=<?= $invoice_data[$k]['invoice_id'];?>" class="ml-1 btn btn-primary mykosan-signature-button-color">View</a></td>
                             </tr>
                           <?php endfor;?>
                         <?php endif;?>

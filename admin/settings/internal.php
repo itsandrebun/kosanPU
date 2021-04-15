@@ -25,7 +25,7 @@
     <?php include "../templates/sidebar.php";?>
 
     <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
+    <div id="content-wrapper" class="d-flex flex-column mykosan-content-wrapper">
 
       <!-- Main Content -->
       <div id="content">
@@ -77,7 +77,7 @@
                         <input class="form-control <?= (!empty($_SESSION['deposit_validation']) ? ('is-invalid') : '') ;?>" name="deposit" value="<?= empty($internal_settings) ? '' : $internal_settings_data[1]['parameter_value'];?>">
                         <?= (!empty($_SESSION['deposit_validation']) ? ('<div class="invalid-feedback">'.$_SESSION['deposit_validation'].'</div>') : '') ;?>
                     </div>
-                    <input type="submit" name="submitInternalForm" value="Submit" class="btn btn-primary">
+                    <input type="submit" name="submitInternalForm" value="Submit" class="btn btn-primary mykosan-signature-button-color">
                 </form>
                 <?php
                     unset($_SESSION['company_name_error']);

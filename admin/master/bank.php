@@ -1,9 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 <?php
-    $page_title = "Admin List - Kosan Admin Panel";
+    $page_title = "Bank List - Kosan Admin Panel";
     $inside_folder = 1;
-    $user_active = 1;
+    $bank_active = 1;
     include "../templates/header.php";
     session_start();
     $logged_in_user = !empty($_SESSION['user']) ? $_SESSION['user'] : null;
@@ -37,21 +37,21 @@
 
             <!-- Page Heading -->
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800">Admin List</h1>
-                <a href="user_form" class="d-none d-sm-inline-block btn btn-sm btn-primary mykosan-signature-button-color shadow-sm"><i class="fas fa-plus fa-sm text-white-50"></i> Add User</a>
+                <h1 class="h3 mb-0 text-gray-800">Bank List</h1>
+                <a href="bank_form" class="d-none d-sm-inline-block btn btn-sm btn-primary mykosan-signature-button-color shadow-sm"><i class="fas fa-plus fa-sm text-white-50"></i> Add Bank</a>
             </div>
             <?php
-                $admin_data = array();
+                $bank_data = array();
 
-                $admin_sql = "SELECT us.* FROM user AS us LEFT JOIN tenant AS tn ON tn.user_id = us.user_id WHERE tn.tenant_id IS NULL";
+                $bank_sql = "SELECT bn.* from banks as bn";
 
-                $admins = $con->query($admin_sql);
+                $banks = $con->query($bank_sql);
 
                 // echo $room_sql;
                 // print_r($rooms['num_rows']);
-                if($admins->num_rows > 0){
-                    while($row = $admins->fetch_assoc()) {
-                        array_push($admin_data, $row);
+                if($banks->num_rows > 0){
+                    while($row = $banks->fetch_assoc()) {
+                        array_push($bank_data, $row);
                     }
                 }
                 $con->close();
@@ -61,27 +61,27 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>First Name</th>
-                            <th>Last Name</th>
-                            <th>Email</th>
-                            <th>Phone Number</th>
+                            <th>Bank Name</th>
+                            <th>Account Number</th>
+                            <th>Description</th>
+                            <th>Owner Name</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                      <?php if(count($admin_data) > 0):?>
-                        <?php for($p = 0; $p < count($admin_data); $p++):?>
+                      <?php if(count($bank_data) > 0):?>
+                        <?php for($p = 0; $p < count($bank_data); $p++):?>
                         <tr>
-                            <td><?= $admin_data[$p]['first_name'];?></td>
-                            <td><?= $admin_data[$p]['last_name'];?></td>
-                            <td><?= $admin_data[$p]['email'];?></td>
-                            <td><?= $admin_data[$p]['phone_number'];?></td>
-                            <td><a href="user_form?id=<?= $admin_data[$p]['user_id'];?>" class="ml-1 btn btn-primary mykosan-signature-button-color">Edit</a></td>
+                            <td><?= $bank_data[$p]['bank_name'];?></td>
+                            <td><?= $bank_data[$p]['bank_account_number'];?></td>
+                            <td><?= $bank_data[$p]['bank_description'];?></td>
+                            <td><?= $bank_data[$p]['owner_name'];?></td>
+                            <td><a href="bank_form?id=<?= $bank_data[$p]['bank_id'];?>" class="ml-1 btn btn-primary mykosan-signature-button-color">Edit</a></td>
                         </tr>
                         <?php endfor;?>
                       <?php else:?>
                         <tr>
-                          <td colspan="5" style="font-size:12px">No data found</td>
+                          <td colspan="4" style="font-size:12px" class="text-center">No data found</td>
                         </tr>
                       <?php endif;?>
                     </tbody>

@@ -25,7 +25,7 @@
     <?php include "../templates/sidebar.php";?>
 
     <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
+    <div id="content-wrapper" class="d-flex flex-column mykosan-content-wrapper">
 
       <!-- Main Content -->
       <div id="content">
@@ -141,7 +141,7 @@
                             <button type="button" class="btn btn-danger" onclick="window.location.href = 'tenant_detail?id=<?= $_GET['id'];?>'">Reset</button>
                         </div>
                         <div class="btn-group ml-2" role="group" aria-label="Second group">
-                            <button type="submit" class="btn btn-primary">Search</button>
+                            <button type="submit" class="btn btn-primary mykosan-signature-button-color">Search</button>
                         </div>
                     </div>
                   </div>

@@ -25,7 +25,7 @@
     <?php include "../templates/sidebar.php";?>
 
     <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
+    <div id="content-wrapper" class="d-flex flex-column mykosan-content-wrapper">
 
       <!-- Main Content -->
       <div id="content">
@@ -80,7 +80,7 @@
                           <?= (!empty($_SESSION['room_gender_validation']) ? ('<div class="invalid-feedback d-block">'.$_SESSION['room_gender_validation'].'</div>') : '') ;?>
                       </div>
                   </div>
-                  <input type="submit" name="submitRoomForm" value="Submit" class="btn btn-primary">
+                  <input type="submit" name="submitRoomForm" value="Submit" class="btn btn-primary mykosan-signature-button-color">
                 </form>
                 <?php
                   unset($_SESSION['room_name_error']);

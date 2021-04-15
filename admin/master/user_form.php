@@ -25,7 +25,7 @@
     <?php include "../templates/sidebar.php";?>
 
     <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
+    <div id="content-wrapper" class="d-flex flex-column mykosan-content-wrapper">
 
       <!-- Main Content -->
       <div id="content">
@@ -47,13 +47,6 @@
   
                   $admins = $con->query($admin_sql);
                   $admin_data = $admins->fetch_assoc();
-                  // echo $room_sql;
-                  // print_r($rooms['num_rows']);
-                  // if($admins->num_rows > 0){
-                  //     while($row = $admins->fetch_assoc()) {
-                  //         array_push($admin_data, $row);
-                  //     }
-                  // }
                 }
                 $con->close();
             ?>
@@ -66,15 +59,21 @@
                           <input readonly class="form-control" value="<?= (!empty($_GET['id'])) ? $admin_data['user_code'] : '' ;?>" >
                       </div>
                   <?php endif;?>
-                  <div class="form-group">
-                      <label for="tenant_first_name" class="col-form-label font-weight-bold">First Name</label>
-                      <input class="form-control <?= (!empty($_SESSION['first_name_validation']) ? ('is-invalid') : '') ;?>" name="first_name" value="<?= (!empty($_GET['id'])) ? (!empty($_SESSION['first_name_error']) ? $_SESSION['first_name_error'] : $admin_data['first_name']) : (!empty($_SESSION['first_name_error']) ? $_SESSION['first_name_error'] : '') ;?>">
-                      <?= (!empty($_SESSION['first_name_validation']) ? ('<div class="invalid-feedback">'.$_SESSION['first_name_validation'].'</div>') : '') ;?>
-                  </div>
-                  <div class="form-group">
-                      <label for="tenant_last_name" class="col-form-label font-weight-bold">Last Name</label>
-                      <input class="form-control <?= (!empty($_SESSION['last_name_validation']) ? ('is-invalid') : '') ;?>" name="last_name" value="<?= (!empty($_GET['id'])) ? (!empty($_SESSION['last_name_error']) ? $_SESSION['last_name_error'] : $admin_data['last_name']) : (!empty($_SESSION['last_name_error']) ? $_SESSION['last_name_error'] : '') ;?>">
-                      <?= (!empty($_SESSION['last_name_validation']) ? ('<div class="invalid-feedback">'.$_SESSION['last_name_validation'].'</div>') : '') ;?>
+                  <div class="row">
+                    <div class="col-md-6">
+                      <div class="form-group">
+                          <label for="tenant_first_name" class="col-form-label font-weight-bold">First Name</label>
+                          <input class="form-control <?= (!empty($_SESSION['first_name_validation']) ? ('is-invalid') : '') ;?>" name="first_name" value="<?= (!empty($_GET['id'])) ? (!empty($_SESSION['first_name_error']) ? $_SESSION['first_name_error'] : $admin_data['first_name']) : (!empty($_SESSION['first_name_error']) ? $_SESSION['first_name_error'] : '') ;?>">
+                          <?= (!empty($_SESSION['first_name_validation']) ? ('<div class="invalid-feedback">'.$_SESSION['first_name_validation'].'</div>') : '') ;?>
+                      </div>
+                    </div>
+                    <div class="col-md-6">
+                      <div class="form-group">
+                          <label for="tenant_last_name" class="col-form-label font-weight-bold">Last Name</label>
+                          <input class="form-control <?= (!empty($_SESSION['last_name_validation']) ? ('is-invalid') : '') ;?>" name="last_name" value="<?= (!empty($_GET['id'])) ? (!empty($_SESSION['last_name_error']) ? $_SESSION['last_name_error'] : $admin_data['last_name']) : (!empty($_SESSION['last_name_error']) ? $_SESSION['last_name_error'] : '') ;?>">
+                          <?= (!empty($_SESSION['last_name_validation']) ? ('<div class="invalid-feedback">'.$_SESSION['last_name_validation'].'</div>') : '') ;?>
+                      </div>
+                    </div>
                   </div>
                   <div class="form-group">
                       <label for="tenant_email" class="col-form-label font-weight-bold">Email</label>
@@ -106,7 +105,7 @@
                           <?= (!empty($_SESSION['gender_validation']) ? ('<div class="invalid-feedback d-block">'.$_SESSION['gender_validation'].'</div>') : '') ;?>
                       </div>
                   </div>
-                  <input type="submit" name="submitUserForm" value="Submit" class="btn btn-primary">
+                  <input type="submit" name="submitUserForm" value="Submit" class="btn btn-primary mykosan-signature-button-color">
                 </form>
                 <?php
                   unset($_SESSION['first_name_error']);

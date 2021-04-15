@@ -25,7 +25,7 @@
     <?php include "../templates/sidebar.php";?>
 
     <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
+    <div id="content-wrapper" class="d-flex flex-column mykosan-content-wrapper">
 
       <!-- Main Content -->
       <div id="content">
@@ -78,7 +78,7 @@
                     <div class="form-group">
                         <label for="payment_evidence" class="col-form-label font-weight-bold">Payment Evidence</label>
                         <?php if($payment_history_master_data['payment_status'] < 3):?>
-                        <button type="button" class="btn btn-primary" onclick="document.getElementById('payment_evidence').click();">Upload</button>
+                        <button type="button" class="btn btn-primary mykosan-signature-button-color" onclick="document.getElementById('payment_evidence').click();">Upload</button>
                         <input type="file" name="payment_evidence" class="form-control d-none" id="payment_evidence">
                         <?php endif;?>
                     </div>
@@ -86,7 +86,7 @@
                         <label for="payment_date" class="col-form-label font-weight-bold">Payment Date</label>
                         <input type="date" name="payment_date" class="form-control" value="<?= $payment_history_master_data['payment_status'] >= 3 ? ($payment_history_master_data['payment_date'] != null ? date('Y-m-d',strtotime($payment_history_master_data['payment_date'])) : '') : '';?>" <?= $payment_history_master_data['payment_status'] >= 3 ? 'readonly' : '';?>>
                     </div>
-                    <input type="submit" name="confirmEvidenceButton" class="btn btn-primary" value="Submit">
+                    <input type="submit" name="confirmEvidenceButton" class="btn btn-primary mykosan-signature-button-color" value="Submit">
                 </form>
                 <hr>
                 <div id="payment_history_div" class="mt-4">

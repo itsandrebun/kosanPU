@@ -25,7 +25,7 @@
     <?php include "../templates/sidebar.php";?>
 
     <!-- Content Wrapper -->
-    <div id="content-wrapper" class="d-flex flex-column">
+    <div id="content-wrapper" class="d-flex flex-column mykosan-content-wrapper">
 
       <!-- Main Content -->
       <div id="content">
@@ -38,7 +38,7 @@
           <!-- Page Heading -->
           <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800">Room List</h1>
-            <a href="room_form" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i class="fas fa-plus fa-sm text-white-50"></i> Add Room</a>
+            <a href="room_form" class="d-none d-sm-inline-block btn btn-sm btn-primary mykosan-signature-button-color shadow-sm"><i class="fas fa-plus fa-sm text-white-50"></i> Add Room</a>
           </div>
           
           <?php
@@ -79,7 +79,7 @@
                               <td class="text-center"><?= $room_data[$k]['room_name'];?></td>
                               <td class="text-center"><?= $room_data[$k]['room_floor'];?></td>
                               <td class="text-center"><?= $room_data[$k]['gender'] == 1 ? 'Male' : 'Female';?></td>
-                              <td><a href="room_form?id=<?= $room_data[$k]['room_id']?>" class="ml-1 btn btn-primary">Edit</a></td>
+                              <td><a href="room_form?id=<?= $room_data[$k]['room_id']?>" class="ml-1 btn btn-primary mykosan-signature-button-color">Edit</a></td>
                           </tr>
                         <?php endfor;?>
                       <?php endif;?>
