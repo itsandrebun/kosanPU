@@ -1,7 +1,7 @@
 <!-- Nav Bar -->
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mykosan-navbar">
     <div class="container-fluid">
-        <a class="navbar-brand" href="index.php">MyKosan</a>
+        <a class="navbar-brand" href="index">MyKosan</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -13,10 +13,10 @@
             <?php if($logged_in_user == null):?>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item">
-                    <a class="nav-link <?php echo (isset($login_navbar) ? $login_navbar : '') ;?>" aria-current="page" href="login.php">Login</a>
+                    <a class="nav-link <?php echo (isset($login_navbar) ? $login_navbar : '') ;?>" aria-current="page" href="login">Login</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link <?php echo (isset($register_navbar) ? $register_navbar : '') ;?>" href="register.php">Register</a>
+                    <a class="nav-link <?php echo (isset($register_navbar) ? $register_navbar : '') ;?>" href="register">Register</a>
                 </li>
             </ul>
             <?php else:?>
@@ -31,7 +31,7 @@
                             <?php
                                 if(isset($_POST['logout_flag'])){
                                     session_destroy();
-                                    header("Location:index.php");
+                                    header("Location:index");
                                 }
                             ?>
                             <form method="POST" id="logoutForm">

@@ -55,11 +55,11 @@
     }
     if($booking_validation != ""){
         $_SESSION['booking_validation'] = $booking_validation;
-        header("Location:calendar.php?room=".$room_parameter);
+        header("Location:calendar?room=".$room_parameter);
     }
 
     if($booked == 1){
         $_SESSION['success_booking'] = $success_booking_msg;
-        header("Location:index.php");
+        header("Location:index");
     }
 ?>

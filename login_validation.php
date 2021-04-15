@@ -28,7 +28,8 @@ if (isset($_POST['submitLogin'])){
                         "gender" => $check_email_or_phone_number['gender'],
                         "user_id" => $check_email_or_phone_number['user_id'],
                         "email" => $check_email_or_phone_number['email'],
-                        "phone_number" => $check_email_or_phone_number['phone_number']
+                        "phone_number" => $check_email_or_phone_number['phone_number'],
+                        "tenant_id" => $check_email_or_phone_number['tenant_id']
                     );
 
                     $_SESSION['user'] = $logged_in_user;
@@ -64,9 +65,9 @@ if($password_validation != ""){
 }
 
 if($login == 0){
-    header('Location:login.php');
+    header('Location:login');
 }else{
-    header('Location:index.php');  
+    header('Location:index');  
 
 }
 

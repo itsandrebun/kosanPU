@@ -12,9 +12,10 @@
 <body>
 <?php
     include "templates/navbar.php";
-    $logged_in_user = $_SESSION['user'];
-    if(empty($logged_in_user)){
-        header("Location:index.php");
+    $logged_in_user = !empty($_SESSION['user']) ? $_SESSION['user'] : null;
+    if($logged_in_user == null || ($logged_in_user != null && $logged_in_user['tenant_id'] == null)){
+        session_destroy();
+        header("Location:index");
     }
 
 ?>
@@ -36,5 +37,6 @@
         </div>
     </form>
 </div>
+<?php include "templates/js_list.php";?>
 </body>
 </html>

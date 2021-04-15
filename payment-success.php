@@ -12,9 +12,10 @@
 <body>
 <?php
     include "templates/navbar.php";
-    $logged_in_user = $_SESSION['user'];
-    if(empty($logged_in_user)){
-        header("Location:index.php");
+    $logged_in_user = !empty($_SESSION['user']) ? $_SESSION['user'] : null;
+    if($logged_in_user == null || ($logged_in_user != null && $logged_in_user['tenant_id'] == null)){
+        session_destroy();
+        header("Location:index");
     }
 ?>
 <div class="image-login-register d-flex justify-content-end">
@@ -27,5 +28,7 @@
           <a href="index.php" class="btn btn-primary d-block mt-2">Back To Home</a>
         </div>
     </div>
+</div>
+<?php include "templates/js_list.php";?>
 </body>
 </html>

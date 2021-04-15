@@ -3,18 +3,25 @@
   <head>
     <?php
       $page_title = "Landing Page";
+      // session_start();
+      
       include "templates/header.php";
     ?>
   </head>
   <body style="height:100vh">
     <?php
       include "templates/navbar.php";
+      $logged_in_user = !empty($_SESSION['user']) ? $_SESSION['user'] : null;
+      if($logged_in_user != null && $logged_in_user['tenant_id'] == null){
+        session_destroy();
+        header("Location:/");
+      }
     ?>
     <div class="image-login-register d-flex justify-content-end">
       <img src="photo/kosan.jpg" class="card-img-top" alt="...">
       <?php if($logged_in_user == null):?>
         <div class="position-fixed" style="top: 50%;left: 50%;transform: translate(-50%, -50%)">
-          <a href="login.php" class="btn btn-primary">Find Dormitory</a>
+          <a href="login" class="btn btn-primary">Find Dormitory</a>
         </div>
       <?php else:?>
       <?php $page_title="Home" ?>

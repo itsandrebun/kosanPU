@@ -3,6 +3,15 @@
 <?php
     $page_title = "Dashboard - Kosan Admin Panel";
     $dashboard_active = 1;
+    session_start();
+    $logged_in_user = !empty($_SESSION['user']) ? $_SESSION['user'] : null;
+    if(isset($_POST['logout_flag'])){
+        session_destroy();
+        header('Location:login');
+    }
+    if($logged_in_user == null || ($logged_in_user != null && $logged_in_user['tenant_id'] != null)){
+        header('Location:login');
+    }
     include "templates/header.php";
 ?>
 
@@ -20,15 +29,7 @@
       <div id="content">
 
         <?php
-          session_start();
-          $logged_in_user = !empty($_SESSION['user']) ? $_SESSION['user'] : null;
-          if(isset($_POST['logout_flag'])){
-              session_destroy();
-              header('Location:login');
-          }   
-          if($logged_in_user == null || ($logged_in_user != null && $logged_in_user['tenant_id'] != null)){
-            header('Location:login');
-          }
+          
           include "templates/navbar.php";
         ?>
 

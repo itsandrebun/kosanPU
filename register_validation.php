@@ -133,5 +133,5 @@
         $_SESSION['date_of_birth_validation'] = $date_of_birth_validation;
     }
 
-    header('Location:register.php');
+    header('Location:register');
 ?>

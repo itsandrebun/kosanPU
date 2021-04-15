@@ -12,6 +12,7 @@
         header('Location:../login');
     }
     if($logged_in_user == null || ($logged_in_user != null && $logged_in_user['tenant_id'] != null)){
+        session_destroy();
         header('Location:../login');
     }
 ?>

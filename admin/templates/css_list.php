@@ -4,3 +4,5 @@
 
 <!-- Custom styles for this template-->
 <link href="<?= (isset($inside_folder) ? '../../assets/css/sb-admin-2.min.css' : '../assets/css/sb-admin-2.min.css') ;?>" rel="stylesheet">
+<link rel="stylesheet" href="<?= (isset($inside_folder) ? '../../assets/css/fonts.css' : '../assets/css/fonts.css') ;?>">
+<link rel="stylesheet" href="<?= (isset($inside_folder) ? '../../assets/css/style.css' : '../assets/css/style.css') ;?>">
