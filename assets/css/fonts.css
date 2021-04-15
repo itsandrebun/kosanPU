@@ -7,3 +7,53 @@
     font-family: Poppins-Regular;
     src: url(../fonts/Poppins-Regular.ttf);
 }
+
+@font-face {
+    font-family: NunitoSans-Black;
+    src: url(../fonts/NunitoSans-Black.ttf);
+}
+
+@font-face {
+    font-family: NunitoSans-Regular;
+    src: url(../fonts/NunitoSans-Regular.ttf);
+}
+
+@font-face {
+    font-family: Inter-Black;
+    src: url(../fonts/Inter-Black.ttf);
+}
+
+@font-face {
+    font-family: Inter-Regular;
+    src: url(../fonts/Inter-Regular.ttf);
+}
+
+@font-face {
+    font-family: Oxygen-Black;
+    src: url(../fonts/Oxygen-Black.ttf);
+}
+
+@font-face {
+    font-family: Oxygen-Regular;
+    src: url(../fonts/Oxygen-Regular.ttf);
+}
+
+@font-face {
+    font-family: Arimo-Black;
+    src: url(../fonts/Arimo-Black.ttf);
+}
+
+@font-face {
+    font-family: Arimo-Regular;
+    src: url(../fonts/Arimo-Regular.ttf);
+}
+
+@font-face {
+    font-family: Overpass-Black;
+    src: url(../fonts/Overpass-Black.ttf);
+}
+
+@font-face {
+    font-family: Overpass-Regular;
+    src: url(../fonts/Overpass-Regular.ttf);
+}
