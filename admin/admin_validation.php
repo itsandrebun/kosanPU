@@ -65,9 +65,9 @@
                 $email = strtolower($email);
                 $user_form_query = "";
                 if($user_id == null){
-                    $user_form_query = "INSERT INTO `user`(`first_name`, `last_name`, `password`, `email`, `phone_number`, `dob`, `gender`) VALUES ('".$first_name."','".$last_name."','".$password."','".$email."','".$phone_number."','".$user_dob."',".$gender.")";
+                    $user_form_query = "CALL insert_admin('".$first_name."','".$last_name."','".$email."','".$phone_number."','".$gender."','".$user_dob."','".($password)."')";
                 }else{
-                    $user_form_query = "UPDATE user SET first_name = '".$first_name."', last_name = '".$last_name."', password = '".$password."', email = '".$email."', phone_number = '".$phone_number."', dob = '".$user_dob."', gender = '".$gender."' WHERE user_id = ".$user_id;
+                    $user_form_query = "CALL update_admin('".$user_id."','".$first_name."','".$last_name."','".$email."','".$phone_number."','".$gender."','".$user_dob."')";
                 }
                 $modification_query = $con->query($user_form_query);
 
