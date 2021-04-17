@@ -19,7 +19,7 @@
     }
 ?>
 <div class="image-login-register d-flex justify-content-end">
-    <img src="photo/kosan.jpg" class="card-img-top" alt="...">
+    <img src="assets/photo/kosan.jpg" class="card-img-top" alt="...">
     <div class="position-fixed d-flex justify-content-center p-3" style="top: 50%;left: 50%;transform: translate(-50%, -50%);background:white">
         <?php
             $room_data = array();

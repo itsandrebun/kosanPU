@@ -19,10 +19,10 @@
     }
 ?>
 <div class="image-login-register d-flex justify-content-end">
-    <img src="photo/kosan.jpg" class="card-img-top" alt="...">
+    <img src="assets/photo/kosan.jpg" class="card-img-top" alt="...">
     <div class="position-fixed" style="top: 50%;left: 50%;transform: translate(-50%, -50%)">
         <div>
-            <img src="photo/checked.svg" alt="" srcset="" width="300" height="300">
+            <img src="assets/photo/checked.svg" alt="" srcset="" width="300" height="300">
         </div>
         <div>
           <a href="index.php" class="btn btn-primary d-block mt-2">Back To Home</a>

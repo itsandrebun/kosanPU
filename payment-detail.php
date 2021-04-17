@@ -22,7 +22,7 @@
     <?php
        include "DB_connection.php";
     ?>
-    <img src="photo/kosan.jpg" class="card-img-top" alt="...">
+    <img src="assets/photo/kosan.jpg" class="card-img-top" alt="...">
         <div class="position-fixed d-flex justify-content-center p-3" style="top: 50%;left: 50%;transform: translate(-50%, -50%);background:white">
             <div style="height: 500px;overflow-y:auto">
                 <h3 class="text-center"> Payment Detail</h3>

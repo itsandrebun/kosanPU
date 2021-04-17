@@ -22,7 +22,7 @@
             <div class="row">
               <div class="col-lg-6 d-none d-lg-block">
                 <div class="h-100 d-flex justify-content-center align-items-center" style="background-color:#000000!important">
-                  <img class="w-100" src="../photo/kosan.jpg" alt="">
+                  <img class="w-100" src="../assets/photo/kosan.jpg" alt="">
                 </div>
               </div>
               <div class="col-lg-6">

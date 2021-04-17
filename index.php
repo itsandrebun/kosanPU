@@ -18,7 +18,7 @@
       }
     ?>
     <div class="image-login-register d-flex justify-content-end">
-      <img src="photo/kosan.jpg" class="card-img-top" alt="...">
+      <img src="assets/photo/kosan.jpg" class="card-img-top" alt="...">
       <?php if($logged_in_user == null):?>
         <div class="position-fixed" style="top: 50%;left: 50%;transform: translate(-50%, -50%)">
           <a href="login" class="btn btn-primary">Find Dormitory</a>
@@ -33,13 +33,13 @@
         <?php endif;?>
         <div class="position-fixed justify-content" style="top: 50%;left: 25%;transform: translate(-50%, -50%)">
           <div>
-            <img src="photo/man.svg" alt="" srcset="" width="300" height="300">
+            <img src="assets/photo/man.svg" alt="" srcset="" width="300" height="300">
           </div>
           <a href="room.php?gender=1" class="btn btn-primary d-block mt-3">Book Now!</a>
         </div>
         <div class="position-fixed justify-content" style="top: 50%;left: 75%;transform: translate(-50%, -50%)">
           <div>
-            <img src="photo/woman.svg" alt="" srcset="" width="300" height="300">
+            <img src="assets/photo/woman.svg" alt="" srcset="" width="300" height="300">
           </div>
           <a href="room.php?gender=2" class="btn btn-primary d-block mt-3">Book Now!</a>
         </div>
