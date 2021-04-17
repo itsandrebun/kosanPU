@@ -12,7 +12,7 @@
   <div class="container">
 
     <!-- Outer Row -->
-    <div class="row justify-content-center">
+    <div class="row d-flex justify-content-center align-items-center" style="height:100vh">
 
       <div class="col-xl-10 col-lg-12 col-md-9">
 
@@ -20,7 +20,11 @@
           <div class="card-body p-0">
             <!-- Nested Row within Card Body -->
             <div class="row">
-              <div class="col-lg-6 d-none d-lg-block"></div>
+              <div class="col-lg-6 d-none d-lg-block">
+                <div class="h-100 d-flex justify-content-center align-items-center" style="background-color:#000000!important">
+                  <img class="w-100" src="../photo/kosan.jpg" alt="">
+                </div>
+              </div>
               <div class="col-lg-6">
                 <div class="p-5">
                   <div class="text-center">
