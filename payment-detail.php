@@ -24,64 +24,57 @@
     ?>
     <img src="assets/photo/kosan.jpg" class="card-img-top" alt="...">
         <div class="position-fixed d-flex justify-content-center p-3" style="top: 50%;left: 50%;transform: translate(-50%, -50%);background:white">
-            <div style="height: 500px;overflow-y:auto">
+            <div style="height: 450px;overflow-y:auto">
                 <h3 class="text-center"> Payment Detail</h3>
                     <table class="table table-dark table-borderless">
                             <thead>
                                 <tr>
-                                    <th scope="col">Bill Code</th>
-                                    <th scope="col">Transaction Date</th>
-                                    <th scope="col">Payment Status</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>01248u294</td>
-                                    <td>01248u294</td>
-                                    <td>01248u294</td>
-                                </tr>
-                            </tbody>
-                            <thead>
-                                <tr>
                                     <th scope="col">First name</th>
                                     <th scope="col">Last Name</th>
-                                    <th scope="col">E-mail</th>
+                                    <th scope="col">Bill Code</th>
+                                    <th scope="col">Payment Status</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
                                     <td>Diko</td>
                                     <td>Kintarenji</td>
-                                    <td>diko.renji@gmail.com</td>
+                                    <td>KSINV21041100001</td>
+                                    <td>Done</td>
                                 </tr>
                             </tbody>
                             <thead>
                                 <tr>
-                                    <th scope="col">Phone Number</th>
-                                    <th scope="col">Gender</th>
-                                    <th scope="col">DoB</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td>0868768757656</td>
-                                    <td>Male</td>
-                                    <td>18/04/2002</td>
-                                </tr>
-                            </tbody>
-                            <thead>
-                                <tr>
+                                    <th scope="col">Fine</th>
+                                    <th scope="col">Rent Cost</th>
+                                    <th scope="col">Deposit</th>
                                     <th scope="col">Total Payment</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
+                                    <td>-</td>
+                                    <td>Rp.1.000.000,00</td>
+                                    <td>Rp.1.000.000,00</td>
                                     <td>Rp.2.000.000,00</td>
                                 </tr>
                             </tbody>
-                            <!-- <div>
-                                <a href="payment-evidence.php" class="btn btn-primary d-block mt-2">Pay Now!</a>
-                            </div> -->
+                            <thead>
+                                <tr>
+                                    <th scope="col">Transaction Code</th>
+                                    <th scope="col">Transaction Type</th>
+                                    <th scope="col">Transaction Date</th>
+                                    <th scope="col">Description</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>KSTRS21041100001</td>
+                                    <td>Rent Cost & Deposit</td>
+                                    <td>DD/MM/YY</td>
+                                    <td>-</td>
+                                </tr>
+                            </tbody>
                     </table>
                 <div>
                 <a href="payment-evidence.php" class="btn btn-primary d-block mt-2">Pay Now!</a>
