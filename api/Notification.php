@@ -1,0 +1,117 @@
+<?php
+
+    header("Access-Control-Allow-Origin: *");
+    header("Content-Type: application/json; charset=UTF-8");
+    header("Access-Control-Allow-Methods: POST");
+    header("Access-Control-Max-Age: 3600");
+    header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
+    // function get(){
+    //     $data = (Object)array(
+    //         "data" => null
+    //     );
+
+    //     echo json_encode($data);
+    // }
+
+    
+    // print_r($con);
+    // exit;
+    include "../DB_connection.php";
+    
+
+    class Notification{
+
+        protected $con;
+        public function __construct(){
+            $database = new Database();
+            $con = $database->getConnection();
+            $this->con = $con;
+        }
+
+        public function get(){
+            $notification_data = array();
+            $request = json_decode(file_get_contents("php://input"));
+            $notification_query = "SELECT nt.notification_id, nt.description, nt.read_by_admin, nt.read_by_tenant, nt.user_id, us.first_name, us.last_name, nt.created_date, inv.invoice_id, inv.invoice_number from notification AS nt JOIN user AS us ON us.user_id = nt.user_id JOIN invoice AS inv ON inv.invoice_id = nt.invoice_id ORDER BY nt.created_date DESC";
+
+            if(isset($request->tenant_id)){
+                $tenant_id = $request->tenant_id;
+                $notification_query .= " WHERE nt.user_id = ".$tenant_id;
+            }
+
+            $total_unread_message = 0;
+            $status = 200;
+            $message = "Successfully get notification data";
+            $response = array();
+            $notifications = $this->con->query($notification_query);
+            if($notifications->num_rows > 0){
+                while($row = $notifications->fetch_assoc()) {
+                    array_push($notification_data, $row);
+
+                    if($row['read_by_admin'] == 0){
+                        $total_unread_message += 1;
+                    }
+                }
+            }
+            $this->con->close();
+
+            // if(count($notification_data) == 0){
+            //     $status = 404;
+            //     $message = "Data not found!";
+            //     http_response_code($status);
+            // }
+            $response = array(
+                "status" => $status,
+                "message" => $message,
+                "total_unread_message" => $total_unread_message,
+                "data" => count($notification_data) > 0 ? $notification_data : null
+            );
+            return $response;
+        }
+
+        public function send(){
+            $request = json_decode(file_get_contents("php://input"));
+
+            $message = "";
+            $status = 200;
+            
+            $current_date = date('Y-m-d H:i:s');
+            $send_notification_query = "INSERT INTO notification(user_id, payment_status_id, invoice_id, description)";
+            $send_notification_query .= " SELECT tenant_id, 5, invoice_id, '[user] should pay the bill with the code: [invoice_code]. [user] didnot pay the bill on the specified due dates.' FROM invoice WHERE '".$current_date."' > due_end_date";
+            $send_notification = $this->con->query($send_notification_query);
+
+                // print_r($update_notification);
+                // exit;
+            if($send_notification === TRUE){
+                $message = "Successfully send notification to user";
+            }
+            $this->con->close();
+
+            $response = array(
+                "status" => $status,
+                "message" => $message
+            );
+
+            return $response;
+        }
+
+        public function action(){
+            $request = json_decode(file_get_contents("php://input"));
+            $status = 0;
+
+            // echo json_encode($request);
+
+            $response = array();
+            if($request->action == "get"){
+                $response = $this->get();
+            }else{
+                $response = $this->send();
+            }
+
+            echo json_encode($response);
+        }
+    }
+
+    $notification = new Notification();
+
+    $notification->action();
+?>

@@ -12,6 +12,8 @@
         if(!empty($user_name) && !empty($password)){
             include "../DB_connection.php";
             
+            $database = new Database();
+            $con = $database->getConnection();
             // echo 11;
             // exit;
             $user_name = strtolower($user_name);

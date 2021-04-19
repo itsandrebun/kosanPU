@@ -53,12 +53,12 @@
                   $chosen_year = $_GET['year'];
                 }
 
-                $invoice_sql = "SELECT inv.invoice_id, inv.invoice_number, inv.user_id, inv.phone_number, inv.first_name, inv.last_name, inv.total_payment, inv.deposit, inv.due_date, inv.confirmed_date, inv.submitted_date, inv.payment_date, pst.payment_status_name FROM invoice AS inv JOIN user AS us ON us.user_id = inv.user_id JOIN payment_status AS pst ON pst.payment_status_id = inv.payment_status WHERE MONTH(inv.created_date) = '".$chosen_month."' AND year(inv.created_date) = '".$chosen_year."'";
+                $invoice_sql = "SELECT inv.invoice_id, inv.invoice_number, inv.user_id, inv.phone_number, inv.first_name, inv.last_name, inv.total_payment, inv.deposit, inv.due_start_date, inv.due_end_date, inv.confirmed_date, inv.submitted_date, inv.payment_date, pst.payment_status_name FROM invoice AS inv JOIN user AS us ON us.user_id = inv.user_id JOIN payment_status AS pst ON pst.payment_status_id = inv.payment_status WHERE MONTH(inv.created_date) = '".$chosen_month."' AND year(inv.created_date) = '".$chosen_year."'";
                 if(!empty($_GET['payment_status'])){
                   $invoice_sql .= " AND inv.payment_status = ".$_GET['payment_status'];
                 }
-                $payment_status_sql = "SELECT * FROM payment_status";
                 $invoices = $con->query($invoice_sql);
+                $payment_status_sql = "SELECT * FROM payment_status";
                 $payment_status = $con->query($payment_status_sql);
 
                 // echo $room_sql;

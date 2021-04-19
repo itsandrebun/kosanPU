@@ -26,6 +26,9 @@
         if((!empty($user_first_name) && preg_match('/^[\p{L} ]+$/u', $user_first_name)) && (!empty($user_checkbox) && preg_match('/^[\p{L} ]+$/u', $user_first_name)) && (!empty($password) && strlen($password) >= 8) && (!empty($confirm_password) && $password == $confirm_password) && !empty($user_dob) && !empty($user_gender) && !empty($user_checkbox) && (!empty($user_email) && strpos($user_email, "@")!== false) && (!empty($user_phonenumber) && is_numeric($user_phonenumber) && (strlen($user_phonenumber)>=10||($user_phonenumber)<=15))){
             include "DB_connection.php";
 
+            $database = new Database();
+            $con = $database->getConnection();
+            
             $check_email_or_phone_number = "SELECT * FROM user FROM email = '".strtolower($user_email)."' OR phone_number = '".$user_phonenumber."'";
 
             $check_email_or_phone_number = $con->query($check_email_or_phone_number);

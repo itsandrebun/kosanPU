@@ -24,6 +24,8 @@
         <?php
             $room_data = array();
             include "DB_connection.php";
+            $database = new Database();
+            $con = $database->getConnection();
 
             $room_sql = "SELECT * FROM room WHERE gender = ".$_GET['gender'];
 

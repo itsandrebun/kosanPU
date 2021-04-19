@@ -20,6 +20,8 @@
         if((!empty($first_name) && strlen($first_name) >= 5) && !empty($last_name) && (!empty($email) && strpos($email, "@")!== false) && (!empty($phone_number) && (strlen($phone_number) >= 10 || strlen($phone_number) <= 15)) && isset($gender)){
             include "../DB_connection.php";
             
+            $database = new Database();
+            $con = $database->getConnection();
             // echo 11;
             // exit;
             $check_email_or_phone_number = "SELECT us.user_id, us.user_code, us.first_name, us.last_name, 

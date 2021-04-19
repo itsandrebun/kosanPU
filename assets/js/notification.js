@@ -1,0 +1,123 @@
+getNotification();
+
+function getNotification(){
+    var a = 0;
+    setInterval(function(){
+        a+= 1;
+        console.log(a);
+
+        var notificationAction = "get";
+        var requestData = {};
+        if(a > 0 && a % 10 == 0){
+            notificationAction = "update";
+        }
+        requestData = {
+            action: notificationAction
+        };
+
+        if(tenant_id != null){
+            requestData = {
+                action: notificationAction,
+                tenant_id: tenant_id
+            };
+        }
+        $.ajax({
+            method : "POST",
+            url : fullUrl,
+            data : JSON.stringify(requestData),
+            success : function(resultData){
+                // console.log(resultData);
+                var data = resultData['data'];
+                var totalUnreadNotifications = resultData['total_unread'];
+
+                var notificationDiv = "";
+                notificationDiv += '<h6 class="dropdown-header mykosan-alert-header">';
+                notificationDiv += 'Alerts Center';
+                notificationDiv += '</h6>';
+                if(data != null){
+                    for(b = 0; b < data.length; b++){
+                        var dateObj = new Date(data[b]['created_date']);
+                        // var weekday = dateObj.toLocaleString("default", { weekday: "long" });
+                        // var date =
+                        var monthList = ["January","February","March","April","May","June","July","August","September","October","November","December"];
+                        var year = dateObj.getFullYear();
+                        var date = dateObj.getDate();
+                        if(date < 10){
+                            date = ("0"+date);
+                        }
+                        var month = dateObj.getMonth();
+                        var fullDate = monthList[month]+' '+date+','+year;
+                        // console.log(weekday);
+
+                        if(tenant_id == null){
+                            notificationDiv += '<a class="dropdown-item d-flex align-items-center" href="#">';
+                            notificationDiv += '<div class="mr-3">';
+                            notificationDiv += '<div class="icon-circle bg-primary">';
+                            notificationDiv += '<i class="fas fa-file-alt text-white"></i>';
+                            notificationDiv += '</div>';
+                            notificationDiv += '</div>';
+                            notificationDiv += '<div>';
+                            notificationDiv += '<div class="small text-gray-500">'+fullDate+'</div>';
+                            notificationDiv += '<span class="font-weight-bold">'+data[b]['description'].replace('[user]',(data[b]['first_name']+' '+data[b]['last_name'])).replace('[invoice_code]',data[b]['invoice_number'])+'</span>';
+                            notificationDiv += '</div>';
+                            notificationDiv += '</a>';
+                        }else{
+                            notificationDiv += '<li>'
+                            notificationDiv += '<a class="dropdown-item d-flex align-items-center">'
+                            notificationDiv += '<div class="mr-3">'
+                            notificationDiv += '<div class="icon-circle bg-primary mykosan-icon-background-color" style="height: 2.5rem;width: 2.5rem;border-radius: 100%;display: flex;align-items: center;justify-content: center;">'
+                            notificationDiv += '<i class="fas fa-file-alt text-white"></i>'
+                            notificationDiv += '</div>'
+                            notificationDiv += '</div>'
+                            notificationDiv += '<div style="color: #b7b9cc !important;font-size: 80%;font-weight: 400;">'
+                            notificationDiv += '<span>'+data[b]['description'].replace('[user]',(data[b]['first_name']+' '+data[b]['last_name'])).replace('[invoice_code]',data[b]['invoice_number'])+'</span>'
+                            notificationDiv += '<span class="d-block" style="font-size:11px;">'+fullDate+'</span>'
+                            notificationDiv += '</div>'
+                            notificationDiv += '</a>'
+                            notificationDiv += '</li>'
+                        }
+                    }
+                }else{
+                    if(tenant_id == null){
+                        notificationDiv += '<a class="dropdown-item d-flex align-items-center" href="#">';
+                        notificationDiv += '<div class="mr-3">';
+                        notificationDiv += '<div class="icon-circle bg-primary">';
+                        notificationDiv += '<i class="fas fa-file-alt text-white"></i>';
+                        notificationDiv += '</div>';
+                        notificationDiv += '</div>';
+                        notificationDiv += '<div>';
+                        notificationDiv += '<div class="small text-gray-500">No data found!</div>';
+                        notificationDiv += '</div>';
+                        notificationDiv += '</a>';
+                    }else{
+                        notificationDiv += '<li>'
+                        notificationDiv += '<a class="dropdown-item d-flex align-items-center">'
+                        notificationDiv += '<div class="mr-3">'
+                        notificationDiv += '<div class="icon-circle bg-primary mykosan-icon-background-color" style="height: 2.5rem;width: 2.5rem;border-radius: 100%;display: flex;align-items: center;justify-content: center;">'
+                        notificationDiv += '<i class="fas fa-file-alt text-white"></i>'
+                        notificationDiv += '</div>'
+                        notificationDiv += '</div>'
+                        notificationDiv += '<div style="color: #b7b9cc !important;font-size: 80%;font-weight: 400;">'
+                        notificationDiv += '<span>No data found!</span>'
+                        notificationDiv += '</div>'
+                        notificationDiv += '</a>'
+                        notificationDiv += '</li>'
+                    }
+                }
+
+                document.getElementById('notificationDropdown').innerHTML = notificationDiv;
+
+                if(typeof totalUnreadNotifications !== 'undefined'){
+                    totalUnreadNotifications = totalUnreadNotifications;
+                }else{
+                    totalUnreadNotifications = 0;
+                }
+
+                document.getElementById('totalUnreadNotifications').innerHTML = totalUnreadNotifications;
+            }
+            // error: function(){
+            //     console.log("bbb");
+            // }
+        });
+    },1000)
+}

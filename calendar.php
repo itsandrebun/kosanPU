@@ -18,6 +18,8 @@
     <div class="container-fluid">
         <?php
             include "DB_connection.php";
+            $database = new Database();
+            $con = $database->getConnection();
             $price_array = array();
             
             $price_sql = "SELECT * FROM internal_parameter";

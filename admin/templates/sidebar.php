@@ -82,9 +82,9 @@
     </li>
 
     <li class="nav-item<?= isset($transaction_active) ? ' active' : '';?>">
-        <a class="nav-link" href="<?=(isset($inside_folder) ? '../transaction/list' : 'transaction/list');?>">
+        <a class="nav-link" href="<?=(isset($inside_folder) ? '../booking/list' : 'booking/list');?>">
             <i class="fas fa-fw fa-list"></i>
-            <span>Transaction</span>
+            <span>Booking</span>
         </a>
     </li>
 

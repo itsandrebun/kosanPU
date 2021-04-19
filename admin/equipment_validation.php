@@ -14,6 +14,9 @@
                 $_SESSION['equipment_name_error'] = $equipment_name;
             }else{
                 include "../DB_connection.php";
+
+                $database = new Database();
+                $con = $database->getConnection();
                 $modification_sql = "";
                 if($equipment_id == null){
                     $modification_sql = "INSERT INTO equipment(equipment_name) VALUES ('".$equipment_name."')";

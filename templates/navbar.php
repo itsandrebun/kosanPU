@@ -22,10 +22,32 @@
             <?php else:?>
             <ul class="navbar-nav ml-auto">
                 <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" id="notificationDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fas fa-bell fa-fw"></i>
+
+                        <span class="badge badge-danger badge-counter" id="totalUnreadNotifications" style="position: absolute;">0</span>
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="notificationDropdownMenuLink" id="notificationDropdown">
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center">
+                                <div class="mr-3">
+                                    <div class="icon-circle bg-primary mykosan-icon-background-color" style="height: 2.5rem;width: 2.5rem;border-radius: 100%;display: flex;align-items: center;justify-content: center;">
+                                        <i class="fas fa-file-alt text-white"></i>
+                                    </div>
+                                </div>
+                                <div style="color: #b7b9cc !important;font-size: 80%;font-weight: 400;">
+                                    <span>Hi, Sushi Estia. Aku harap agar kamu segera membayar tunggakan! Terima kasih</span>
+                                    <span class="d-block" style="font-size:11px;">September 20, 2019</span>
+                                </div>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                         Hi, <?= $logged_in_user['first_name'].' '.$logged_in_user['last_name'];?>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="navbarDropdownMenuLink">
+                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
                         <li><a class="dropdown-item" href="profile.php">Profile</a></li>
                         <li>
                             <?php

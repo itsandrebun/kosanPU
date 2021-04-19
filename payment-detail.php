@@ -20,7 +20,9 @@
     ?>
     <div class="image-login-register d-flex justify-content-end">
     <?php
-       include "DB_connection.php";
+        include "DB_connection.php";
+        $database = new Database();
+        $con = $database->getConnection();
     ?>
     <img src="assets/photo/kosan.jpg" class="card-img-top" alt="...">
         <div class="position-fixed d-flex justify-content-center p-3" style="top: 50%;left: 50%;transform: translate(-50%, -50%);background:white">

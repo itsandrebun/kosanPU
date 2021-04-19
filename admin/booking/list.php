@@ -37,20 +37,20 @@
 
             <!-- Page Heading -->
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800">Invoice List</h1>
+                <h1 class="h3 mb-0 text-gray-800">Booking List</h1>
             </div>
             <?php
-                $tenant_data = array();
+                $booking_data = array();
 
-                $tenant_sql = "SELECT us.* FROM user AS us JOIN tenant AS tn ON tn.user_id = us.user_id";
+                $booking_sql = "SELECT us.user_code, us.email, us.first_name, us.last_name, rm.room_name, rm.room_id, tr.transaction_id, tr.booking_start_date, tr.booking_end_date, tr.terminated_date FROM transaction AS tr JOIN user AS us ON us.user_id = tr.user_id JOIN room AS rm ON rm.room_id = tr.room_id WHERE tr.transaction_type_id = 1";
 
-                $tenants = $con->query($tenant_sql);
+                $bookings = $con->query($booking_sql);
 
                 // echo $room_sql;
                 // print_r($rooms['num_rows']);
-                if($tenants->num_rows > 0){
-                    while($row = $tenants->fetch_assoc()) {
-                        array_push($tenant_data, $row);
+                if($bookings->num_rows > 0){
+                    while($row = $bookings->fetch_assoc()) {
+                        array_push($booking_data, $row);
                     }
                 }
                 $con->close();
@@ -59,23 +59,25 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Tenant Code</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
+                            <th>User Fullname</th>
                             <th>Email</th>
-                            <th>Phone Number</th>
+                            <th>Room</th>
+                            <th>Booking Start Date</th>
+                            <th>Booking End Date</th>
+                            <th>Status</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php for($k = 0; $k < count($tenant_data); $k++):?>
+                        <?php for($k = 0; $k < count($booking_data); $k++):?>
                           <tr>
-                              <td><?= $tenant_data[$k]['user_code'];?></td>
-                              <td><?= $tenant_data[$k]['first_name'];?></td>
-                              <td><?= $tenant_data[$k]['last_name'];?></td>
-                              <td><?= $tenant_data[$k]['email'];?></td>
-                              <td><?= $tenant_data[$k]['phone_number'];?></td>
-                              <td><a href="tenant_detail?id=<?= $tenant_data[$k]['user_id'];?>" class="ml-1 btn btn-primary mykosan-signature-button-color">View</a></td>
+                              <td><?= $booking_data[$k]['first_name'].' '.$booking_data[$k]['last_name'];?></td>
+                              <td><?= $booking_data[$k]['email'];?></td>
+                              <td><?= $booking_data[$k]['room_name'];?></td>
+                              <td><?= $booking_data[$k]['booking_start_date'];?></td>
+                              <td><?= $booking_data[$k]['booking_end_date'];?></td>
+                              <td><?= ((strtotime('now') >= strtotime($booking_data[$k]['booking_start_date']) && strtotime('now') <= strtotime($booking_data[$k]['booking_end_date']) ) && $booking_data[$k]['terminated_date'] == null ? '<span class="badge bg-success" style="color:white">Active</span>' : '<span class="badge bg-secondary" style="color:white">Inactive</span>');?></td>
+                              <td><a href="detail?id=<?= $booking_data[$k]['transaction_id'];?>" class="ml-1 btn btn-primary mykosan-signature-button-color">View</a></td>
                           </tr>
                         <?php endfor;?>
                     </tbody>

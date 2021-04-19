@@ -33,6 +33,9 @@
     <?php
         include isset($inside_folder) ? "../../DB_connection.php" : "../DB_connection.php";
 
+        $database = new Database();
+        $con = $database->getConnection();
+        
         $notification_data = array();
         $total_notification = 0;
 
@@ -55,10 +58,10 @@
         <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-bell fa-fw"></i>
             <!-- Counter - Alerts -->
-            <span class="badge badge-danger badge-counter"><?= $total_notification > 10 ? ($total_notification."+") : $total_notification;?></span>
+            <span class="badge badge-danger badge-counter" id="totalUnreadNotifications"><?= $total_notification > 10 ? ($total_notification."+") : $total_notification;?></span>
         </a>
         <!-- Dropdown - Alerts -->
-        <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown">
+        <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown" id="notificationDropdown">
             <h6 class="dropdown-header mykosan-alert-header">
                 Alerts Center
             </h6>

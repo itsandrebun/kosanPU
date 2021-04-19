@@ -16,6 +16,9 @@
         if(!empty($bank_name) && !(empty($bank_account_number) && is_numeric($bank_account_number) && (strlen($bank_account_number) >= 10 || strlen($bank_account_number) <= 15)) && !empty($bank_description) && !empty($owner_name)){
             include "../DB_connection.php";
 
+            $database = new Database();
+            $con = $database->getConnection();
+            
             $modification_sql = "";
             if($bank_id == 0){
                 $modification_sql = "INSERT INTO banks (bank_name, bank_account_number, bank_description, owner_name) VALUES ('".$bank_name."','".$bank_account_number."','".$bank_description."','".$owner_name."')";

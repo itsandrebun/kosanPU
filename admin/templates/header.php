@@ -7,7 +7,17 @@
   <meta name="author" content="">
 
   <title><?= $page_title;?></title>
-
-  <?php include "css_list.php";?>
+  
+  <?php
+    $actual_link = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+    $link_part = explode("/",$actual_link);
+    
+    if(isset($inside_folder)){
+      $actual_link = str_replace($link_part[count($link_part) - 3].'/'.$link_part[count($link_part) - 2].'/'.$link_part[count($link_part) - 1],"api/notification",$actual_link);
+    }else{
+      $actual_link = str_replace($link_part[count($link_part) - 2].'/'.$link_part[count($link_part) - 1],"api/notification",$actual_link);
+    }
+    include "css_list.php";
+  ?>
 
 </head>
