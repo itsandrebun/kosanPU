@@ -26,7 +26,7 @@
                 $notification_query .= " WHERE nt.user_id = ".$tenant_id;
             }
 
-            $total_unread_message = 0;
+            $total_unread_messages = 0;
             $status = 200;
             $message = "Successfully get notification data";
             $response = array();
@@ -36,7 +36,7 @@
                     array_push($notification_data, $row);
 
                     if($row['read_by_admin'] == 0){
-                        $total_unread_message += 1;
+                        $total_unread_messages += 1;
                     }
                 }
             }
@@ -45,7 +45,7 @@
             $response = array(
                 "status" => $status,
                 "message" => $message,
-                "total_unread_message" => $total_unread_message,
+                "total_unread_messages" => $total_unread_messages,
                 "data" => count($notification_data) > 0 ? $notification_data : null
             );
             return $response;

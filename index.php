@@ -14,7 +14,7 @@
       $logged_in_user = !empty($_SESSION['user']) ? $_SESSION['user'] : null;
       if($logged_in_user != null && $logged_in_user['tenant_id'] == null){
         session_destroy();
-        header("Location:/");
+        header("Location:index.php");
       }
     ?>
     <div class="image-login-register d-flex justify-content-end">

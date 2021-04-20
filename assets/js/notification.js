@@ -44,8 +44,9 @@ function getNotification(){
             success : function(resultData){
                 // console.log(resultData);
                 var data = resultData['data'];
-                var totalUnreadNotifications = resultData['total_unread'];
+                var totalUnreadNotifications = resultData['total_unread_messages'];
 
+                console.log(data);
                 var notificationDiv = "";
                 notificationDiv += '<h6 class="dropdown-header mykosan-alert-header">';
                 notificationDiv += 'Alerts Center';
@@ -62,7 +63,7 @@ function getNotification(){
                             date = ("0"+date);
                         }
                         var month = dateObj.getMonth();
-                        var fullDate = monthList[month]+' '+date+','+year;
+                        var fullDate = monthList[month]+' '+date+', '+year;
                         // console.log(weekday);
 
                         if(tenant_id == null){
@@ -125,9 +126,8 @@ function getNotification(){
 
                 if(typeof totalUnreadNotifications !== 'undefined'){
                     totalUnreadNotifications = totalUnreadNotifications;
-                }else{
-                    totalUnreadNotifications = 0;
                 }
+                
 
                 document.getElementById('totalUnreadNotifications').innerHTML = totalUnreadNotifications;
             }

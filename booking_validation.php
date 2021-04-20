@@ -29,18 +29,19 @@
             
             // echo $booking;exit;
             $booking = $con->query($booking_sql);
-            
+            $due_start_date = date("Y-m-01",strtotime($booking_end_date));
+            $due_end_date = date("Y-m-d H:i:s", strtotime($due_start_date." +1 week"));
             // print_r($booking);exit;
             if($booking->num_rows == 0){
                 $notification_msg = "Hi [user], you have successfully booked ".$room_name." on ".$booking_start_date." until ".$booking_end_date;
-                $insert_transaction_query = "CALL insert_transaction(".$logged_in_user['user_id'].", '".$logged_in_user['first_name']."', '".$logged_in_user['last_name']."', '".$logged_in_user['email']."', '".$logged_in_user['phone_number']."', '".$company_name."', '".$company_address."', '".date("Y-m-01",strtotime($booking_end_date))."', ".$room_parameter.", ".$rent_cost.", ".$total_price.", ".$deposit.", '".$booking_start_date."', '".$booking_end_date."', '".$notification_msg."')";
+                $insert_transaction_query = "CALL insert_transaction(".$logged_in_user['user_id'].", '".$logged_in_user['first_name']."', '".$logged_in_user['last_name']."', '".$logged_in_user['email']."', '".$logged_in_user['phone_number']."', '".$company_name."', '".$company_address."', '".$due_start_date."','".$due_end_date."', ".$room_parameter.", ".$rent_cost.", ".$total_price.", ".$deposit.", '".$booking_start_date."', '".$booking_end_date."', '".$notification_msg."')";
     
                 $insert_transaction_query = $con->query($insert_transaction_query);
     
                 $success_booking_msg = "You have successfully booked room ".$room_name;
                 $booked = 1;
             }else{
-                $booking_validation = "Sorry, you cannot book this room between these dates because it has been booked.";
+                $booking_validation = "Sorry, you cannot book this room between these dates because it has been booked by you or other tenant.";
             }
         }
 
