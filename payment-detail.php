@@ -116,15 +116,6 @@
                             <td>-</td>
                         </tr>
                     </tbody>
-                    <thead>
-                        <tr>
-                            <th scope="col">Transaction Code:</th>
-                            <th scope="col">Transaction Type:</th>
-                            <th scope="col">Total Price:</th>
-                            <th scope="col">Room No:</th>
-                            <th scope="col">Fine Items:</th>
-                        </tr>
-                    </thead>
                     <tbody>
                         <tr>
                             <td>KSINV21041100001</td>
