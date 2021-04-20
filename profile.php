@@ -31,8 +31,8 @@
                     <table class="table table-dark table-borderless">
                         <thead>
                             <tr>
-                                <th scope="col">First name</th>
-                                <th scope="col">Last Name</th>
+                                <th scope="col" class="pt-3 pb-0">First name</th>
+                                <th scope="col" class="pt-3 pb-0">Last Name</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -43,8 +43,8 @@
                         </tbody>
                         <thead>
                             <tr>
-                                <th scope="col">E-Mail</th>
-                                <th scope="col">Phone Number</th>
+                                <th scope="col" class="pt-0 pb-0">E-Mail</th>
+                                <th scope="col" class="pt-0 pb-0">Phone Number</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -55,14 +55,14 @@
                         </tbody>
                         <thead>
                             <tr>
-                                <th scope="col">Gender</th>
-                                <th scope="col">Date of Birth</th>
+                                <th scope="col" class="pt-0 pb-0">Gender</th>
+                                <th scope="col" class="pt-0 pb-0">Date of Birth</th>
                             </tr>
                         </thead>
                         <tbody>
                             <tr>
-                                <td><input type="text" name="gender" class="form-control" value="<?= $logged_in_user['gender'] == 1 ? 'Male' : 'Female';?>"></td>
-                                <td><input type="date" name="dob" class="form-control" value="<?= $logged_in_user['dob'];?>"></td>
+                                <td class="pb-3"><input type="text" name="gender" class="form-control" value="<?= $logged_in_user['gender'] == 1 ? 'Male' : 'Female';?>"></td>
+                                <td class="pb-3"><input type="date" name="dob" class="form-control" value="<?= $logged_in_user['dob'];?>"></td>
                             </tr>
                         </tbody>
                             <!-- <div>

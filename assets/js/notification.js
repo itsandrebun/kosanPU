@@ -4,11 +4,27 @@ function getNotification(){
     var a = 0;
     setInterval(function(){
         a+= 1;
+
+        var current = new Date();
+        var hour = current.getHours();
+        if(hour < 10){
+            hour = "0"+hour;
+        }
+        var minute = current.getMinutes();
+        if(minute < 10){
+            minute = "0"+minute;
+        }
+        var second = current.getSeconds();
+        if(second < 10){
+            second = "0"+second;
+        }
+        var fullTime = hour+":"+minute+":"+second;
+        console.log(hour+":"+minute+":"+second);
         console.log(a);
 
         var notificationAction = "get";
         var requestData = {};
-        if(a > 0 && a % 10 == 0){
+        if(fullTime == "00:00:00"){
             notificationAction = "send";
         }
         requestData = {
