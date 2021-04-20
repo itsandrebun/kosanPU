@@ -28,7 +28,7 @@
         <?php if(!empty($_SESSION['success_booking'])):?>
         <div class="alert alert-success alert-dismissible fade show position-absolute" role="alert" style="top:0%;left:0%">
           <strong><?= $_SESSION['success_booking'];?></strong>
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
         </div>
         <?php endif;?>
         <div class="position-fixed justify-content" style="top: 50%;left: 25%;transform: translate(-50%, -50%)">

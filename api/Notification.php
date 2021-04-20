@@ -5,20 +5,8 @@
     header("Access-Control-Allow-Methods: POST");
     header("Access-Control-Max-Age: 3600");
     header("Access-Control-Allow-Headers: Content-Type, Access-Control-Allow-Headers, Authorization, X-Requested-With");
-    // function get(){
-    //     $data = (Object)array(
-    //         "data" => null
-    //     );
-
-    //     echo json_encode($data);
-    // }
-
-    
-    // print_r($con);
-    // exit;
     include "../DB_connection.php";
     
-
     class Notification{
 
         protected $con;
@@ -54,11 +42,6 @@
             }
             $this->con->close();
 
-            // if(count($notification_data) == 0){
-            //     $status = 404;
-            //     $message = "Data not found!";
-            //     http_response_code($status);
-            // }
             $response = array(
                 "status" => $status,
                 "message" => $message,
@@ -76,7 +59,7 @@
             
             $current_date = date('Y-m-d H:i:s');
             $send_notification_query = "INSERT INTO notification(user_id, payment_status_id, invoice_id, description)";
-            $send_notification_query .= " SELECT tenant_id, 5, invoice_id, '[user] should pay the bill with the code: [invoice_code]. [user] didnot pay the bill on the specified due dates.' FROM invoice WHERE '".$current_date."' > due_end_date";
+            $send_notification_query .= " SELECT tenant_id, 5, invoice_id, '[user] should pay the bill with the code: [invoice_code]. [user] didnot pay the bill on the specified due dates.' FROM invoice WHERE '".$current_date."' > due_end_date AND invoice_id NOT IN (SELECT nt.invoice_id FROM notification AS nt WHERE nt.invoice_id = invoice.invoice_id AND nt.payment_status_id = 5)";
             $send_notification = $this->con->query($send_notification_query);
 
                 // print_r($update_notification);
@@ -96,15 +79,18 @@
 
         public function action(){
             $request = json_decode(file_get_contents("php://input"));
-            $status = 0;
-
-            // echo json_encode($request);
 
             $response = array();
             if($request->action == "get"){
                 $response = $this->get();
-            }else{
+            }elseif($request->action == "send"){
                 $response = $this->send();
+            }else{
+                http_response_code(404);
+                $response = array(
+                    "status" => 404,
+                    "message" => "Data not found!"
+                );
             }
 
             echo json_encode($response);

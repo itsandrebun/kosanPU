@@ -9,7 +9,7 @@ function getNotification(){
         var notificationAction = "get";
         var requestData = {};
         if(a > 0 && a % 10 == 0){
-            notificationAction = "update";
+            notificationAction = "send";
         }
         requestData = {
             action: notificationAction
