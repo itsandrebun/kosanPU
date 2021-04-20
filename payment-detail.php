@@ -79,7 +79,7 @@
                             </tbody>
                     </table>
                 <div>
-                <a href="payment-evidence.php" class="btn btn-primary d-block mt-2">Pay Now!</a>
+                <a href="payment-evidence" class="btn btn-primary d-block mt-2">Pay Now!</a>
                 </div>
             </div>
         </div>

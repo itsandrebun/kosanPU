@@ -27,50 +27,53 @@
         <div class="position-fixed d-flex justify-content-center p-3" style="top: 50%;left: 50%;transform: translate(-50%, -50%);background:white">
             <div style="height: 400px;overflow-y:auto">
                 <h3 class="text-center">Profile</h3>
+                <form>
                     <table class="table table-dark table-borderless">
-                            <thead>
-                                <tr>
-                                    <th scope="col">First name</th>
-                                    <th scope="col">Last Name</th>
+                        <thead>
+                            <tr>
+                                <th scope="col">First name</th>
+                                <th scope="col">Last Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="text" name="first_name" class="form-control" value="<?= $logged_in_user['first_name'];?>"></td>
+                                <td><input type="text" name="last_name" class="form-control" value="<?= $logged_in_user['last_name'];?>"></td>
+                            </tr>
+                        </tbody>
+                        <thead>
+                            <tr>
+                                <th scope="col">E-Mail</th>
+                                <th scope="col">Phone Number</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="text" name="email" class="form-control" value="<?= $logged_in_user['email'];?>"></td>
+                                <td><input type="text" name="phone_number" class="form-control" value="<?= $logged_in_user['phone_number'];?>"></td>
                                 </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><input type="text" name="first_name" class="form-control" value="<?= $logged_in_user['first_name'];?>"></td>
-                                    <td><input type="text" name="last_name" class="form-control" value="<?= $logged_in_user['last_name'];?>"></td>
-                                </tr>
-                            </tbody>
-                            <thead>
-                                <tr>
-                                    <th scope="col">E-Mail</th>
-                                    <th scope="col">Phone Number</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><input type="text" name="email" class="form-control" value="<?= $logged_in_user['email'];?>"></td>
-                                    <td><input type="text" name="phone_number" class="form-control" value="<?= $logged_in_user['phone_number'];?>"></td>
-                                </tr>
-                            </tbody>
-                            <thead>
-                                <tr>
-                                    <th scope="col">Gender</th>
-                                    <th scope="col">Date of Birth</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr>
-                                    <td><input type="text" name="gender" class="form-control" value="<?= $logged_in_user['gender'] == 1 ? 'Male' : 'Female';?>"></td>
-                                    <td><input type="date" name="dob" class="form-control" value="<?= $logged_in_user['dob'];?>"></td>
-                                </tr>
-                            </tbody>
+                        </tbody>
+                        <thead>
+                            <tr>
+                                <th scope="col">Gender</th>
+                                <th scope="col">Date of Birth</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td><input type="text" name="gender" class="form-control" value="<?= $logged_in_user['gender'] == 1 ? 'Male' : 'Female';?>"></td>
+                                <td><input type="date" name="dob" class="form-control" value="<?= $logged_in_user['dob'];?>"></td>
+                            </tr>
+                        </tbody>
                             <!-- <div>
                                 <a href="payment-evidence.php" class="btn btn-primary d-block mt-2">Pay Now!</a>
                             </div> -->
                     </table>
                     <div>
-                        <button type="button" class="btn btn-primary d-block mt-2 w-100" data-toggle="modal" data-target="#invoiceModalCenter">See Invoice</button>
+                        <input type="button" name="changeProfileButton" class="btn btn-primary w-100" value="Submit">
+                        <button type="button" class="btn btn-primary d-block mt-2 w-100" data-toggle="modal" data-target="#invoiceModalCenter" style="background:#aa6d5a!important;border-color:#aa6d5a!important;">See Invoice</button>
                     </div>
+                </form>
             </div>
         </div>
         <div class="modal fade" id="invoiceModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
