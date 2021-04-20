@@ -93,6 +93,7 @@
                             <th scope="col">Payment Status:</th>
                             <th scope="col">Payment Date:</th>
                             <th scope="col">Date In:</th>
+                            <th scope="col">See Detail:</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -101,13 +102,10 @@
                             <td>Done</td>
                             <td>21 March 2021</td>
                             <td>21 March 2021</td>
+                            <td><a href="payment-detail.php">Click Here!</a></td>
                         </tr>
                     </tbody>
                     </table>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                    <a href="payment-detail.php" class="btn btn-primary">See Detail</a>
                 </div>
             </div>
             </div>
