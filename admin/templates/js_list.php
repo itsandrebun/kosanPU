@@ -11,6 +11,7 @@
 <script>
     var fullUrl = "<?= $actual_link;?>";
     var tenant_id = null;
+    var total_unread_notification = "<?= $total_unread_notifications;?>";
 </script>
 <script src="<?=(isset($inside_folder) ? '../../assets/js/notification.js' : '../assets/js/notification.js');?>"></script>
 <?php endif;?>

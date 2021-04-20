@@ -19,7 +19,7 @@
         public function get(){
             $notification_data = array();
             $request = json_decode(file_get_contents("php://input"));
-            $notification_query = "SELECT nt.notification_id, nt.description, nt.read_by_admin, nt.read_by_tenant, nt.user_id, us.first_name, us.last_name, nt.created_date, inv.invoice_id, inv.invoice_number from notification AS nt JOIN user AS us ON us.user_id = nt.user_id JOIN invoice AS inv ON inv.invoice_id = nt.invoice_id ORDER BY nt.created_date DESC";
+            $notification_query = "SELECT nt.notification_id, nt.description, nt.read_by_admin, nt.read_by_tenant, nt.user_id, us.first_name, us.last_name, nt.created_date, inv.invoice_id, inv.invoice_number, tr.transaction_id, tr.transaction_code from notification AS nt JOIN user AS us ON us.user_id = nt.user_id LEFT JOIN invoice AS inv ON inv.invoice_id = nt.invoice_id LEFT JOIN transaction AS tr ON tr.transaction_id = nt.transaction_id ORDER BY nt.created_date DESC";
 
             if(isset($request->tenant_id)){
                 $tenant_id = $request->tenant_id;
@@ -48,6 +48,32 @@
                 "total_unread_messages" => $total_unread_messages,
                 "data" => count($notification_data) > 0 ? $notification_data : null
             );
+            return $response;
+        }
+
+        public function read(){
+            $request = json_decode(file_get_contents("php://input"));
+            $message = "Internal Server Error";
+            $status = 500;
+
+            $read_notification_query = "UPDATE notification SET read_by_admin_date = CURRENT_TIMESTAMP(), read_by_admin = 1";
+            if(isset($request->tenant_id)){
+                $read_notification_query = "UPDATE notification SET read_by_tenant_date = CURRENT_TIMESTAMP(), read_by_tenant = 1 WHERE tenant_id = ".$request->tenant_id;
+            }
+
+            $read_notification = $this->con->query($read_notification_query);
+            
+            if($read_notification === TRUE){
+                $message = "Successfully read all unread notifications";
+                $status = 200;
+            }
+            $this->con->close();
+
+            $response = array(
+                "status" => $status,
+                "message" => $message
+            );
+
             return $response;
         }
 
@@ -85,6 +111,8 @@
                 $response = $this->get();
             }elseif($request->action == "send"){
                 $response = $this->send();
+            }elseif($request->action == "read"){
+                $response = $this->read();
             }else{
                 http_response_code(404);
                 $response = array(

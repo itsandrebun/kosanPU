@@ -1,5 +1,6 @@
 <?php
 
+    session_start();
     $success = 0;
     
     $first_name_validation="";
@@ -9,7 +10,6 @@
     $gender_validation="";
     $date_of_birth_validation = "";
     if(isset($_POST['submitProfileForm'])){
-        session_start();
         $logged_in_user = $_SESSION['user'];
         $user_id = $logged_in_user['user_id'];
         $first_name = $_POST['first_name'];

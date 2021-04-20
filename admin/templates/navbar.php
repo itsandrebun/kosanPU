@@ -37,18 +37,22 @@
         $con = $database->getConnection();
         
         $notification_data = array();
-        $total_notification = 0;
+        $total_unread_notifications = 0;
 
-        $notification_sql = "SELECT nt.notification_id, nt.user_id, us.first_name, us.last_name, nt.description, nt.created_date FROM notification AS nt JOIN user AS us ON us.user_id = nt.user_id ORDER BY nt.created_date DESC";
+        $notification_sql = "SELECT nt.notification_id, nt.user_id, us.first_name, us.last_name, nt.description, nt.created_date, tr.transaction_id, tr.transaction_code, inv.invoice_id, inv.invoice_number, nt.read_by_admin FROM notification AS nt JOIN user AS us ON us.user_id = nt.user_id LEFT JOIN transaction AS tr ON tr.transaction_id = nt.transaction_id LEFT JOIN invoice AS inv ON inv.invoice_id = nt.invoice_id ORDER BY nt.created_date DESC";
 
         $notifications = $con->query($notification_sql);
 
         // echo $room_sql;
         // print_r($rooms['num_rows']);
         if($notifications->num_rows > 0){
-            $total_notification = $notifications->num_rows;
+            // $total_notification = $notifications->num_rows;
             while($row = $notifications->fetch_assoc()) {
                 array_push($notification_data, $row);
+
+                if($row['read_by_admin'] == 0){
+                    $total_unread_notifications += 1;
+                }
             }
         }
 
@@ -58,12 +62,12 @@
         <a class="nav-link dropdown-toggle" href="#" id="alertsDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
             <i class="fas fa-bell fa-fw"></i>
             <!-- Counter - Alerts -->
-            <span class="badge badge-danger badge-counter" id="totalUnreadNotifications"><?= $total_notification > 10 ? ($total_notification."+") : $total_notification;?></span>
+            <span class="badge badge-danger badge-counter" id="totalUnreadNotifications"><?= $total_unread_notifications > 10 ? ($total_unread_notifications."+") : $total_unread_notifications;?></span>
         </a>
         <!-- Dropdown - Alerts -->
         <div class="dropdown-list dropdown-menu dropdown-menu-right shadow animated--grow-in" aria-labelledby="alertsDropdown" id="notificationDropdown">
             <h6 class="dropdown-header mykosan-alert-header">
-                Alerts Center
+                Notifications Center
             </h6>
             <?php if(count($notification_data) == 0):?>
             <a class="dropdown-item d-flex align-items-center" href="#">
@@ -85,13 +89,18 @@
                     </div>
                 </div>
                 <div>
+                    <?php
+                        $notification_msg = str_replace("[user]",($notification_data[$k]['first_name'].' '.$notification_data[$k]['last_name']),$notification_data[$k]['description']);
+                        $notification_msg = str_replace("[invoice_code]",($notification_data[$k]['invoice_number']),$notification_msg);
+                        $notification_msg = str_replace("[transaction_code]",($notification_data[$k]['transaction_code']),$notification_msg);
+                    ?>
                     <div class="small text-gray-500"><?= date("F d, Y",strtotime($notification_data[$k]['created_date']));?></div>
-                    <span class="font-weight-bold"><?= str_replace("[user]",($notification_data[$k]['first_name'].' '.$notification_data[$k]['last_name']),$notification_data[$k]['description']);?></span>
+                    <span class="font-weight-bold"><?= $notification_msg;?></span>
                 </div>
             </a>
             <?php endfor;?>
             <?php endif;?>
-            <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a>
+            <!-- <a class="dropdown-item text-center small text-gray-500" href="#">Show All Alerts</a> -->
         </div>
     </li>
 
