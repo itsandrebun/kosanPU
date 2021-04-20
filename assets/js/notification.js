@@ -129,7 +129,7 @@ function getNotification(){
                 }
                 
 
-                document.getElementById('totalUnreadNotifications').innerHTML = totalUnreadNotifications;
+                document.getElementById('totalUnreadNotifications').innerHTML = (totalUnreadNotifications > 10 ? "10+" : totalUnreadNotifications);
             }
             // error: function(){
             //     console.log("bbb");
