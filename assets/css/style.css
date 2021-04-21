@@ -80,6 +80,10 @@ a.redirect-to-privacy-popup{
     background-image:linear-gradient(180deg,#287ecf 50%,#396998 100%)!important;
 }
 
+.mykosan-signature-danger-button-color{
+    background-image: linear-gradient(180deg,#cf2828 50%,#983939 100%)!important;
+}
+
 .mykosan-sidebar{
     max-height:100vh;
     overflow-y:auto;
@@ -93,4 +97,8 @@ a.redirect-to-privacy-popup{
 .mykosan-content-wrapper{
     max-height:100vh;
     overflow-y:auto;
+}
+
+img.payment_evidence_image{
+    width:12rem;
 }

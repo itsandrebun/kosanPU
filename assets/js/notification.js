@@ -94,7 +94,7 @@ function getNotification(requestData){
                             notificationDiv += '</div>'
                             notificationDiv += '</div>'
                             notificationDiv += '<div style="color: #b7b9cc !important;font-size: 80%;font-weight: 400;">'
-                            notificationDiv += '<span>'+data[b]['description'].replace('[user]',(data[b]['first_name']+' '+data[b]['last_name'])).replace('[invoice_code]',data[b]['invoice_number']).replace('[transaction_code]',data[b]['transaction_code'])+'</span>'
+                            notificationDiv += '<span>'+data[b]['description'].replace('[user]','You').replace('[invoice_code]',data[b]['invoice_number']).replace('[transaction_code]',data[b]['transaction_code'])+'</span>'
                             notificationDiv += '<span class="d-block" style="font-size:11px;">'+fullDate+'</span>'
                             notificationDiv += '</div>'
                             notificationDiv += '</a>'

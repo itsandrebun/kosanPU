@@ -63,12 +63,22 @@
             <div class="data-list">
                 <form action="../submit_evidence" method="POST" enctype="multipart/form-data">
                     <div class="form-group">
-                        <label for="user_name" class="col-form-label font-weight-bold">User Name</label>
-                        <input type="text" readonly name="user_name" class="form-control" value="<?= $payment_history_master_data['first_name'] . ' ' . $payment_history_master_data['last_name'];?>">
-                    </div>
-                    <div class="form-group">
                         <label for="user_code" class="col-form-label font-weight-bold">User Code</label>
                         <input type="text" readonly name="user_code" class="form-control" value="<?= $payment_history_master_data['user_code'] ;?>" readonly>
+                    </div>
+                    <div class="row">
+                      <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="user_name" class="col-form-label font-weight-bold">First Name</label>
+                            <input type="text" readonly name="user_first_name" class="form-control" value="<?= $payment_history_master_data['first_name'];?>">
+                        </div>
+                      </div>
+                      <div class="col-md-6">
+                        <div class="form-group">
+                            <label for="user_name" class="col-form-label font-weight-bold">Last Name</label>
+                            <input type="text" readonly name="user_last_name" class="form-control" value="<?= $payment_history_master_data['last_name'];?>">
+                        </div>
+                      </div>
                     </div>
                     <div class="form-group">
                         <input type="hidden" name="invoice_id" value="<?= $_GET['id'];?>">
@@ -77,17 +87,30 @@
                     </div>
                     <div class="form-group">
                         <label for="payment_evidence" class="col-form-label font-weight-bold">Payment Evidence</label>
-                        <?php if($payment_history_master_data['payment_status'] < 3):?>
-                        <button type="button" class="btn btn-primary mykosan-signature-button-color" onclick="document.getElementById('payment_evidence').click();">Upload</button>
-                        <input type="file" name="payment_evidence" class="form-control d-none" id="payment_evidence">
-                        <?php endif;?>
+                        <img class="d-block payment_evidence_image" src="<?= $payment_history_master_data['payment_evidence'];?>" alt="" onError="this.onerror=null;this.src='../../assets/photo/invoice-icon-line-style-symbol-shopping-icon-collection-invoice-creative-element-logo-infographic-ux-ui-invoice-icon-169076566.jpg';">
                     </div>
                     <div class="form-group">
                         <label for="payment_date" class="col-form-label font-weight-bold">Payment Date</label>
                         <input type="date" name="payment_date" class="form-control" value="<?= $payment_history_master_data['payment_status'] >= 3 ? ($payment_history_master_data['payment_date'] != null ? date('Y-m-d',strtotime($payment_history_master_data['payment_date'])) : '') : '';?>" <?= $payment_history_master_data['payment_status'] >= 3 ? 'readonly' : '';?>>
                     </div>
-                    <input type="submit" name="confirmEvidenceButton" class="btn btn-primary mykosan-signature-button-color" value="Submit">
+                    <?php if($payment_history_master_data['payment_status'] == 4):?>
+                    <div class="form-group">
+                        <label for="rejected_reason" class="col-form-label font-weight-bold">Rejected Reason</label>
+                        <textarea style="resize:none" class="form-control <?= (!empty($_SESSION['rejected_reason_validation']) ? ('is-invalid') : '') ;?>" name="rejected_reason"><?= (!empty($_SESSION['rejected_reason_error']) ? $_SESSION['rejected_reason_error'] : '') ;?></textarea>
+                        <?= (!empty($_SESSION['rejected_reason_validation']) ? ('<div class="invalid-feedback">'.$_SESSION['rejected_reason_validation'].'</div>') : '') ;?>
+                    </div>
+                    <?php endif;?>
+                    <div class="btn-group d-flex justify-content-end" role="group" aria-label="Basic example">
+                      <div>
+                        <input type="submit" name="confirmEvidenceButton" class="btn btn-primary mykosan-signature-button-color" value="Approve"<?= ($payment_history_master_data['payment_status'] == 3 ? ' disabled' : '');?>>
+                        <input type="submit" name="rejectEvidenceButton" class="btn btn-danger ml-2 mykosan-signature-danger-button-color" value="Reject"<?= ($payment_history_master_data['payment_status'] == 3 ? ' disabled' : '');?>>
+                      </div>
+                    </div>
                 </form>
+                <?php
+                  unset($_SESSION['rejected_reason_validation']);
+                  unset($_SESSION['rejected_reason_error']);
+                ?>
                 <hr>
                 <div id="payment_history_div" class="mt-4">
                     <h1 class="h3 mb-0 text-gray-800">Payment History</h1>
@@ -96,7 +119,7 @@
                           <tr>
                             <th class="text-center">Payment Status Name</th>
                             <th class="text-center">Payment Status Description</th>
-                            <th class="text-center">Payment Status Date</th>
+                            <th class="text-center">History Date</th>
                           </tr>
                       </thead>
                       <tbody>
