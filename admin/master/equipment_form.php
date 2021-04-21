@@ -3,7 +3,7 @@
 <?php
     $page_title = (isset($_GET['id']) ? 'Edit Equipment' : 'Create Equipment')." - Kosan Admin Panel";
     $inside_folder = 1;
-    $room_active = 1;
+    $equipment_active = 1;
     include "../templates/header.php";
     session_start();
     $logged_in_user = !empty($_SESSION['user']) ? $_SESSION['user'] : null;
@@ -44,7 +44,7 @@
                 $room_mapping_array = array();
 
                 if(!empty($_GET['id'])){
-                    $equipment_sql = "SELECT eq.* FROM equipment AS eq WHERE eq.equipment_id = ".$_GET['id'];
+                    $equipment_sql = "SELECT eq.equipment_id, eq.equipment_name, fn.price AS fine_cost FROM equipment AS eq LEFT JOIN fine AS fn ON fn.item_id = eq.equipment_id WHERE eq.equipment_id = ".$_GET['id'];
                     $room_mapping_sql = "SELECT rm.*,(CASE WHEN rm.room_id IN (SELECT rem.room_id FROM room_equipment_mapping AS rem WHERE rem.equipment_id = ".$_GET['id'].") THEN 1 ELSE 0 END) AS room_availability from room as rm";
 
                     $equipments = $con->query($equipment_sql);
@@ -70,13 +70,18 @@
                       <input class="form-control <?= (!empty($_SESSION['equipment_name_validation']) ? ('is-invalid') : '') ;?>" name="equipment_name" value="<?= (!empty($_GET['id'])) ? (!empty($_SESSION['equipment_name_error']) ? $_SESSION['equipment_name_error'] : $equipment_data['equipment_name']) : (!empty($_SESSION['equipment_name_error']) ? $_SESSION['equipment_name_error'] : '') ;?>">
                       <?= (!empty($_SESSION['equipment_name_validation']) ? ('<div class="invalid-feedback">'.$_SESSION['equipment_name_validation'].'</div>') : '') ;?>
                   </div>
+                  <div class="form-group">
+                      <label for="fine_cost" class="col-form-label font-weight-bold">Fine Cost</label>
+                      <input type="number" class="form-control <?= (!empty($_SESSION['fine_cost_validation']) ? ('is-invalid') : '') ;?>" name="fine_cost" value="<?= (!empty($_GET['id'])) ? (!empty($_SESSION['fine_cost_error']) ? $_SESSION['fine_cost_error'] : $equipment_data['fine_cost']) : (!empty($_SESSION['fine_cost_error']) ? $_SESSION['fine_cost_error'] : '') ;?>">
+                      <?= (!empty($_SESSION['fine_cost_validation']) ? ('<div class="invalid-feedback">'.$_SESSION['fine_cost_validation'].'</div>') : '') ;?>
+                  </div>
                   <input type="submit" name="submitEquipmentForm" value="Submit" class="btn btn-primary mykosan-signature-button-color">
                 </form>
                 <?php if(isset($_GET['id'])):?>
                     <hr>
                     <!-- <h5 class="mt-4 font-weight-bold">Available in</h5> -->
                     <div class="d-sm-flex align-items-center justify-content-between mb-3 mt-3">
-                        <h4 class="h4 mb-0 text-gray-800">Dashboard</h4>
+                        <h4 class="h4 mb-0 text-gray-800">Available in</h4>
                         <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary mykosan-signature-button-color shadow-sm" data-toggle="modal" data-target="#equipmentAvailabilityPopup"><i class="fas fa-edit fa-sm text-white-50"></i> Edit Available Rooms</button>
                     </div>
                     <?php if(count($room_mapping_array) == 0):?>
@@ -103,6 +108,8 @@
                 <?php
                   unset($_SESSION['equipment_name_error']);
                   unset($_SESSION['equipment_name_validation']);
+                  unset($_SESSION['fine_cost_error']);
+                  unset($_SESSION['fine_cost_validation']);
                 ?>
             </div>
 
