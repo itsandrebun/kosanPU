@@ -44,25 +44,41 @@
                 $room_data = array();
                 $chosen_month = date('m');
                 if(!empty($_GET['month'])){
-                  $chosen_month = $_GET['month'];
+                    if($chosen_month == "all"){
+                      $chosen_month = "all";
+                    }else{
+                      $chosen_month = $_GET['month'];
+                    }
                 }
+
+                // echo $_GET['month'] == "" ? 0 : 1;
+                // echo $chosen_month;
                 $chosen_year = date('Y');
                 if(!empty($_GET['year'])){
                   $chosen_year = $_GET['year'];
                 }
                 
-
                 $booking_sql = "SELECT us.user_code, us.email, us.first_name, us.last_name, rm.room_name, rm.room_id, tr.transaction_id, tr.booking_start_date, tr.booking_end_date, tr.terminated_date FROM transaction AS tr JOIN user AS us ON us.user_id = tr.user_id JOIN room AS rm ON rm.room_id = tr.room_id WHERE tr.transaction_type_id = 1 AND ((MONTH(tr.booking_start_date) = '".$chosen_month."' AND YEAR(tr.booking_start_date) = '".$chosen_year."') OR (MONTH(tr.booking_end_date) = '".$chosen_month."' AND YEAR(tr.booking_end_date) = '".$chosen_year."'))";
 
-                if(!empty($_GET['room'])){
+                if($chosen_month == "all"){
+                  $booking_sql = "SELECT us.user_code, us.email, us.first_name, us.last_name, rm.room_name, rm.room_id, tr.transaction_id, tr.booking_start_date, tr.booking_end_date, tr.terminated_date FROM transaction AS tr JOIN user AS us ON us.user_id = tr.user_id JOIN room AS rm ON rm.room_id = tr.room_id WHERE tr.transaction_type_id = 1 AND ((YEAR(tr.booking_start_date) = '".$chosen_year."') OR (YEAR(tr.booking_end_date) = '".$chosen_year."'))";
+                  if($chosen_year == "all"){
+                    $booking_sql = "SELECT us.user_code, us.email, us.first_name, us.last_name, rm.room_name, rm.room_id, tr.transaction_id, tr.booking_start_date, tr.booking_end_date, tr.terminated_date FROM transaction AS tr JOIN user AS us ON us.user_id = tr.user_id JOIN room AS rm ON rm.room_id = tr.room_id WHERE tr.transaction_type_id = 1";
+                  }
+                }elseif($chosen_year == "all"){
+                  $booking_sql = "SELECT us.user_code, us.email, us.first_name, us.last_name, rm.room_name, rm.room_id, tr.transaction_id, tr.booking_start_date, tr.booking_end_date, tr.terminated_date FROM transaction AS tr JOIN user AS us ON us.user_id = tr.user_id JOIN room AS rm ON rm.room_id = tr.room_id WHERE tr.transaction_type_id = 1 AND ((MONTH(tr.booking_start_date) = '".$chosen_month."') OR (MONTH(tr.booking_end_date) = '".$chosen_month."'))";
+                  if($chosen_month == "all"){
+                    $booking_sql = "SELECT us.user_code, us.email, us.first_name, us.last_name, rm.room_name, rm.room_id, tr.transaction_id, tr.booking_start_date, tr.booking_end_date, tr.terminated_date FROM transaction AS tr JOIN user AS us ON us.user_id = tr.user_id JOIN room AS rm ON rm.room_id = tr.room_id WHERE tr.transaction_type_id = 1";
+                  }
+                }
+
+                if(!empty($_GET['room']) && $_GET['room'] != "all"){
                   $booking_sql .= " AND tr.room_id = ".$_GET['room'];
                 }
                 $room_sql = "SELECT rm.* from room AS rm";
                 $bookings = $con->query($booking_sql);
                 $rooms = $con->query($room_sql);
 
-                // echo $room_sql;
-                // print_r($rooms['num_rows']);
                 if($bookings->num_rows > 0){
                     while($row = $bookings->fetch_assoc()) {
                         array_push($booking_data, $row);
@@ -81,19 +97,19 @@
                   <div class="row mb-2">
                     <div class="col-md-4">
                         <select name="month" id="" class="form-control">
-                            <option value="">Choose Month</option>
-                            <option value="01" <?= !empty($chosen_month) && $chosen_month == '01' ? 'selected' : '' ;?>>January</option>
-                            <option value="02" <?= !empty($chosen_month) && $chosen_month == '02' ? 'selected' : '' ;?>>February</option>
-                            <option value="03" <?= !empty($chosen_month) && $chosen_month == '03' ? 'selected' : '' ;?>>March</option>
-                            <option value="04" <?= !empty($chosen_month) && $chosen_month == '04' ? 'selected' : '' ;?>>April</option>
-                            <option value="05" <?= !empty($chosen_month) && $chosen_month == '05' ? 'selected' : '' ;?>>May</option>
-                            <option value="06" <?= !empty($chosen_month) && $chosen_month == '06' ? 'selected' : '' ;?>>June</option>
-                            <option value="07" <?= !empty($chosen_month) && $chosen_month == '07' ? 'selected' : '' ;?>>July</option>
-                            <option value="08" <?= !empty($chosen_month) && $chosen_month == '08' ? 'selected' : '' ;?>>August</option>
-                            <option value="09" <?= !empty($chosen_month) && $chosen_month == '09' ? 'selected' : '' ;?>>September</option>
-                            <option value="10" <?= !empty($chosen_month) && $chosen_month == '10' ? 'selected' : '' ;?>>October</option>
-                            <option value="11" <?= !empty($chosen_month) && $chosen_month == '11' ? 'selected' : '' ;?>>November</option>
-                            <option value="12" <?= !empty($chosen_month) && $chosen_month == '12' ? 'selected' : '' ;?>>December</option>
+                            <option value="all">Choose Month</option>
+                            <option value="01" <?= $chosen_month != "" && $chosen_month == '01' ? 'selected' : '' ;?>>January</option>
+                            <option value="02" <?= $chosen_month != "" && $chosen_month == '02' ? 'selected' : '' ;?>>February</option>
+                            <option value="03" <?= $chosen_month != "" && $chosen_month == '03' ? 'selected' : '' ;?>>March</option>
+                            <option value="04" <?= $chosen_month != "" && $chosen_month == '04' ? 'selected' : '' ;?>>April</option>
+                            <option value="05" <?= $chosen_month != "" && $chosen_month == '05' ? 'selected' : '' ;?>>May</option>
+                            <option value="06" <?= $chosen_month != "" && $chosen_month == '06' ? 'selected' : '' ;?>>June</option>
+                            <option value="07" <?= $chosen_month != "" && $chosen_month == '07' ? 'selected' : '' ;?>>July</option>
+                            <option value="08" <?= $chosen_month != "" && $chosen_month == '08' ? 'selected' : '' ;?>>August</option>
+                            <option value="09" <?= $chosen_month != "" && $chosen_month == '09' ? 'selected' : '' ;?>>September</option>
+                            <option value="10" <?= $chosen_month != "" && $chosen_month == '10' ? 'selected' : '' ;?>>October</option>
+                            <option value="11" <?= $chosen_month != "" && $chosen_month == '11' ? 'selected' : '' ;?>>November</option>
+                            <option value="12" <?= $chosen_month != "" && $chosen_month == '12' ? 'selected' : '' ;?>>December</option>
                         </select>
                     </div>
                     <div class="col-md-4">
@@ -101,7 +117,7 @@
                             $year = date('Y');
                         ?>
                         <select name="year" id="" class="form-control">
-                          <option value="">Choose Year</option>
+                          <option value="all">Choose Year</option>
                           <?php for($k = ($year - 4); $k < ($year + 5); $k++):?>
                               <option value="<?= $k ;?>" <?= !empty($chosen_year) && $chosen_year == $k ? 'selected' : '' ;?>><?= $k ;?></option>
                           <?php endfor;?>
@@ -109,7 +125,7 @@
                     </div>
                     <div class="col-md-4">
                           <select name="room" class="form-control">
-                            <option value="">Choose Room</option>
+                            <option value="all">Choose Room</option>
                             <?php for($k = 0; $k < count($room_data); $k++):?>
                               <option value="<?= $room_data[$k]['room_id'] ;?>" <?= !empty($_GET['room']) && $_GET['room'] == $room_data[$k]['room_id'] ? 'selected' : '' ;?>><?= $room_data[$k]['room_name'] ;?></option>
                           <?php endfor;?>

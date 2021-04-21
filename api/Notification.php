@@ -35,8 +35,14 @@
                 while($row = $notifications->fetch_assoc()) {
                     array_push($notification_data, $row);
 
-                    if($row['read_by_admin'] == 0){
-                        $total_unread_messages += 1;
+                    if(isset($request->tenant_id)){
+                        if($row['read_by_tenant'] == 0){
+                            $total_unread_messages += 1;
+                        }
+                    }else{
+                        if($row['read_by_admin'] == 0){
+                            $total_unread_messages += 1;
+                        }
                     }
                 }
             }

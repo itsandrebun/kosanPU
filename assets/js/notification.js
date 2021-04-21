@@ -133,6 +133,7 @@ function getNotification(requestData){
     
                 if(typeof totalUnreadNotifications !== 'undefined'){
                     totalUnreadNotifications = totalUnreadNotifications;
+                    total_unread_notification = totalUnreadNotifications;
                 }else{
                     totalUnreadNotifications = total_unread_notification;
                 }
