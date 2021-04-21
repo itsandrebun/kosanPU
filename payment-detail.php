@@ -21,9 +21,20 @@
     ?>
     <div class="image-login-register d-flex justify-content-end">
     <?php
+        $payment_data=array();
         include "DB_connection.php";
         $database = new Database();
         $con = $database->getConnection();
+
+        $payment_sql="SELECT * FROM transaction WHERE transaction_id= ".$_GET['user_id'];
+
+        $payments=$con->query($payment_sql);
+
+        if($payments->num_rows > 0){
+            while($row = $payments->fetch_assoc()) {
+                array_push($payment_data, $row);
+            }
+        }
     ?>
     <img src="assets/photo/kosan.jpg" class="card-img-top" alt="...">
         <div class="position-fixed d-flex justify-content-center p-3" style="top: 50%;left: 50%;transform: translate(-50%, -50%);background:white">
@@ -39,12 +50,14 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <?php for($m = 0; $m < count($payment_data); $m++):?>
                                 <tr>
-                                    <td>Diko</td>
-                                    <td>Kintarenji</td>
-                                    <td>KSINV21041100001</td>
+                                    <td><input type="text" name="first_name" class="form-control" value="<?= $logged_in_user['first_name'];?>"></td>
+                                    <td><input type="text" name="last_name" class="form-control" value="<?= $logged_in_user['last_name'];?>"></td>
+                                    <td><?= $payment_data[$m]['transaction_code'];?></td>
                                     <td>Done</td>
                                 </tr>
+                                <?php endfor;?>
                             </tbody>
                             <thead>
                                 <tr>
