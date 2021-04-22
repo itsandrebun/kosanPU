@@ -26,10 +26,10 @@
       <?php else:?>
       <?php $page_title="Home" ?>
         <?php if(!empty($_SESSION['success_booking'])):?>
-        <div class="alert alert-success alert-dismissible fade show position-absolute" role="alert" style="top:0%;left:0%">
-          <strong><?= $_SESSION['success_booking'];?></strong>
-          <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
-        </div>
+          <div class="alert alert-success alert-dismissible fade show position-absolute w-100 auth_alert" role="alert" style="top:0%;left:0%">
+            <strong><?= $_SESSION['success_booking'];?></strong>
+            <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+          </div>
         <?php endif;?>
         <div class="position-fixed justify-content" style="top: 50%;left: 25%;transform: translate(-50%, -50%)">
           <div>
@@ -50,5 +50,10 @@
     </div>
 
     <?php include "templates/js_list.php";?>
+    <script>
+      $(".auth_alert").fadeTo(2000, 500).slideUp(500, function(){
+          $(".auth_alert").slideUp(500);
+      });
+    </script>
   </body>
 </html>

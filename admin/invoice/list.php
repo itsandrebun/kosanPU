@@ -53,10 +53,19 @@
                   $chosen_year = $_GET['year'];
                 }
 
-                $invoice_sql = "SELECT inv.invoice_id, inv.invoice_number, inv.user_id, inv.phone_number, inv.first_name, inv.last_name, inv.total_payment, inv.deposit, inv.due_start_date, inv.due_end_date, inv.confirmed_date, inv.submitted_date, inv.payment_date, pst.payment_status_name FROM invoice AS inv JOIN user AS us ON us.user_id = inv.user_id JOIN payment_status AS pst ON pst.payment_status_id = inv.payment_status WHERE MONTH(inv.created_date) = '".$chosen_month."' AND year(inv.created_date) = '".$chosen_year."'";
+                $invoice_sql = "SELECT inv.invoice_id, inv.invoice_number, inv.user_id, inv.phone_number, inv.first_name, inv.last_name, inv.total_payment, inv.deposit, inv.due_start_date, inv.due_end_date, inv.confirmed_date, inv.submitted_date, inv.payment_date, pst.payment_status_name, inv.created_date FROM invoice AS inv JOIN user AS us ON us.user_id = inv.user_id JOIN payment_status AS pst ON pst.payment_status_id = inv.payment_status WHERE MONTH(inv.created_date) = '".$chosen_month."' AND year(inv.created_date) = '".$chosen_year."'";
+
+                if($chosen_month == "all"){
+                  $invoice_sql = "SELECT inv.invoice_id, inv.invoice_number, inv.user_id, inv.phone_number, inv.first_name, inv.last_name, inv.total_payment, inv.deposit, inv.due_start_date, inv.due_end_date, inv.confirmed_date, inv.submitted_date, inv.payment_date, pst.payment_status_name FROM invoice AS inv JOIN user AS us ON us.user_id = inv.user_id JOIN payment_status AS pst ON pst.payment_status_id = inv.payment_status WHERE year(inv.created_date) = '".$chosen_year."'";
+                }else{
+                  if($chosen_year == "all"){
+                    $invoice_sql = "SELECT inv.invoice_id, inv.invoice_number, inv.user_id, inv.phone_number, inv.first_name, inv.last_name, inv.total_payment, inv.deposit, inv.due_start_date, inv.due_end_date, inv.confirmed_date, inv.submitted_date, inv.payment_date, pst.payment_status_name FROM invoice AS inv JOIN user AS us ON us.user_id = inv.user_id JOIN payment_status AS pst ON pst.payment_status_id = inv.payment_status WHERE MONTH(inv.created_date) = '".$chosen_month."'";
+                  }
+                }
                 if(!empty($_GET['payment_status'])){
                   $invoice_sql .= " AND inv.payment_status = ".$_GET['payment_status'];
                 }
+                $invoice_sql .= " ORDER BY inv.created_date ASC";
                 $invoices = $con->query($invoice_sql);
                 $payment_status_sql = "SELECT * FROM payment_status";
                 $payment_status = $con->query($payment_status_sql);
@@ -82,7 +91,7 @@
                   <div class="row mb-2">
                     <div class="col-md-4">
                         <select name="month" id="" class="form-control">
-                            <option value="">Choose Month</option>
+                            <option value="all">Choose Month</option>
                             <option value="01" <?= !empty($chosen_month) && $chosen_month == '01' ? 'selected' : '' ;?>>January</option>
                             <option value="02" <?= !empty($chosen_month) && $chosen_month == '02' ? 'selected' : '' ;?>>February</option>
                             <option value="03" <?= !empty($chosen_month) && $chosen_month == '03' ? 'selected' : '' ;?>>March</option>
@@ -102,7 +111,7 @@
                             $year = date('Y');
                         ?>
                         <select name="year" id="" class="form-control">
-                          <option value="">Choose Year</option>
+                          <option value="all">Choose Year</option>
                           <?php for($k = ($year - 4); $k < ($year + 5); $k++):?>
                               <option value="<?= $k ;?>" <?= !empty($chosen_year) && $chosen_year == $k ? 'selected' : '' ;?>><?= $k ;?></option>
                           <?php endfor;?>
@@ -136,6 +145,7 @@
                             <th>Payment Status</th>
                             <th>Payment Date</th>
                             <th>Total Payment</th>
+                            <th>Created Date</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -152,6 +162,7 @@
                                 <td><?= $invoice_data[$k]['payment_status_name'];?></td>
                                 <td><?= $invoice_data[$k]['payment_date'] == null ? "-" : date("Y-m-d H:i:s",strtotime($invoice_data[$k]['payment_date']));?></td>
                                 <td><?= $invoice_data[$k]['total_payment'];?></td>
+                                <td><?= date("Y-m-d H:i:s",strtotime($invoice_data[$k]['created_date']));?></td>
                                 <td><a href="detail?id=<?= $invoice_data[$k]['invoice_id'];?>" class="ml-1 btn btn-primary mykosan-signature-button-color">View</a></td>
                             </tr>
                           <?php endfor;?>

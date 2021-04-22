@@ -15,7 +15,6 @@
 </script>
 <script src="<?=(isset($inside_folder) ? '../../assets/js/notification.js' : '../assets/js/notification.js');?>"></script>
 <?php endif;?>
-
 <!-- Page level plugins -->
 <script src="<?=(isset($inside_folder) ? '../../assets/vendor/chart.js/Chart.min.js' : '../assets/vendor/chart.js/Chart.min.js');?>"></script>
 

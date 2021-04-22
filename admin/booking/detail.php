@@ -9,11 +9,11 @@
     $logged_in_user = !empty($_SESSION['user']) ? $_SESSION['user'] : null;
     if(isset($_POST['logout_flag'])){
         session_destroy();
-        header('Location:login');
+        header('Location:../login');
     }
     if($logged_in_user == null || ($logged_in_user != null && $logged_in_user['tenant_id'] != null)){
         session_destroy();
-        header('Location:login');
+        header('Location:../login');
     }
 ?>
 

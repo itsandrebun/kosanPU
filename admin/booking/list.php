@@ -75,6 +75,8 @@
                 if(!empty($_GET['room']) && $_GET['room'] != "all"){
                   $booking_sql .= " AND tr.room_id = ".$_GET['room'];
                 }
+
+                $booking_sql .= " ORDER BY tr.created_date ASC";
                 $room_sql = "SELECT rm.* from room AS rm";
                 $bookings = $con->query($booking_sql);
                 $rooms = $con->query($room_sql);

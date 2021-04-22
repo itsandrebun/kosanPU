@@ -11,6 +11,12 @@
       $register_navbar = "active";
       include "templates/navbar.php";
     ?>
+    <?php if(!empty($_SESSION['success_registration'])):?>
+    <div class="alert alert-success alert-dismissible fade show position-absolute w-100 auth_alert" role="alert" style="top:0%;left:0%">
+      <strong><?= $_SESSION['success_registration'];?></strong>
+      <button type="button" class="close" data-bs-dismiss="alert" aria-label="Close"><span aria-hidden="true">×</span></button>
+    </div>
+    <?php endif;?>
     <div class="container register-container d-flex justify-content-center align-items-center">
       <div class="row">
         <div class="col-md-6 register-form-1">
@@ -100,5 +106,10 @@
       </div>
     </div>
     <?php include "templates/js_list.php";?>
+    <script>
+      $(".auth_alert").fadeTo(2000, 500).slideUp(500, function(){
+          $(".auth_alert").slideUp(500);
+      });
+    </script>
 </body>
 </html>

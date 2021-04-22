@@ -44,7 +44,9 @@
                 $password = password_hash($password, PASSWORD_DEFAULT);
                 $sql="CALL insert_tenant('".$user_first_name."','".$user_last_name."','".$user_email."','".$user_phonenumber."','".$user_gender."','".$user_dob."','".($password)."')";
     
-                $result= $con->query($sql);  
+                $result= $con->query($sql);
+
+                $_SESSION['success_registration'] = "You have successfully registered.";
             }
             $con->close();
         }else{

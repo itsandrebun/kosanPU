@@ -87,11 +87,11 @@
                     </div>
                     <div class="form-group">
                         <label for="payment_evidence" class="col-form-label font-weight-bold">Payment Evidence</label>
-                        <img class="d-block payment_evidence_image" src="<?= $payment_history_master_data['payment_evidence'];?>" alt="" onError="this.onerror=null;this.src='../../assets/photo/invoice-icon-line-style-symbol-shopping-icon-collection-invoice-creative-element-logo-infographic-ux-ui-invoice-icon-169076566.jpg';">
+                        <img class="d-block payment_evidence_image" src="<?= $domain_name.'/'.$payment_history_master_data['payment_evidence'];?>" alt="" onError="this.onerror=null;this.src='../../assets/photo/invoice-icon-line-style-symbol-shopping-icon-collection-invoice-creative-element-logo-infographic-ux-ui-invoice-icon-169076566.jpg';">
                     </div>
                     <div class="form-group">
                         <label for="payment_date" class="col-form-label font-weight-bold">Payment Date</label>
-                        <input type="date" name="payment_date" class="form-control" value="<?= $payment_history_master_data['payment_status'] >= 3 ? ($payment_history_master_data['payment_date'] != null ? date('Y-m-d',strtotime($payment_history_master_data['payment_date'])) : '') : '';?>" <?= $payment_history_master_data['payment_status'] >= 3 ? 'readonly' : '';?>>
+                        <input type="date" name="payment_date" class="form-control" value="<?= $payment_history_master_data['payment_status'] >= 3 ? ($payment_history_master_data['payment_date'] != null ? date('Y-m-d',strtotime($payment_history_master_data['payment_date'])) : '') : '';?>" <?= $payment_history_master_data['payment_status'] >= 3 || $payment_history_master_data['payment_status'] == 1 ? 'readonly' : '';?>>
                     </div>
                     <?php if($payment_history_master_data['payment_status'] == 4):?>
                     <div class="form-group">
@@ -102,8 +102,8 @@
                     <?php endif;?>
                     <div class="btn-group d-flex justify-content-end" role="group" aria-label="Basic example">
                       <div>
-                        <input type="submit" name="confirmEvidenceButton" class="btn btn-primary mykosan-signature-button-color" value="Approve"<?= ($payment_history_master_data['payment_status'] == 3 ? ' disabled' : '');?>>
-                        <input type="submit" name="rejectEvidenceButton" class="btn btn-danger ml-2 mykosan-signature-danger-button-color" value="Reject"<?= ($payment_history_master_data['payment_status'] == 3 ? ' disabled' : '');?>>
+                        <input type="submit" name="confirmEvidenceButton" class="btn btn-primary mykosan-signature-button-color" value="Approve"<?= ($payment_history_master_data['payment_status'] == 3 || $payment_history_master_data['payment_status'] == 1 ? ' disabled' : '');?>>
+                        <input type="submit" name="rejectEvidenceButton" class="btn btn-danger ml-2 mykosan-signature-danger-button-color" value="Reject"<?= ($payment_history_master_data['payment_status'] == 3 || $payment_history_master_data['payment_status'] == 1 ? ' disabled' : '');?>>
                       </div>
                     </div>
                 </form>
