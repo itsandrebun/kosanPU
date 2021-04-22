@@ -3,6 +3,7 @@
     session_start();
     $evidence_file_validation = "";
     $bank_validation = "";
+    $payment_date_validation = "";
     $evidence_link = "";
     if(isset($_POST['submitEvidenceButton'])){
         $evidence_file = $_FILES['evidence'];
@@ -38,13 +39,27 @@
         }else{
             if($evidence_file == null){
                 $evidence_file_validation = "Evidence file is required";
-                $evidence_link = "Location:payment-detail?id=".$invoice_id;
             }
+            
+            if($empty($bank_id)){
+                $bank_validation = "Bank is required";
+            }
+
+            if($empty($payment_date)){
+                $payment_date_validation = "Payment Date is required";
+            }
+            $evidence_link = "Location:payment-detail?id=".$invoice_id;
         }
     }
 
     if($evidence_file_validation != ""){
         $_SESSION['evidence_file_validation'] = $evidence_file_validation;
+    }
+    if($bank_validation != ""){
+        $_SESSION['bank_validation'] = $bank_validation;
+    }
+    if($payment_date_validation != ""){
+        $_SESSION['payment_date_validation'] = $payment_date_validation;
 
     }
     header($evidence_link);
