@@ -7,7 +7,6 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <?php
         $page_title = "Profile";
-        $user_parameter=($_GET['user_id']);
         include "templates/header.php";
     ?>
 </head>
@@ -22,11 +21,24 @@
     ?>
     <div class="image-login-register d-flex justify-content-end">
     <?php
-       include "DB_connection.php";
+        $invoice_data=array();
+        include "DB_connection.php";
+        $database = new Database();
+        $con = $database->getConnection();
+
+        $invoice_sql="SELECT inv.invoice_id, inv.invoice_number, inv.due_start_date, inv.payment_status, pys.payment_status_name, inv.total_payment, inv.payment_date, inv.created_date FROM invoice AS inv JOIN payment_status AS pys ON pys.payment_status_id = inv.payment_status WHERE inv.user_id = '" . $logged_in_user['user_id'] . "'";
+
+        $invoices=$con->query($invoice_sql);
+
+        if($invoices->num_rows > 0){
+            while($row = $invoices->fetch_assoc()) {
+                array_push($invoice_data, $row);
+            }
+        }
     ?>
     <img src="assets/photo/kosan.jpg" class="card-img-top" alt="...">
         <div class="position-fixed d-flex justify-content-center p-3" style="top: 50%;left: 50%;transform: translate(-50%, -50%);background:white">
-            <div style="height: 400px;overflow-y:auto">
+            <div style="height: 450px;overflow-y:auto">
                 <h3 class="text-center">Profile</h3>
                 <form>
                     <table class="table table-dark table-borderless">
@@ -99,12 +111,14 @@
                     </thead>
                     <tbody>
                         <tr>
-                            <td>KSINV21041100001</td>
-                            <td>Done</td>
-                            <td>21 March 2021</td>
-                            <td>21 March 2021</td>
-                            <td><a href="payment-detail.php">Click Here!</a></td>
+                        <?php for($p = 0; $p < count($invoice_data); $p++):?>
+                            <td><?= $invoice_data[$p]['invoice_number'];?></td>
+                            <td><?= $invoice_data[$p]['payment_status_name'];?></td>
+                            <td><?= $invoice_data[$p]['payment_date'];?>-</td>
+                            <td><?= $invoice_data[$p]['due_start_date'];?></td>
+                            <td><a href="payment-detail.php?invoice_id=<?=$invoice_data[$p]['invoice_id'];?>">Click Here</a></td>
                         </tr>
+                        <?php endfor;?>
                     </tbody>
                     </table>
                 </div>
