@@ -8,7 +8,7 @@
 <?php if(isset($_SESSION['user'])):?>
 <script>
     var fullUrl = "<?= $actual_link;?>";
-    var tenant_id = "<?= $_SESSION['user']['user_id'];?>";
+    var tenant_id = parseInt("<?= $_SESSION['user']['user_id'];?>");
     var total_unread_notification = 0;
 </script>
 <script src="assets/js/notification.js"></script>

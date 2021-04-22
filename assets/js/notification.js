@@ -41,13 +41,14 @@ setInterval(function(){
 },1000);
 
 function getNotification(requestData){
+    console.log(requestData);
     $.ajax({
         method : "POST",
         url : fullUrl,
         async: false,
         data : JSON.stringify(requestData),
         success : function(resultData){
-            // console.log(resultData);
+            console.log(resultData);
             var data = resultData['data'];
             var totalUnreadNotifications = resultData['total_unread_messages'];
 
@@ -55,9 +56,11 @@ function getNotification(requestData){
             
             if(requestData['action'] != "send" && requestData['action'] != "read"){
                 var notificationDiv = "";
-                notificationDiv += '<h6 class="dropdown-header mykosan-alert-header">';
-                notificationDiv += 'Notifications Center';
-                notificationDiv += '</h6>';
+                if(tenant_id == null){
+                    notificationDiv += '<h6 class="dropdown-header mykosan-alert-header">';
+                    notificationDiv += 'Notifications Center';
+                    notificationDiv += '</h6>';
+                }
                 if(data != null){
                     for(b = 0; b < data.length; b++){
                         var dateObj = new Date(data[b]['created_date']);
@@ -141,10 +144,10 @@ function getNotification(requestData){
     
                 document.getElementById('totalUnreadNotifications').innerHTML = (totalUnreadNotifications > 10 ? "10+" : totalUnreadNotifications);
             }
+        },
+        error: function(){
+            console.log("bbb");
         }
-        // error: function(){
-        //     console.log("bbb");
-        // }
     });
 }
 
