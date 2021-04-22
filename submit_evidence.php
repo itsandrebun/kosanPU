@@ -34,7 +34,7 @@
                 $evidence_link = "Location:index";
             }else{
                 $evidence_file_validation = "Evidence file must be an image";
-                $evidence_link = "Location:payment-detail?id=".$invoice_id;
+                $evidence_link = "Location:payment-evidence?id=".$invoice_id;
             }
         }else{
             if($evidence_file == null){
@@ -48,7 +48,7 @@
             if($empty($payment_date)){
                 $payment_date_validation = "Payment Date is required";
             }
-            $evidence_link = "Location:payment-detail?id=".$invoice_id;
+            $evidence_link = "Location:payment-evidence?id=".$invoice_id;
         }
     }
 
