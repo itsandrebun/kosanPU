@@ -362,8 +362,10 @@
                         // console.log();
                         full_end_date.setMonth(full_end_date.getMonth() + 1);
                         booking_end_date = full_end_date.toLocaleDateString();
+                        console.log("end date: "+full_end_date);
                         booking_end_date = booking_end_date.split('/');
-                        booking_end_date = booking_end_date[2]+'-'+(booking_end_date[0] < 10 ? ("0" + booking_end_date[0]) : booking_end_date[0])+'-'+(booking_end_date[1] < 10 ? ("0" + booking_end_date[1]) : booking_end_date[1]);
+                        console.log(booking_end_date);
+                        booking_end_date = booking_end_date[2]+'-'+(parseInt(booking_end_date[1]) < 10 ? ("0" + parseInt(booking_end_date[1])) : booking_end_date[1])+'-'+(parseInt(booking_end_date[0]) < 10 ? ("0" + parseInt(booking_end_date[0])) : booking_end_date[0]);
                         document.getElementsByName('booking_end_date')[0].value = booking_end_date;
                         console.log(booking_start_date);
                         console.log(booking_end_date);

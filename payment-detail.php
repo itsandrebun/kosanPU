@@ -29,7 +29,7 @@
 
         $payment_sql="SELECT trs.transaction_id, trs.transaction_code, trs.price, trs.room_id, roo.room_name, trs.transaction_type_id, typ.transaction_type_name, fin.fine_transaction_id, fin.price AS fine_price, equ.equipment_name FROM transaction AS trs JOIN transaction_type AS typ ON trs.transaction_type_id = typ.transaction_type_id LEFT JOIN room AS roo on trs.room_id=roo.room_id LEFT JOIN fine_transaction_detail AS fin on trs.transaction_id=fin.fine_transaction_id LEFT JOIN equipment as equ on equ.equipment_id=fin.equipment_id where trs.invoice_id =" .$_GET['invoice_id'];
 
-        $master_sql="SELECT usr.first_name, usr.last_name, pys.payment_status_id, pys.payment_status_name, inv.invoice_number, inv.payment_date, inv.created_date, inv.total_payment, inv.due_start_date, inv.due_end_date FROM user as usr JOIN invoice AS inv ON usr.user_id=inv.user_id join payment_status AS pys ON pys.payment_status_id=inv.payment_status=" .$_GET['invoice_id'];
+        $master_sql = "SELECT usr.first_name, usr.last_name, pys.payment_status_id, pys.payment_status_name, inv.invoice_number, inv.payment_date, inv.created_date, inv.total_payment, inv.due_start_date, inv.due_end_date FROM user as usr JOIN invoice AS inv ON usr.user_id=inv.user_id join payment_status AS pys ON pys.payment_status_id=inv.payment_status WHERE inv.invoice_id=" .$_GET['invoice_id'];
 
         $payments=$con->query($payment_sql);
 
@@ -50,16 +50,16 @@
                     <table class="table table-dark table-borderless">
                             <thead>
                                 <tr>
+                                    <th scope="col">Bill Code</th>
                                     <th scope="col">First name</th>
                                     <th scope="col">Last Name</th>
-                                    <th scope="col">Bill Code</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><?= $master_data['first_name'] ?></td>
-                                    <td><?= $master_data['last_name'] ?></td>
-                                    <td><?= $master_data['invoice_number'] ?></td>
+                                    <td><?= $master_data['invoice_number']; ?></td>
+                                    <td><?= $master_data['first_name']; ?></td>
+                                    <td><?= $master_data['last_name']; ?></td>
                                 </tr>
                             </tbody>
                             <thead>
@@ -71,9 +71,9 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><?= $master_data['total_payment'] ?></td>
-                                    <td><?= $master_data['due_start_date'] ?></td>
-                                    <td><?= $master_data['due_end_date'] ?></td>
+                                    <td><?= $master_data['total_payment']; ?></td>
+                                    <td><?= $master_data['due_start_date']; ?></td>
+                                    <td><?= $master_data['due_end_date']; ?></td>
                                 </tr>
                             </tbody>
                             <thead>
@@ -85,9 +85,9 @@
                             </thead>
                             <tbody>
                                 <tr>
-                                    <td><?= $master_data['payment_status_name'] ?></td>
-                                    <td><?= $master_data['created_date'] ?></td>
-                                    <td><?= $master_data['payment_date'] ?></td>
+                                    <td><?= $master_data['payment_status_name']; ?></td>
+                                    <td><?= $master_data['created_date']; ?></td>
+                                    <td><?= $master_data['payment_date'] == null ? '-' : $master_data['payment_date']; ?></td>
                                 </tr>
                             </tbody>
                     </table>

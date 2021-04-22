@@ -27,9 +27,9 @@
 
                         <span class="badge badge-danger badge-counter" id="totalUnreadNotifications" style="position: absolute;">0</span>
                     </a>
-                    <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="alertsDropdown" id="notificationDropdown">
-                        <!-- <li>
-                            <a class="dropdown-item d-flex align-items-center">
+                    <ul class="dropdown-menu dropdown-menu-right" style="width:20rem!important" aria-labelledby="alertsDropdown" id="notificationDropdown">
+                        <li>
+                            <a class="dropdown-item d-flex align-items-center" style="white-space: normal;padding-top: .5rem;padding-bottom: .5rem;border-left: 1px solid #e3e6f0;border-right: 1px solid #e3e6f0;border-bottom: 1px solid #e3e6f0;line-height: 1.3rem;">
                                 <div class="mr-3">
                                     <div class="icon-circle bg-primary mykosan-icon-background-color" style="height: 2.5rem;width: 2.5rem;border-radius: 100%;display: flex;align-items: center;justify-content: center;">
                                         <i class="fas fa-file-alt text-white"></i>
@@ -40,7 +40,7 @@
                                     <span class="d-block" style="font-size:11px;">September 20, 2019</span>
                                 </div>
                             </a>
-                        </li> -->
+                        </li>
                     </ul>
                 </li>
                 <li class="nav-item dropdown">

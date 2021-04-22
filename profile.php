@@ -115,7 +115,7 @@
                             <td><?= $invoice_data[$p]['invoice_number'];?></td>
                             <td><?= $invoice_data[$p]['payment_status_name'];?></td>
                             <td><?= $invoice_data[$p]['payment_date'];?>-</td>
-                            <td><?= $invoice_data[$p]['due_start_date'];?></td>
+                            <td><?= $invoice_data[$p]['created_date'];?></td>
                             <td><a href="payment-detail.php?invoice_id=<?=$invoice_data[$p]['invoice_id'];?>">Click Here</a></td>
                         </tr>
                         <?php endfor;?>

@@ -39,7 +39,7 @@
         $notification_data = array();
         $total_unread_notifications = 0;
 
-        $notification_sql = "SELECT nt.notification_id, nt.user_id, us.first_name, us.last_name, nt.description, nt.created_date, tr.transaction_id, tr.transaction_code, inv.invoice_id, inv.invoice_number, nt.read_by_admin FROM notification AS nt JOIN user AS us ON us.user_id = nt.user_id LEFT JOIN transaction AS tr ON tr.transaction_id = nt.transaction_id LEFT JOIN invoice AS inv ON inv.invoice_id = nt.invoice_id ORDER BY nt.created_date DESC";
+        $notification_sql = "SELECT nt.notification_id, nt.user_id, us.first_name, us.last_name, nt.description, nt.created_date, tr.transaction_id, tr.transaction_code, inv.invoice_id, inv.invoice_number, nt.read_by_admin, rm.room_name FROM notification AS nt JOIN user AS us ON us.user_id = nt.user_id LEFT JOIN transaction AS tr ON tr.transaction_id = nt.transaction_id LEFT JOIN invoice AS inv ON inv.invoice_id = nt.invoice_id LEFT JOIN room AS rm ON rm.room_id = tr.room_id ORDER BY nt.created_date DESC";
 
         $notifications = $con->query($notification_sql);
 
@@ -93,6 +93,7 @@
                         $notification_msg = str_replace("[user]",($notification_data[$k]['first_name'].' '.$notification_data[$k]['last_name']),$notification_data[$k]['description']);
                         $notification_msg = str_replace("[invoice_code]",($notification_data[$k]['invoice_number']),$notification_msg);
                         $notification_msg = str_replace("[transaction_code]",($notification_data[$k]['transaction_code']),$notification_msg);
+                        $notification_msg = str_replace("[room_name]",($notification_data[$k]['room_name']),$notification_msg);
                     ?>
                     <div class="small text-gray-500"><?= date("F d, Y",strtotime($notification_data[$k]['created_date']));?></div>
                     <span class="font-weight-bold"><?= $notification_msg;?></span>

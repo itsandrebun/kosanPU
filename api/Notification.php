@@ -19,7 +19,7 @@
         public function get(){
             $notification_data = array();
             $request = json_decode(file_get_contents("php://input"));
-            $notification_query = "SELECT nt.notification_id, nt.description, nt.read_by_admin, nt.read_by_tenant, nt.user_id, us.first_name, us.last_name, nt.created_date, inv.invoice_id, inv.invoice_number, tr.transaction_id, tr.transaction_code from notification AS nt JOIN user AS us ON us.user_id = nt.user_id LEFT JOIN invoice AS inv ON inv.invoice_id = nt.invoice_id LEFT JOIN transaction AS tr ON tr.transaction_id = nt.transaction_id";
+            $notification_query = "SELECT nt.notification_id, nt.description, nt.read_by_admin, nt.read_by_tenant, nt.user_id, us.first_name, us.last_name, nt.created_date, inv.invoice_id, inv.invoice_number, tr.transaction_id, tr.transaction_code, rm.room_name from notification AS nt JOIN user AS us ON us.user_id = nt.user_id LEFT JOIN invoice AS inv ON inv.invoice_id = nt.invoice_id LEFT JOIN transaction AS tr ON tr.transaction_id = nt.transaction_id LEFT JOIN room AS rm ON rm.room_id = tr.room_id";
 
             if(isset($request->tenant_id)){
                 $tenant_id = $request->tenant_id;
@@ -66,7 +66,7 @@
 
             $read_notification_query = "UPDATE notification SET read_by_admin_date = CURRENT_TIMESTAMP(), read_by_admin = 1";
             if(isset($request->tenant_id)){
-                $read_notification_query = "UPDATE notification SET read_by_tenant_date = CURRENT_TIMESTAMP(), read_by_tenant = 1 WHERE tenant_id = ".$request->tenant_id;
+                $read_notification_query = "UPDATE notification SET read_by_tenant_date = CURRENT_TIMESTAMP(), read_by_tenant = 1 WHERE user_id = ".$request->tenant_id;
             }
 
             $read_notification = $this->con->query($read_notification_query);

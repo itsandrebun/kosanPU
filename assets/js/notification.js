@@ -85,19 +85,19 @@ function getNotification(requestData){
                             notificationDiv += '</div>';
                             notificationDiv += '<div>';
                             notificationDiv += '<div class="small text-gray-500">'+fullDate+'</div>';
-                            notificationDiv += '<span class="font-weight-bold">'+data[b]['description'].replace('[user]',(data[b]['first_name']+' '+data[b]['last_name'])).replace('[invoice_code]',data[b]['invoice_number']).replace('[transaction_code]',data[b]['transaction_code'])+'</span>';
+                            notificationDiv += '<span class="font-weight-bold">'+data[b]['description'].replace('[user]',(data[b]['first_name']+' '+data[b]['last_name'])).replace('[invoice_code]',data[b]['invoice_number']).replace('[transaction_code]',data[b]['transaction_code']).replace('[room_name]',data[b]['room_name'])+'</span>';
                             notificationDiv += '</div>';
                             notificationDiv += '</a>';
                         }else{
-                            notificationDiv += '<li>'
-                            notificationDiv += '<a class="dropdown-item d-flex align-items-center">'
+                            notificationDiv += '<li style="max-width:20rem!important">'
+                            notificationDiv += '<a class="dropdown-item d-flex align-items-center" style="white-space: normal;padding-top: .5rem;padding-bottom: .5rem;border-left: 1px solid #e3e6f0;border-right: 1px solid #e3e6f0;border-bottom: 1px solid #e3e6f0;line-height: 1.3rem;">'
                             notificationDiv += '<div class="mr-3">'
                             notificationDiv += '<div class="icon-circle bg-primary mykosan-icon-background-color" style="height: 2.5rem;width: 2.5rem;border-radius: 100%;display: flex;align-items: center;justify-content: center;">'
                             notificationDiv += '<i class="fas fa-file-alt text-white"></i>'
                             notificationDiv += '</div>'
                             notificationDiv += '</div>'
                             notificationDiv += '<div style="color: #b7b9cc !important;font-size: 80%;font-weight: 400;">'
-                            notificationDiv += '<span>'+data[b]['description'].replace('[user]','You').replace('[invoice_code]',data[b]['invoice_number']).replace('[transaction_code]',data[b]['transaction_code'])+'</span>'
+                            notificationDiv += '<span style="width:200px;">'+data[b]['description'].replace('[user]','You').replace('[invoice_code]',data[b]['invoice_number']).replace('[transaction_code]',data[b]['transaction_code']).replace('[room_name]',data[b]['room_name'])+'</span>'
                             notificationDiv += '<span class="d-block" style="font-size:11px;">'+fullDate+'</span>'
                             notificationDiv += '</div>'
                             notificationDiv += '</a>'
@@ -117,8 +117,8 @@ function getNotification(requestData){
                         notificationDiv += '</div>';
                         notificationDiv += '</a>';
                     }else{
-                        notificationDiv += '<li>'
-                        notificationDiv += '<a class="dropdown-item d-flex align-items-center">'
+                        notificationDiv += '<li style="max-width:20rem!important">'
+                        notificationDiv += '<a class="dropdown-item d-flex align-items-center" style="white-space: normal;padding-top: .5rem;padding-bottom: .5rem;border-left: 1px solid #e3e6f0;border-right: 1px solid #e3e6f0;border-bottom: 1px solid #e3e6f0;line-height: 1.3rem;">'
                         notificationDiv += '<div class="mr-3">'
                         notificationDiv += '<div class="icon-circle bg-primary mykosan-icon-background-color" style="height: 2.5rem;width: 2.5rem;border-radius: 100%;display: flex;align-items: center;justify-content: center;">'
                         notificationDiv += '<i class="fas fa-file-alt text-white"></i>'
@@ -156,6 +156,13 @@ document.getElementById('alertsDropdown').onclick = function(){
     requestData = {
         action: "read"
     };
+
+    if(tenant_id != null){
+        requestData = {
+            action: "read",
+            tenant_id: tenant_id
+        };
+    }
 
     getNotification(requestData);
 };
