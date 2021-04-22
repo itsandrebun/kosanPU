@@ -71,7 +71,7 @@
 
     <!-- Heading -->
     <div class="sidebar-heading">
-    Transaction and Invoice
+    Booking, Invoice, and Fine
     </div>
 
     <li class="nav-item<?= isset($invoice_active) ? ' active' : '';?>">

@@ -40,17 +40,17 @@
                 <h1 class="h3 mb-0 text-gray-800">Fine List</h1>
             </div>
             <?php
-                $fine = array();
+                $fine_data = array();
 
-                $tenant_sql = "SELECT us.* FROM user AS us JOIN tenant AS tn ON tn.user_id = us.user_id";
+                $fine_sql = "SELECT tr.transaction_id, tr.transaction_code, tr.room_id, tr.price, rm.room_name, us.user_id, us.first_name, us.last_name, us.email, (SELECT COUNT(fed.equipment_id) FROM fine_transaction_detail AS fed WHERE fed.transaction_id = tr.transaction_id) AS total_fine from transaction AS tr JOIN room AS rm ON rm.room_id = tr.room_id JOIN user AS us ON us.user_id = tr.user_id WHERE tr.transaction_type_id = 2";
 
-                $tenants = $con->query($tenant_sql);
+                $fines = $con->query($fine_sql);
 
                 // echo $room_sql;
                 // print_r($rooms['num_rows']);
-                if($tenants->num_rows > 0){
-                    while($row = $tenants->fetch_assoc()) {
-                        array_push($fine, $row);
+                if($fines->num_rows > 0){
+                    while($row = $fines->fetch_assoc()) {
+                        array_push($fine_data, $row);
                     }
                 }
                 $con->close();
@@ -59,25 +59,31 @@
                 <table class="table">
                     <thead>
                         <tr>
-                            <th>Tenant Code</th>
-                            <th>First Name</th>
-                            <th>Last Name</th>
+                            <th>Name</th>
                             <th>Email</th>
-                            <th>Phone Number</th>
+                            <th>Room</th>
+                            <th>Total Fine</th>
+                            <th>Fine Cost</th>
                             <th></th>
                         </tr>
                     </thead>
                     <tbody>
-                        <?php for($k = 0; $k < count($fine); $k++):?>
+                        <?php if(count($fine_data) == 0):?>
                           <tr>
-                              <td><?= $fine[$k]['user_code'];?></td>
-                              <td><?= $fine[$k]['first_name'];?></td>
-                              <td><?= $fine[$k]['last_name'];?></td>
-                              <td><?= $fine[$k]['email'];?></td>
-                              <td><?= $fine[$k]['phone_number'];?></td>
-                              <td><a href="tenant_detail?id=<?= $fine[$k]['user_id'];?>" class="ml-1 btn btn-primary mykosan-signature-button-color">View</a></td>
+                            <td colspan="6" class="text-center" style="font-size:12px">No data found!</td>
+                          </tr>
+                        <?php else:?>
+                        <?php for($k = 0; $k < count($fine_data); $k++):?>
+                          <tr>
+                              <td><?= $fine_data[$k]['first_name'] . ' '.$fine_data[$k]['last_name'] ;?></td>
+                              <td><?= $fine_data[$k]['email'];?></td>
+                              <td><?= $fine_data[$k]['room_name'];?></td>
+                              <td><?= $fine_data[$k]['total_fine'];?></td>
+                              <td><?= $fine_data[$k]['price'];?></td>
+                              <td><a href="detail?id=<?= $fine_data[$k]['transaction_id'];?>" class="ml-1 btn btn-primary mykosan-signature-button-color">View</a></td>
                           </tr>
                         <?php endfor;?>
+                        <?php endif;?>
                     </tbody>
                 </table>
             </div>
