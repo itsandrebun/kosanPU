@@ -12,10 +12,21 @@
         $payment_date = $_POST['payment_date'];
         $target_dir = "assets/photo/uploads/";
         $target_subdir = "assets/photo/uploads/payment_evidence";
+        $target_file = $target_subdir . basename($_FILES["evidence"]["name"]);
+        $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
         
-        if($evidence_file != null && !empty($bank_id) && !empty($payment_date)){
+        // echo $evidence_file == null ? 1 : 0;
+        // exit;
+
+        if(isset($evidence_file) && isset($bank_id) && !empty($payment_date)){
             $check = getimagesize($evidence_file["tmp_name"]);
             if($check !== false){
+                if(!file_exists($target_dir)){
+                    mkdir($target_dir,0777);
+                }
+                if(!file_exists($target_subdir)){
+                    mkdir($target_subdir,0777);
+                }
                 $evidence_filename = uniqid().'.'.$imageFileType; 
     
                 $evidence_filename = $target_subdir.'/'.$evidence_filename;
@@ -26,29 +37,31 @@
                 $database = new Database();
                 $con = $database->getConnection();
 
-                $notification_msg = "[user] submitted the payment evidence with invoice number [invoice_number] on ".date('Y-m-d H:i:s');
+                $notification_msg = "[user] submitted the payment evidence with invoice number [invoice_code] on ".date('Y-m-d H:i:s');
     
-                $submit_evidence_query = "CALL insert_evidence(".$invoice_id.", 2, '".date("Y-m-d H:i:s")."', '".$payment_date."', '".$move_uploaded_file."', ".$bank_id.", '".$notification_msg."')";
+                $submit_evidence_query = "CALL insert_evidence(".$invoice_id.", 2, '".date("Y-m-d H:i:s")."', '".$payment_date."', '".$evidence_filename."', ".$bank_id.", '".$notification_msg."')";
 
                 $submit_evidence = $con->query($submit_evidence_query);
-                $evidence_link = "Location:index";
+                $evidence_link = "Location:payment-success";
             }else{
                 $evidence_file_validation = "Evidence file must be an image";
-                $evidence_link = "Location:payment-evidence?id=".$invoice_id;
+                $evidence_link = "Location:payment-evidence?invoice_id=".$invoice_id;
             }
         }else{
-            if($evidence_file == null){
+            if(!isset($evidence_file)){
                 $evidence_file_validation = "Evidence file is required";
             }
             
-            if($empty($bank_id)){
+            if(!isset($bank_id)){
                 $bank_validation = "Bank is required";
             }
 
-            if($empty($payment_date)){
+            $_SESSION['bank_id'] = $bank_id;
+            if(empty($payment_date)){
                 $payment_date_validation = "Payment Date is required";
             }
-            $evidence_link = "Location:payment-evidence?id=".$invoice_id;
+            $_SESSION['payment_date'] = $payment_date;
+            $evidence_link = "Location:payment-evidence?invoice_id=".$invoice_id;
         }
     }
 

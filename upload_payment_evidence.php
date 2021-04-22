@@ -2,8 +2,8 @@
 
     $target_dir = "assets/photo/uploads/";
     $target_subdir = "assets/photo/uploads/payment_evidence";
-    $target_file = $target_subdir . basename($_FILES["payment_evidence"]["name"]);
     $uploadOk = 1;
+    $target_file = $target_subdir . basename($_FILES["payment_evidence"]["name"]);
     $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
 
     if(!file_exists($target_dir)){
