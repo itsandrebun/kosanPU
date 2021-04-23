@@ -50,7 +50,7 @@
                     $booking_data = $bookings->fetch_assoc();
                 }
                 
-                $equipment_sql = "SELECT eq.equipment_id, eq.equipment_name, (CASE WHEN eq.equipment_id IN (SELECT ftd.equipment_id FROM fine_transaction_detail AS ftd JOIN transaction AS trs ON trs.transaction_id = ftd.transaction_id JOIN invoice AS iv ON iv.invoice_id = trs.invoice_id WHERE trs.transaction_id = tr.transaction_id) THEN 1 ELSE 0 END) AS fine_status from equipment as eq JOIN room_equipment_mapping AS rem ON rem.equipment_id = eq.equipment_id JOIN transaction AS tr ON tr.room_id = rem.room_id WHERE tr.transaction_id = ".$_GET['id'];
+                $equipment_sql = "SELECT eq.equipment_id, eq.equipment_name, (CASE WHEN eq.equipment_id IN (SELECT ftd.equipment_id FROM fine_transaction_detail AS ftd JOIN transaction AS trs ON trs.transaction_id = ftd.transaction_id JOIN invoice AS iv ON iv.invoice_id = trs.invoice_id WHERE iv.parent_invoice_id = tr.invoice_id) THEN 1 ELSE 0 END) AS fine_status from equipment as eq JOIN room_equipment_mapping AS rem ON rem.equipment_id = eq.equipment_id JOIN transaction AS tr ON tr.room_id = rem.room_id WHERE tr.transaction_id = ".$_GET['id'];
                 $equipment = $con->query($equipment_sql);
 
                 $internal_parameter_query = "SELECT * FROM internal_parameter AS itp WHERE itp.parameter_name IN ('company_name','company_address')";
@@ -212,10 +212,10 @@
                     </button>
                 </div>
                 <div class="modal-body">
-                    <form method="POST" action="../fine_status_form" id="fineStatusForm">
+                    <form method="POST" action="../submit_fine" id="fineStatusForm">
                         <input type="hidden" name="transaction_id" value="<?= $_GET['id'];?>">
                         <input type="hidden" name="parent_invoice_id" value="<?= $booking_data['invoice_id'];?>">
-                        <input type="hidden" name="submitFineStatus" value="1">
+                        <input type="hidden" name="submitFineStatus" value="1" id="submitFineStatus">
                         <input type="hidden" name="tenant_id" value="<?= $booking_data['user_id'];?>">
                         <input type="hidden" name="room_id" value="<?= $booking_data['room_id'];?>">
                         <input type="hidden" name="deposit" value="<?= $booking_data['deposit'];?>">
@@ -236,6 +236,7 @@
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary mykosan-signature-button-color" onclick="document.getElementById('submitFineStatus').value = 2;document.getElementById('fineStatusForm').submit();">Finalize</button>
                     <button type="button" class="btn btn-primary mykosan-signature-button-color" onclick="document.getElementById('fineStatusForm').submit();">Submit</button>
                 </div>
             </div>

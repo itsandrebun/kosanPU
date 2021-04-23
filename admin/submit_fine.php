@@ -20,6 +20,7 @@
         $notification_msg = "";
         $due_start_date = $_POST['due_start_date'];
         $due_end_date = $_POST['due_end_date'];
+        $fined_status = $_POST['submitFineStatus'];
         if(count($checked_items) == 0){
             $fined_validation = "You have to choose at least 1 room to connect with the equipment.";
         }else{
