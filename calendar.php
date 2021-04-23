@@ -199,12 +199,12 @@
             <div class="row">
                 <div class="col-md-6">
                     <label class="col-sm-label">Start Date</label>
-                    <input type="text" readonly class="form-control <?= (!empty($_SESSION['booking_start_date_validation']) ? ('is-invalid') : '') ;?>" name="booking_start_date" id="booking_start_date">
+                    <input type="text" readonly class="form-control <?= (!empty($_SESSION['booking_start_date_validation']) ? ('is-invalid') : '') ;?>" name="booking_start_date" id="booking_start_date" <?= (!empty($_SESSION['booking_start_date_error']) ? ('value="'.$_SESSION['booking_start_date_error'].'"') : '') ;?>>
                     <?= (!empty($_SESSION['booking_start_date_validation']) ? ('<div class="invalid-feedback">'.$_SESSION['booking_start_date_validation'].'</div>') : '') ;?>
                 </div>
                 <div class="col-md-6">
                     <label class="col-sm-label">End Date</label>
-                    <input type="text" readonly class="form-control <?= (!empty($_SESSION['booking_end_date_validation']) ? ('is-invalid') : '') ;?>" name="booking_end_date">
+                    <input type="text" readonly class="form-control <?= (!empty($_SESSION['booking_end_date_validation']) ? ('is-invalid') : '') ;?>" name="booking_end_date" <?= (!empty($_SESSION['booking_end_date_error']) ? ('value="'.$_SESSION['booking_end_date_error'].'"') : '') ;?>>
                     <?= (!empty($_SESSION['booking_end_date_validation']) ? ('<div class="invalid-feedback">'.$_SESSION['booking_end_date_validation'].'</div>') : '') ;?>
                     <input type="hidden" readonly class="form-control" name="total_payment" value="<?= $price_array[0]['parameter_value'] + $price_array[1]['parameter_value'];?>">
                     <input type="hidden" name="rent_cost" value="<?= $price_array[0]['parameter_value'];?>">
@@ -226,6 +226,8 @@
             <?php
                 unset($_SESSION['booking_start_date_validation']);
                 unset($_SESSION['booking_end_date_validation']);
+                unset($_SESSION['booking_start_date_error']);
+                unset($_SESSION['booking_end_date_error']);
                 unset($_SESSION['booking_validation']);
             ?>
         </form>

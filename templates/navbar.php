@@ -48,7 +48,7 @@
                         Hi, <?= $logged_in_user['first_name'].' '.$logged_in_user['last_name'];?>
                     </a>
                     <ul class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdownMenuLink">
-                        <li><a class="dropdown-item" href="profile.php">Profile</a></li>
+                        <li><a class="dropdown-item" href="profile">Profile</a></li>
                         <li>
                             <?php
                                 if(isset($_POST['logout_flag'])){

@@ -4,6 +4,8 @@
     $page_title = "Invoice Detail - Kosan Admin Panel";
     $inside_folder = 1;
     $invoice_active = 1;
+    $payment_evidence_src = (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? "https" : "http") . "://$_SERVER[HTTP_HOST]$_SERVER[REQUEST_URI]";
+    $payment_evidence_src_part = explode("/",$payment_evidence_src);
     include "../templates/header.php";
     session_start();
     $logged_in_user = !empty($_SESSION['user']) ? $_SESSION['user'] : null;
@@ -85,9 +87,12 @@
                         <label for="invoice_number" class="col-form-label font-weight-bold">Invoice Number</label>
                         <input type="text" name="invoice_number" class="form-control" value="<?= $payment_history_master_data['invoice_number'];?>" readonly>
                     </div>
+                    <?php
+                      $payment_evidence_src = str_replace($payment_evidence_src_part[count($payment_evidence_src_part) - 3].'/'.$payment_evidence_src_part[count($payment_evidence_src_part) - 2].'/'.$payment_evidence_src_part[count($payment_evidence_src_part) - 1],$payment_history_master_data['payment_evidence'],$payment_evidence_src);
+                    ?>
                     <div class="form-group">
                         <label for="payment_evidence" class="col-form-label font-weight-bold">Payment Evidence</label>
-                        <img class="d-block payment_evidence_image" src="<?= $domain_name.'/'.$payment_history_master_data['payment_evidence'];?>" alt="" onError="this.onerror=null;this.src='../../assets/photo/invoice-icon-line-style-symbol-shopping-icon-collection-invoice-creative-element-logo-infographic-ux-ui-invoice-icon-169076566.jpg';">
+                        <img class="d-block payment_evidence_image" src="<?= '/../../'.$payment_history_master_data['payment_evidence'];?>" alt="" onError="this.onerror=null;this.src='../../assets/photo/invoice-icon-line-style-symbol-shopping-icon-collection-invoice-creative-element-logo-infographic-ux-ui-invoice-icon-169076566.jpg';">
                     </div>
                     <div class="form-group">
                         <label for="payment_date" class="col-form-label font-weight-bold">Payment Date</label>
@@ -107,10 +112,10 @@
                       </div>
                     </div>
                 </form>
-                <?php
+                <!-- <?php
                   unset($_SESSION['rejected_reason_validation']);
                   unset($_SESSION['rejected_reason_error']);
-                ?>
+                ?> -->
                 <hr>
                 <div id="payment_history_div" class="mt-4">
                     <h1 class="h3 mb-0 text-gray-800">Payment History</h1>

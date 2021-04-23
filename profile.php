@@ -26,7 +26,7 @@
         $database = new Database();
         $con = $database->getConnection();
 
-        $invoice_sql="SELECT inv.invoice_id, inv.invoice_number, inv.due_start_date, inv.payment_status, pys.payment_status_name, inv.total_payment, inv.payment_date, inv.created_date FROM invoice AS inv JOIN payment_status AS pys ON pys.payment_status_id = inv.payment_status WHERE inv.user_id = '" . $logged_in_user['user_id'] . "'";
+        $invoice_sql="SELECT inv.invoice_id, inv.invoice_number, inv.due_start_date, inv.payment_status, pys.payment_status_name, inv.total_payment, inv.payment_date, inv.created_date FROM invoice AS inv JOIN payment_status AS pys ON pys.payment_status_id = inv.payment_status WHERE inv.finalized_draft = 1 AND inv.user_id = '" . $logged_in_user['user_id'] . "'";
 
         $invoices=$con->query($invoice_sql);
 
@@ -110,15 +110,21 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <tr>
-                        <?php for($p = 0; $p < count($invoice_data); $p++):?>
-                            <td><?= $invoice_data[$p]['invoice_number'];?></td>
-                            <td><?= $invoice_data[$p]['payment_status_name'];?></td>
-                            <td><?= $invoice_data[$p]['payment_date'];?>-</td>
-                            <td><?= $invoice_data[$p]['created_date'];?></td>
-                            <td><a href="payment-detail.php?invoice_id=<?=$invoice_data[$p]['invoice_id'];?>">Click Here</a></td>
-                        </tr>
-                        <?php endfor;?>
+                        <?php if(count($invoice_data) > 0):?>
+                            <?php for($p = 0; $p < count($invoice_data); $p++):?>
+                                <tr>
+                                    <td><?= $invoice_data[$p]['invoice_number'];?></td>
+                                    <td><?= $invoice_data[$p]['payment_status_name'];?></td>
+                                    <td><?= $invoice_data[$p]['payment_date'];?>-</td>
+                                    <td><?= $invoice_data[$p]['created_date'];?></td>
+                                    <td><a href="payment-detail?invoice_id=<?=$invoice_data[$p]['invoice_id'];?>">Click Here</a></td>
+                                </tr>
+                            <?php endfor;?>
+                        <?php else:?>
+                            <tr>
+                                <td colspan="5" class="text-center" style="font-size:11px">No data found!</td>
+                            </tr>
+                        <?php endif;?>
                     </tbody>
                     </table>
                 </div>

@@ -25,23 +25,31 @@
             include "DB_connection.php";
             $database = new Database();
             $con = $database->getConnection();
-            $booking_sql = "SELECT tr.* from transaction AS tr JOIN invoice AS inv ON inv.invoice_id = tr.invoice_id WHERE inv.payment_status <> 4 AND tr.transaction_type_id = 1 AND tr.room_id = ".$room_parameter." AND (DATE_FORMAT('".$booking_start_date." 00:00:00', '%Y-%m-%d %H:%i:%s') between DATE_FORMAT(booking_start_date, '%Y-%m-%d %H:%i:%s') and DATE_FORMAT(booking_end_date, '%Y-%m-%d %H:%i:%s') OR DATE_FORMAT('".$booking_end_date." 23:59:59', '%Y-%m-%d %H:%i:%s') between DATE_FORMAT(booking_start_date, '%Y-%m-%d %H:%i:%s') and DATE_FORMAT(booking_end_date, '%Y-%m-%d %H:%i:%s') OR DATE_FORMAT(CONCAT(booking_start_date,' 00:00:00'), '%Y-%m-%d %H:%i:%s') between DATE_FORMAT('".$booking_start_date." 00:00:00', '%Y-%m-%d %H:%i:%s') and DATE_FORMAT('".$booking_end_date." 23:59:59', '%Y-%m-%d %H:%i:%s') OR DATE_FORMAT(CONCAT(booking_end_date,' 00:00:00'), '%Y-%m-%d %H:%i:%s') between DATE_FORMAT('".$booking_start_date." 00:00:00', '%Y-%m-%d %H:%i:%s') and DATE_FORMAT('".$booking_end_date." 23:59:59', '%Y-%m-%d %H:%i:%s') OR DATE_FORMAT(CONCAT(booking_start_date,' 00:00:00'), '%Y-%m-%d %H:%i:%s') between DATE_FORMAT('".$booking_start_date." 00:00:00', '%Y-%m-%d %H:%i:%s') and DATE_FORMAT(CONCAT(booking_end_date,' 23:59:59'), '%Y-%m-%d %H:%i:%s') OR DATE_FORMAT(CONCAT(booking_end_date,' 23:59:59'), '%Y-%m-%d %H:%i:%s') between DATE_FORMAT('".$booking_start_date." 00:00:00', '%Y-%m-%d %H:%i:%s') and DATE_FORMAT(CONCAT(booking_end_date,' 23:59:59'), '%Y-%m-%d %H:%i:%s') OR DATE_FORMAT(CONCAT(booking_start_date,' 00:00:00'), '%Y-%m-%d %H:%i:%s') between DATE_FORMAT('".$booking_end_date." 00:00:00', '%Y-%m-%d %H:%i:%s') and DATE_FORMAT(CONCAT(booking_end_date,' 23:59:59'), '%Y-%m-%d %H:%i:%s') OR DATE_FORMAT(CONCAT(booking_end_date,' 00:00:00'), '%Y-%m-%d %H:%i:%s') between DATE_FORMAT('".$booking_end_date." 00:00:00', '%Y-%m-%d %H:%i:%s') and DATE_FORMAT(CONCAT(booking_end_date,' 23:59:59'), '%Y-%m-%d %H:%i:%s'))";
+            $booking_start_month = date('m',strtotime($booking_start_date));
+            $booking_end_month = date('m',strtotime($booking_end_date));
+            $booking_sql = "SELECT tr.transaction_id, tr.transaction_code, tr.booking_start_date, tr.booking_end_date, tr.room_id FROM transaction AS tr WHERE (tr.user_id = ".$logged_in_user['user_id']." AND MONTH(tr.booking_start_date) = '".$booking_start_month."' AND MONTH(tr.booking_end_date) = '".$booking_end_month."' AND tr.transaction_type_id = 1) OR (tr.room_id = ".$room_parameter." AND MONTH(tr.booking_start_date) = '".$booking_start_month."' AND MONTH(tr.booking_end_date) = '".$booking_end_month."' AND tr.transaction_type_id = 1)";
             
-            // echo $booking;exit;
             $booking = $con->query($booking_sql);
             $due_start_date = date("Y-m-01",strtotime($booking_end_date));
             $due_end_date = date("Y-m-d H:i:s", strtotime($due_start_date." +1 week"));
-            // print_r($booking);exit;
+            
             if($booking->num_rows == 0){
-                $notification_msg = "[user] booked room [room_name] for ".$booking_start_date." until ".$booking_end_date." on ".date('Y-m-d H:i:s');
-                $insert_transaction_query = "CALL insert_transaction(".$logged_in_user['user_id'].", '".$logged_in_user['first_name']."', '".$logged_in_user['last_name']."', '".$logged_in_user['email']."', '".$logged_in_user['phone_number']."', '".$company_name."', '".$company_address."', '".$due_start_date."','".$due_end_date."', ".$room_parameter.", ".$rent_cost.", ".$total_price.", ".$deposit.", '".$booking_start_date."', '".$booking_end_date."', '".$notification_msg."')";
-    
-                $insert_transaction_query = $con->query($insert_transaction_query);
-    
-                $success_booking_msg = "You have successfully booked room ".$room_name;
-                $booked = 1;
+                if(date("Y-m-d") >= $booking_start_date){
+                    $booking_validation = "You cannot choose booking start date greater than equal to today";
+                    $_SESSION['booking_start_date_error'] = $booking_start_date;
+                    $_SESSION['booking_end_date_error'] = $booking_end_date;
+                }else{
+                    $notification_msg = "[user] booked room [room_name] for ".$booking_start_date." until ".$booking_end_date." on ".date('Y-m-d H:i:s');
+                    $insert_transaction_query = "CALL insert_transaction(".$logged_in_user['user_id'].", '".$logged_in_user['first_name']."', '".$logged_in_user['last_name']."', '".$logged_in_user['email']."', '".$logged_in_user['phone_number']."', '".$company_name."', '".$company_address."', '".$due_start_date."','".$due_end_date."', ".$room_parameter.", ".$rent_cost.", ".$total_price.", ".$deposit.", '".$booking_start_date."', '".$booking_end_date."', '".$notification_msg."')";
+                    $insert_transaction_query = $con->query($insert_transaction_query);
+                    
+                    if($insert_transaction_query == TRUE){
+                        $success_booking_msg = "You have successfully booked room ".$room_name;
+                        $booked = 1;
+                    }
+                }
             }else{
-                $booking_validation = "Sorry, you cannot book this room between these dates because it has been booked by you or other tenant.";
+                $booking_validation = "Sorry, you cannot book this room between these dates because it has been booked by you or other tenant or you might have booked another room between these dates.";
             }
         }
 
@@ -63,5 +71,7 @@
     if($booked == 1){
         $_SESSION['success_booking'] = $success_booking_msg;
         header("Location:index");
+    }else{
+        header("Location:calendar?room=".$room_parameter);
     }
 ?>

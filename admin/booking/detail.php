@@ -42,20 +42,29 @@
             <?php
                 $booking_data = array();
                 $equipment_data = array();
+                $internal_parameter_data = array();
 
                 if(!empty($_GET['id'])){
-                    $booking_sql = "SELECT tr.transaction_id, tr.transaction_code, tr.room_id, rm.room_name, tr.price, tr.booking_start_date, tr.booking_end_date, tr.terminated_date, us.user_id, us.first_name, us.last_name, us.user_code, us.email, tr.terminated_reason FROM transaction AS tr JOIN user AS us ON us.user_id = tr.user_id JOIN room AS rm ON rm.room_id = tr.room_id WHERE tr.transaction_id = ".$_GET['id'];
-    
+                    $booking_sql = "SELECT tr.transaction_id, tr.transaction_code, tr.room_id, tr.user_id, rm.room_name, tr.price, tr.booking_start_date, tr.booking_end_date, tr.terminated_date, us.user_id, us.first_name, us.last_name, us.user_code, us.email, tr.terminated_reason, tr.invoice_id, inv.deposit FROM transaction AS tr JOIN user AS us ON us.user_id = tr.user_id JOIN room AS rm ON rm.room_id = tr.room_id JOIN invoice AS inv ON inv.invoice_id = tr.invoice_id WHERE tr.transaction_id = ".$_GET['id'];
                     $bookings = $con->query($booking_sql);
                     $booking_data = $bookings->fetch_assoc();
                 }
-
+                
                 $equipment_sql = "SELECT eq.equipment_id, eq.equipment_name, (CASE WHEN eq.equipment_id IN (SELECT ftd.equipment_id FROM fine_transaction_detail AS ftd JOIN transaction AS trs ON trs.transaction_id = ftd.transaction_id JOIN invoice AS iv ON iv.invoice_id = trs.invoice_id WHERE trs.transaction_id = tr.transaction_id) THEN 1 ELSE 0 END) AS fine_status from equipment as eq JOIN room_equipment_mapping AS rem ON rem.equipment_id = eq.equipment_id JOIN transaction AS tr ON tr.room_id = rem.room_id WHERE tr.transaction_id = ".$_GET['id'];
                 $equipment = $con->query($equipment_sql);
+
+                $internal_parameter_query = "SELECT * FROM internal_parameter AS itp WHERE itp.parameter_name IN ('company_name','company_address')";
+                $internal_parameter = $con->query($internal_parameter_query);
 
                 if($equipment->num_rows > 0){
                     while($row = $equipment->fetch_assoc()) {
                         array_push($equipment_data, $row);
+                    }
+                }
+
+                if($internal_parameter->num_rows > 0){
+                    while($row = $internal_parameter->fetch_assoc()) {
+                        array_push($internal_parameter_data, $row);
                     }
                 }
                 $con->close();
@@ -135,6 +144,7 @@
                 <?php
                   unset($_SESSION['terminated_reason_error']);
                   unset($_SESSION['terminated_reason_validation']);
+                  unset($_SESSION['fined_validation']);
                 ?>
                 <hr>
                 <div class="d-sm-flex align-items-center justify-content-between mb-3 mt-3">
@@ -196,20 +206,30 @@
         <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h5 class="modal-title" id="fineStatusPopupLabel">Room Availability</h5>
+                    <h5 class="modal-title" id="fineStatusPopupLabel">Fined Item Status</h5>
                     <button class="close" type="button" data-dismiss="modal" aria-label="Close">
                         <span aria-hidden="true">×</span>
                     </button>
                 </div>
                 <div class="modal-body">
                     <form method="POST" action="../fine_status_form" id="fineStatusForm">
-                        
-                        <input type="hidden" name="booking_id" value="<?= $_GET['id'];?>">
+                        <input type="hidden" name="transaction_id" value="<?= $_GET['id'];?>">
+                        <input type="hidden" name="parent_invoice_id" value="<?= $booking_data['invoice_id'];?>">
                         <input type="hidden" name="submitFineStatus" value="1">
+                        <input type="hidden" name="tenant_id" value="<?= $booking_data['user_id'];?>">
                         <input type="hidden" name="room_id" value="<?= $booking_data['room_id'];?>">
+                        <input type="hidden" name="deposit" value="<?= $booking_data['deposit'];?>">
+                        <?php
+                            $due_start_date = date("Y-m-01",strtotime($booking_data['booking_end_date']." +1 month"));
+                            $due_end_date = date("Y-m-d", strtotime($due_start_date." +1 week"));
+                        ?>
+                        <input type="hidden" name="due_start_date" value="<?= $due_start_date;?>">
+                        <input type="hidden" name="due_end_date" value="<?= $due_end_date;?>">
+                        <input type="hidden" name="company_name" value="<?= $internal_parameter_data[0]['parameter_value'];?>">
+                        <input type="hidden" name="company_address" value="<?= $internal_parameter_data[1]['parameter_value'];?>">
                         <ul class="list-group">
                             <?php for($k = 0; $k < count($equipment_data); $k++):?>
-                                <li class="list-group-item"><input type="checkbox" class="mr-2" name="room_availability_status[]" value="<?= $equipment_data[$k]['equipment_id'];?>"<?= $equipment_data[$k]['fine_status'] == 0 ? ' ' : ' checked';?>><?= $equipment_data[$k]['equipment_name'];?></li>
+                                <li class="list-group-item"><input type="checkbox" class="mr-2" name="fined_equipment_status[]" value="<?= $equipment_data[$k]['equipment_id'];?>"<?= $equipment_data[$k]['fine_status'] == 0 ? ' ' : ' checked';?>><?= $equipment_data[$k]['equipment_name'];?></li>
                             <?php endfor;?>
                         </ul>
                     </form>

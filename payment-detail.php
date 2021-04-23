@@ -120,6 +120,7 @@
                         </tr>
                     </thead>
                     <tbody>
+                    <?php if(count($payment_data) > 0):?>
                     <?php for($d = 0; $d < count($payment_data); $d++):?>
                         <tr>
                             <td><?= $payment_data[$d]['transaction_code'];?></td>
@@ -128,7 +129,12 @@
                             <td><?= $payment_data[$d]['room_name'];?></td>
                             <td><?= $payment_data[$d]['equipment_name'];?>-</td>
                         </tr>
-                    <?php endfor;?> 
+                    <?php endfor;?>
+                    <?php else:?>
+                        <tr>
+                            <td colspan="5" class="text-center" style="font-size:11px">No data found!</td>
+                        </tr>
+                    <?php endif;?>
                     </tbody>
                     </table>
                 </div>
