@@ -123,7 +123,7 @@
                     <?php endif;?>
                     <div class="form-group">
                         <label for="terminated_reason" class="col-form-label font-weight-bold">Terminated Reason</label>
-                        <textarea class="form-control <?= (!empty($_SESSION['terminated_reason_validation']) ? ('is-invalid') : '') ;?>" style="resize:none" <?= $booking_data['terminated_date'] == null ? (!empty($_SESSION['terminated_reason_error']) ? $_SESSION['terminated_reason_error'] : '') : 'readonly';?> name="terminated_reason"><?= $booking_data['terminated_reason'] == null ? (!empty($_SESSION['terminated_reason_error']) ? $_SESSION['terminated_reason_error'] : '') : $booking_data['terminated_reason'];?></textarea>
+                        <textarea class="form-control <?= (!empty($_SESSION['terminated_reason_validation']) ? ('is-invalid') : '') ;?>" style="resize:none" <?= (strtotime('now') >= strtotime($booking_data['booking_start_date']) && strtotime('now') <= strtotime($booking_data['booking_end_date'])) && $booking_data['terminated_date'] == null ? '' : 'readonly';?> name="terminated_reason"><?= $booking_data['terminated_reason'] == null ? (!empty($_SESSION['terminated_reason_error']) ? $_SESSION['terminated_reason_error'] : '') : $booking_data['terminated_reason'];?></textarea>
                         <?= (!empty($_SESSION['terminated_reason_validation']) ? ('<div class="invalid-feedback">'.$_SESSION['terminated_reason_validation'].'</div>') : '') ;?>
                     </div>
                     <?php if((strtotime('now') >= strtotime($booking_data['booking_start_date']) && strtotime('now') <= strtotime($booking_data['booking_end_date'])) && $booking_data['terminated_date'] == null):?>
@@ -139,7 +139,7 @@
                 <hr>
                 <div class="d-sm-flex align-items-center justify-content-between mb-3 mt-3">
                     <h4 class="h4 mb-0 text-gray-800">Equipment and Fine Status</h4>
-                    <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary mykosan-signature-button-color shadow-sm" data-toggle="modal" data-target="#equipmentAvailabilityPopup"><i class="fas fa-edit fa-sm text-white-50"></i> Edit Fine Status</button>
+                    <button type="button" class="d-none d-sm-inline-block btn btn-sm btn-primary mykosan-signature-button-color shadow-sm" data-toggle="modal" data-target="#fineStatusPopup"><i class="fas fa-edit fa-sm text-white-50"></i> Edit Fine Status</button>
                 </div>
                 <table class="table table-striped">
                     <thead>
@@ -186,11 +186,41 @@
   </div>
   <!-- End of Page Wrapper -->
 
-  <!-- Scroll to Top Button-->
-  <a class="scroll-to-top rounded" href="#page-top">
-    <i class="fas fa-angle-up"></i>
-  </a>
-
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+    
+    <!-- Modal -->
+    <div class="modal fade" id="fineStatusPopup" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="fineStatusPopupLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="fineStatusPopupLabel">Room Availability</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="../fine_status_form" id="fineStatusForm">
+                        
+                        <input type="hidden" name="booking_id" value="<?= $_GET['id'];?>">
+                        <input type="hidden" name="submitFineStatus" value="1">
+                        <input type="hidden" name="room_id" value="<?= $booking_data['room_id'];?>">
+                        <ul class="list-group">
+                            <?php for($k = 0; $k < count($equipment_data); $k++):?>
+                                <li class="list-group-item"><input type="checkbox" class="mr-2" name="room_availability_status[]" value="<?= $equipment_data[$k]['equipment_id'];?>"<?= $equipment_data[$k]['fine_status'] == 0 ? ' ' : ' checked';?>><?= $equipment_data[$k]['equipment_name'];?></li>
+                            <?php endfor;?>
+                        </ul>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="button" class="btn btn-primary mykosan-signature-button-color" onclick="document.getElementById('fineStatusForm').submit();">Submit</button>
+                </div>
+            </div>
+        </div>
+    </div>
   <?php include "../logout_modal.php";?>
 
   <?php include "../templates/js_list.php";?>
