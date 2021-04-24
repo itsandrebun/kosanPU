@@ -68,6 +68,9 @@
                     }
                 }
                 $con->close();
+
+                include "../../Helpers/Currency.php";
+                $currency = new Currency();
             ?>
             <div class="data-list">
                 <form action="../booking_termination" method="POST">
@@ -106,7 +109,7 @@
                         <div class="col-sm-6">
                             <div class="form-group">
                                 <label for="rent_cost" class="col-form-label font-weight-bold">Rent Cost</label>
-                                <input class="form-control" readonly name="price" type="text" value="<?= $booking_data['price'];?>">
+                                <input class="form-control" readonly name="price" type="text" value="<?= $currency->convert($booking_data['price']);?>">
                             </div>
                         </div>
                     </div>

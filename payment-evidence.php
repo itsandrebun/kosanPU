@@ -26,7 +26,7 @@
             <h3 style="text-align: center;">Payment Evidence</h3>
             <?php
                 $bank_data = array();
-                $payment_data=array();
+                $payment_data = array();
                 include "DB_connection.php";
                 $database = new Database();
                 $con = $database->getConnection();
@@ -47,6 +47,9 @@
                 }
                 $payment_data=$payments->fetch_assoc();
                 $con->close();
+
+                include "Helpers/Currency.php";
+                $currency = new Currency();
             ?>   
             <div class="form-group">
                 <label class="control-label">Invoice Number</label>
@@ -58,7 +61,7 @@
             <div class="form-group">
                 <label class="control-label">Total Payment</label>
                 <div class="col-xs-4">
-                    <input type="text" readonly class="form-control" name="total_payment" value="<?= $payment_data['total_payment'] ?>"/>
+                    <input type="text" readonly class="form-control" name="total_payment" value="<?= $currency->convert($payment_data['total_payment']); ?>"/>
                 </div>
             </div>
             <div class="form-group">

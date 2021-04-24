@@ -76,6 +76,10 @@
                   }
                 }
                 $con->close();
+
+                include "../../Helpers/Currency.php";
+
+                $currency = new Currency();
             ?>
             <div class="data-list">
                 <form action="../submit_evidence" method="POST" enctype="multipart/form-data">
@@ -212,39 +216,41 @@
                     <tbody>
                       <?php for($a = 0; $a < count($all_transaction_data); $a++):?>
                         <?php $fined_items_detail = $all_transaction_data[$a]['fined_items_detail'];?>
-                        <tr<?= $all_transaction_data[$a]['transaction_type_id'] == 2 ? ' class="table-danger"' : '';?>>
-                          <td><?= $all_transaction_data[$a]['transaction_type_id'] == 2 ? $all_transaction_data[$a]['previous_transaction_code'] : $all_transaction_data[$a]['transaction_code'];?></td>
-                          <td><?= $all_transaction_data[$a]['transaction_type_id'] == 2 ? 'Deposit' : $all_transaction_data[$a]['transaction_type_name'];?></td>
-                          <td><?= $all_transaction_data[$a]['booking_start_date'] == null ? $all_transaction_data[$a]['previous_booking_start_date'] : $all_transaction_data[$a]['booking_start_date'];?></td>
-                          <td><?= $all_transaction_data[$a]['booking_end_date'] == null ? $all_transaction_data[$a]['previous_booking_end_date'] : $all_transaction_data[$a]['booking_end_date'];?></td>
-                          <td><?= $all_transaction_data[$a]['transaction_type_id'] == 2 ? 'Return deposit' : '';?></td>
-                          <td><?= $all_transaction_data[$a]['room_name'];?></td>
-                          <td>-</td>
-                          <td class="text-right"><?= $all_transaction_data[$a]['transaction_type_id'] == 2 ? $all_transaction_data[$a]['previous_deposit'] : $all_transaction_data[$a]['transaction_cost'];?></td>
-                        </tr>
+                          <tr<?= $all_transaction_data[$a]['transaction_type_id'] == 2 ? ' class="table-danger"' : '';?>>
+                            <td<?= $all_transaction_data[$a]['transaction_type_id'] == 1 ? ' rowspan="2" style="vertical-align:middle;text-align:center"' : '';?>><?= $all_transaction_data[$a]['transaction_type_id'] == 2 ? $all_transaction_data[$a]['previous_transaction_code'] : $all_transaction_data[$a]['transaction_code'];?></td>
+                            <td><?= $all_transaction_data[$a]['transaction_type_id'] == 2 ? 'Deposit' : $all_transaction_data[$a]['transaction_type_name'];?></td>
+                            <td <?= $all_transaction_data[$a]['transaction_type_id'] == 1 ? ' rowspan="2" style="vertical-align:middle;text-align:center"' : ' rowspan="'.(count($fined_items_detail)+1).'" style="vertical-align:middle;text-align:center"';?>><?= $all_transaction_data[$a]['booking_start_date'] == null ? $all_transaction_data[$a]['previous_booking_start_date'] : $all_transaction_data[$a]['booking_start_date'];?></td>
+                            <td <?= $all_transaction_data[$a]['transaction_type_id'] == 1 ? ' rowspan="2" style="vertical-align:middle;text-align:center"' : ' rowspan="'.(count($fined_items_detail)+1).'" style="vertical-align:middle;text-align:center"';?>><?= $all_transaction_data[$a]['booking_end_date'] == null ? $all_transaction_data[$a]['previous_booking_end_date'] : $all_transaction_data[$a]['booking_end_date'];?></td>
+                            <td <?= $all_transaction_data[$a]['transaction_type_id'] == 1 ? ' rowspan="2" style="vertical-align:middle;text-align:center"' : ' rowspan="'.(count($fined_items_detail)+1).'" style="vertical-align:middle;text-align:center"';?>><?= $all_transaction_data[$a]['transaction_type_id'] == 2 ? 'Return deposit' : '';?></td>
+                            <td <?= $all_transaction_data[$a]['transaction_type_id'] == 1 ? ' rowspan="2" style="vertical-align:middle;text-align:center"' : ' rowspan="'.(count($fined_items_detail)+1).'" style="vertical-align:middle;text-align:center"';?>><?= $all_transaction_data[$a]['room_name'];?></td>
+                            <td <?= $all_transaction_data[$a]['transaction_type_id'] == 1 ? ' rowspan="2" style="vertical-align:middle;text-align:center"' : '';?>>-</td>
+                            <td class="text-right"><?= $all_transaction_data[$a]['transaction_type_id'] == 2 ? $currency->convert($all_transaction_data[$a]['previous_deposit']) : $currency->convert($all_transaction_data[$a]['transaction_cost']);?></td>
+                          </tr>
                         <?php if($all_transaction_data[$a]['transaction_type_id'] == 1):?>
                           <tr>
-                          <td></td>
-                          <td>Deposit</td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td></td>
-                          <td>-</td>
-                          <td class="text-right"><?= $all_transaction_data[$a]['deposit'];?></td>
-                        </tr>
+                            <!-- <td></td> -->
+                            <td>Deposit</td>
+                            <!-- <td></td>
+                            <td></td> -->
+                            <!-- <td></td> -->
+                            <!-- <td></td> -->
+                            <!-- <td>-</td> -->
+                            <td class="text-right"><?= $currency->convert($all_transaction_data[$a]['deposit']);?></td>
+                          </tr>
                         <?php endif;?>
                         <?php if(isset($fined_items_detail[0]['transaction_id'])):?>
                         <?php for($b = 0; $b < count($fined_items_detail); $b++):?>
                           <tr <?= $fined_items_detail[$b]['transaction_type_id'] == 2 ? ' class="table-danger"' : '';?>>
-                            <td><?= $b != 0 ? '' : (isset($fined_items_detail[$b]['transaction_code']) ? $fined_items_detail[$b]['transaction_code'] : '');?></td>
-                            <td><?= $b != 0 ? '' : (isset($fined_items_detail[$b]['transaction_type_name']) ? $fined_items_detail[$b]['transaction_type_name'] : '');?></td>
-                            <td></td>
-                            <td></td>
-                            <td></td>
-                            <td>-</td>
+                            <?php if($b == 0):?>
+                              <td style="vertical-align:middle" rowspan="<?= count($fined_items_detail);?>"><?= $b != 0 ? '' : (isset($fined_items_detail[$b]['transaction_code']) ? $fined_items_detail[$b]['transaction_code'] : '');?></td>
+                              <td style="vertical-align:middle" rowspan="<?= count($fined_items_detail);?>"><?= $b != 0 ? '' : (isset($fined_items_detail[$b]['transaction_type_name']) ? $fined_items_detail[$b]['transaction_type_name'] : '');?></td>
+                            <?php endif;?>
+                            <!-- <td></td> -->
+                            <!-- <td></td> -->
+                            <!-- <td></td> -->
+                            <!-- <td>-</td> -->
                             <td><?= isset($fined_items_detail[$b]['equipment_name']) ? $fined_items_detail[$b]['equipment_name'] : '-';?></td>
-                            <td class="text-right"><?= isset($fined_items_detail[$b]['fine_cost']) ? $fined_items_detail[$b]['fine_cost'] : '-';?></td>
+                            <td class="text-right"><?= isset($fined_items_detail[$b]['fine_cost']) ? $currency->convert($fined_items_detail[$b]['fine_cost']) : '-';?></td>
                           </tr>
                         <?php endfor;?>
                         <?php endif;?>
@@ -253,7 +259,7 @@
                     <tfoot>
                       <tr>
                         <td colspan="7" class="text-center font-weight-bold">Total</td>
-                        <td class="text-right font-weight-bold"><?= $payment_history_master_data['total_payment'];?></td>
+                        <td class="text-right font-weight-bold"><?= $currency->convert($payment_history_master_data['total_payment']);?></td>
                       </tr>
                     </tfoot>
                   </table>

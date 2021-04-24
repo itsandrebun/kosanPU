@@ -15,6 +15,9 @@
         session_destroy();
         header('Location:../login');
     }
+
+    include "../../Helpers/Currency.php";
+    $currency = new Currency();
 ?>
 
 <body id="page-top">
@@ -63,7 +66,7 @@
                             <th>Email</th>
                             <th>Room</th>
                             <th>Total Fine</th>
-                            <th>Fine Cost</th>
+                            <th class="text-right">Fine Cost</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -79,7 +82,7 @@
                               <td><?= $fine_data[$k]['email'];?></td>
                               <td><?= $fine_data[$k]['room_name'];?></td>
                               <td><?= $fine_data[$k]['total_fine'];?></td>
-                              <td><?= $fine_data[$k]['price'];?></td>
+                              <td class="text-right"><?= $currency->convert($fine_data[$k]['price']);?></td>
                               <td><a href="detail?id=<?= $fine_data[$k]['transaction_id'];?>" class="ml-1 btn btn-primary mykosan-signature-button-color">View</a></td>
                           </tr>
                         <?php endfor;?>

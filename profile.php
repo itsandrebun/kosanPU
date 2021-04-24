@@ -44,6 +44,11 @@
                 array_push($bank_data, $row);
             }
         }
+
+        $con->close();
+
+        include "Helpers/Currency.php";
+        $currency = new Currency();
     ?>
     <img src="assets/photo/kosan.jpg" class="card-img-top" alt="...">
         <div class="position-fixed d-flex justify-content-center p-3" style="top: 50%;left: 50%;transform: translate(-50%, -50%);background:white">
@@ -175,7 +180,7 @@
                 </form>
             </div>
         </div>
-        <div class="modal fade" id="invoiceModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal fade bd-example-modal-lg" id="invoiceModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
                 <div class="modal-header">
@@ -192,7 +197,8 @@
                             <th scope="col">Payment Status:</th>
                             <th scope="col">Payment Date:</th>
                             <th scope="col">Date In:</th>
-                            <th scope="col">See Detail:</th>
+                            <th scope="col" class="text-right">Total Payment</th>
+                            <th scope="col"></th>
                         </tr>
                     </thead>
                     <tbody>
@@ -203,6 +209,7 @@
                                     <td><?= $invoice_data[$p]['payment_status_name'];?></td>
                                     <td><?= $invoice_data[$p]['payment_date'];?>-</td>
                                     <td><?= $invoice_data[$p]['created_date'];?></td>
+                                    <td class="text-right"><?= $currency->convert($invoice_data[$p]['total_payment']);?></td>
                                     <td><a href="payment-detail?invoice_id=<?=$invoice_data[$p]['invoice_id'];?>">Click Here</a></td>
                                 </tr>
                             <?php endfor;?>

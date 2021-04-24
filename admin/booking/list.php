@@ -119,7 +119,7 @@
                             $year = date('Y');
                         ?>
                         <select name="year" id="" class="form-control">
-                          <option value="all">Choose Year</option>
+                          <!-- <option value="all">Choose Year</option> -->
                           <?php for($k = ($year - 4); $k < ($year + 5); $k++):?>
                               <option value="<?= $k ;?>" <?= !empty($chosen_year) && $chosen_year == $k ? 'selected' : '' ;?>><?= $k ;?></option>
                           <?php endfor;?>

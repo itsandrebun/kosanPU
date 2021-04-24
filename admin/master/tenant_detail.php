@@ -81,6 +81,9 @@
                 }
 
                 $con->close();
+
+                include "../../Helpers/Currency.php";
+                $currency = new Currency();
             ?>
             <div class="data-list">
                 <div class="form-group">
@@ -182,7 +185,7 @@
                                 <td><?= $invoice_array[$k]['invoice_number'];?></td>
                                 <td><?= $invoice_array[$k]['payment_status_name'];?></td>
                                 <td class="text-center"><?= $invoice_array[$k]['total_transaction'];?></td>
-                                <td class="text-center"><?= $invoice_array[$k]['total_payment'];?></td>
+                                <td class="text-center"><?= $currency->convert($invoice_array[$k]['total_payment']);?></td>
                                 <td class="text-center"><?= $invoice_array[$k]['payment_date'] == null ? '-' : date("Y-m-d H:i:s",strtotime($invoice_array[$k]['payment_date'])) ;?></td>
                                 <td><?= date("F d, Y",strtotime($invoice_array[$k]['created_date']));?></td>
                             </tr>

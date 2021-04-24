@@ -68,6 +68,9 @@
                     }
                 }
                 $con->close();
+
+                include "../../Helpers/Currency.php";
+                $currency = new Currency();
             ?>
             <div class="data-list">
                 <form action="" method="POST">
@@ -133,7 +136,7 @@
                             <tr>
                                 <?php $total_fine_cost += $equipment_data[$b]['fine_cost'];?>
                                 <td><?= $equipment_data[$b]['equipment_name'];?></td>
-                                <td class="text-right"><?= $equipment_data[$b]['fine_cost'];?></td>
+                                <td class="text-right"><?= $currency->convert($equipment_data[$b]['fine_cost']);?></td>
                             </tr>
                             <?php endfor;?>
                         <?php endif;?>
@@ -141,7 +144,7 @@
                     <tfoot>
                         <tr>
                             <td class="font-weight-bold">Total</td>
-                            <td class="font-weight-bold text-right"><?= $total_fine_cost;?></td>
+                            <td class="font-weight-bold text-right"><?= $currency->convert($total_fine_cost);?></td>
                         </tr>
                     </tfoot>
                 </table>

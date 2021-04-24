@@ -82,8 +82,11 @@
                   while($row = $payment_status->fetch_assoc()) {
                       array_push($payment_status_data, $row);
                   }
-              }
+                }
                 $con->close();
+
+                include "../../Helpers/Currency.php";
+                $currency = new Currency();
             ?>
             <div class="data-list">
                 <form method="GET" class="mb-2 p-3" style="border:0.5px solid #c5c3c3;border-radius:1%;">
@@ -111,7 +114,7 @@
                             $year = date('Y');
                         ?>
                         <select name="year" id="" class="form-control">
-                          <option value="all">Choose Year</option>
+                          <!-- <option value="all">Choose Year</option> -->
                           <?php for($k = ($year - 4); $k < ($year + 5); $k++):?>
                               <option value="<?= $k ;?>" <?= !empty($chosen_year) && $chosen_year == $k ? 'selected' : '' ;?>><?= $k ;?></option>
                           <?php endfor;?>
@@ -144,8 +147,8 @@
                             <th>User Name</th>
                             <th>Payment Status</th>
                             <th>Payment Date</th>
-                            <th>Total Payment</th>
                             <th>Created Date</th>
+                            <th class="text-right">Total Payment</th>
                             <th></th>
                         </tr>
                     </thead>
@@ -161,8 +164,8 @@
                                 <td><?= $invoice_data[$k]['first_name'].' '.$invoice_data[$k]['last_name'];?></td>
                                 <td><?= $invoice_data[$k]['payment_status_name'];?></td>
                                 <td><?= $invoice_data[$k]['payment_date'] == null ? "-" : date("Y-m-d H:i:s",strtotime($invoice_data[$k]['payment_date']));?></td>
-                                <td><?= $invoice_data[$k]['total_payment'];?></td>
                                 <td><?= date("Y-m-d H:i:s",strtotime($invoice_data[$k]['created_date']));?></td>
+                                <td class="text-right"><?= $currency->convert($invoice_data[$k]['total_payment']);?></td>
                                 <td><a href="detail?id=<?= $invoice_data[$k]['invoice_id'];?>" class="ml-1 btn btn-primary mykosan-signature-button-color">View</a></td>
                             </tr>
                           <?php endfor;?>
