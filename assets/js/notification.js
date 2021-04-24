@@ -145,8 +145,8 @@ function getNotification(requestData){
                 document.getElementById('totalUnreadNotifications').innerHTML = (totalUnreadNotifications > 10 ? "10+" : totalUnreadNotifications);
             }
         },
-        error: function(){
-            console.log("bbb");
+        error: function(err){
+            console.log(err);
         }
     });
 }

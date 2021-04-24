@@ -44,20 +44,35 @@
             <?php
                 $payment_history_master_data = array();
                 $payment_history_data = array();
+                $transaction_data = array();
+                $all_transaction_data = array();
+                $bank_data = array();
 
                 if(!empty($_GET['id'])){
                   $payment_history_master_sql = "SELECT inv.*, usr.user_id, usr.first_name, usr.last_name, usr.user_code from invoice AS inv JOIN user AS usr ON usr.user_id = inv.user_id where inv.invoice_id = ".$_GET['id'];
                   $payment_history_sql = "SELECT pys.payment_status_id,pys.payment_status_name, pyh.description, pys.created_date FROM payment_status AS pys JOIN payment_history AS pyh ON pyh.payment_status_id = pys.payment_status_id WHERE pyh.invoice_id = ".$_GET['id'];
+                  $transaction_sql = "SELECT tr.transaction_id, tr.transaction_code, tr.transaction_type_id, ttp.transaction_type_name, tr.booking_start_date, tr.booking_end_date, ftd.equipment_id, eq.equipment_name, rm.room_id, rm.room_name, tr.price AS transaction_cost, ftd.price AS fine_cost, inv.deposit, (SELECT tr2.booking_start_date FROM invoice AS inv2 JOIN transaction AS tr2 ON tr2.invoice_id = inv2.invoice_id WHERE inv2.invoice_id = inv.parent_invoice_id) AS previous_booking_start_date, (SELECT tr2.booking_end_date FROM invoice AS inv2 JOIN transaction AS tr2 ON tr2.invoice_id = inv2.invoice_id WHERE inv2.invoice_id = inv.parent_invoice_id) AS previous_booking_end_date, (SELECT inv2.deposit FROM invoice AS inv2 JOIN transaction AS tr2 ON tr2.invoice_id = inv2.invoice_id WHERE inv2.invoice_id = inv.parent_invoice_id) AS previous_deposit FROM transaction AS tr JOIN invoice AS inv ON inv.invoice_id = tr.invoice_id JOIN transaction_type AS ttp ON ttp.transaction_type_id = tr.transaction_type_id LEFT JOIN room AS rm ON rm.room_id = tr.room_id LEFT JOIN fine_transaction_detail AS ftd ON ftd.transaction_id = tr.transaction_id LEFT JOIN equipment AS eq ON eq.equipment_id = ftd.equipment_id WHERE tr.invoice_id = ".$_GET['id'];
+                  $bank_sql = "SELECT bn.bank_id, bn.bank_name from banks AS bn JOIN user AS us ON us.bank_id = bn.bank_id JOIN invoice AS inv ON inv.user_id = us.user_id WHERE inv.invoice_id = ".$_GET['id'];
 
                   $payment_history_master = $con->query($payment_history_master_sql);
                   $payment_history = $con->query($payment_history_sql);
                   $payment_history_master_data = $payment_history_master->fetch_assoc();
+                  $banks = $con->query($bank_sql);
+                  $bank_data = $banks->fetch_assoc();
+
+                  $transaction = $con->query($transaction_sql);
                   // echo $room_sql;
                   // print_r($rooms['num_rows']);
                   if($payment_history->num_rows > 0){
                       while($row = $payment_history->fetch_assoc()) {
                           array_push($payment_history_data, $row);
                       }
+                  }
+
+                  if($transaction->num_rows > 0){
+                    while($row = $transaction->fetch_assoc()) {
+                        array_push($transaction_data, $row);
+                    }
                   }
                 }
                 $con->close();
@@ -144,9 +159,102 @@
                       </tbody>
                     </table>
                 </div>
+                <?php foreach($transaction_data AS $transaction_per_index):?>
+                  <?php
+                    $transaction_obj = array();
+                    $all_transaction_data[$transaction_per_index['transaction_id']]['transaction_id'] = $transaction_per_index['transaction_id'];
+                    $all_transaction_data[$transaction_per_index['transaction_id']]['transaction_code'] = $transaction_per_index['transaction_code'];
+                    $all_transaction_data[$transaction_per_index['transaction_id']]['transaction_type_id'] = $transaction_per_index['transaction_type_id'];
+                    $all_transaction_data[$transaction_per_index['transaction_id']]['transaction_type_name'] = $transaction_per_index['transaction_type_name'];
+                    $all_transaction_data[$transaction_per_index['transaction_id']]['equipment_id'] = $transaction_per_index['equipment_id'];
+                    $all_transaction_data[$transaction_per_index['transaction_id']]['equipment_name'] = $transaction_per_index['equipment_name'];
+                    $all_transaction_data[$transaction_per_index['transaction_id']]['booking_start_date'] = $transaction_per_index['booking_start_date'];
+                    $all_transaction_data[$transaction_per_index['transaction_id']]['booking_end_date'] = $transaction_per_index['booking_end_date'];
+                    $all_transaction_data[$transaction_per_index['transaction_id']]['previous_booking_start_date'] = $transaction_per_index['previous_booking_start_date'];
+                    $all_transaction_data[$transaction_per_index['transaction_id']]['previous_booking_end_date'] = $transaction_per_index['previous_booking_end_date'];
+                    $all_transaction_data[$transaction_per_index['transaction_id']]['previous_deposit'] = "-".$transaction_per_index['previous_deposit'];
+                    $all_transaction_data[$transaction_per_index['transaction_id']]['deposit'] = $transaction_per_index['deposit'];
+                    $all_transaction_data[$transaction_per_index['transaction_id']]['transaction_cost'] = $transaction_per_index['transaction_cost'];
+                    $all_transaction_data[$transaction_per_index['transaction_id']]['room_name'] = $transaction_per_index['room_name'];
+                    if($transaction_per_index['transaction_type_id'] == 2){
+                      $transaction_obj = $transaction_per_index;
+                    }
+                    $all_transaction_data[$transaction_per_index['transaction_id']]['fined_items_detail'][] = $transaction_obj;
+                  ?>
+                <?php endforeach;?>
+                <?php
+                  $all_transaction_data = array_values($all_transaction_data);
+                  // echo "<pre>";
+                  // print_r($all_transaction_data);
+                ?>
+                <?php if($payment_history_master_data['return_by_admin'] == -1):?>
                 <hr>
                 <div class="d-flex justify-content-end">
-                    <input type="button" value="Return amount to admin" class="btn btn-primary mykosan-signature-button-color">
+                    <input type="button" value="Return amount to tenant" class="btn btn-primary mykosan-signature-button-color" data-toggle="modal" data-target="#returnTenantMoneyPopup">
+                </div>
+                <?php endif;?>
+                <div id="transaction_list_div" class="mt-4">
+                  <table id="transaction_list_table" class="table table-striped">
+                    <thead>
+                      <tr>
+                        <th>Transaction Code</th>
+                        <th>Transaction Type</th>
+                        <th>Booking Start Date</th>
+                        <th>Booking End Date</th>
+                        <th>Description</th>
+                        <th>Room</th>
+                        <th>Fined Items</th>
+                        <th class="text-right">Price</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <?php for($a = 0; $a < count($all_transaction_data); $a++):?>
+                        <?php $fined_items_detail = $all_transaction_data[$a]['fined_items_detail'];?>
+                        <tr>
+                          <td><?= $all_transaction_data[$a]['transaction_code'];?></td>
+                          <td><?= $all_transaction_data[$a]['transaction_type_id'] == 2 ? 'Deposit' : $all_transaction_data[$a]['transaction_type_name'];?></td>
+                          <td><?= $all_transaction_data[$a]['booking_start_date'] == null ? $all_transaction_data[$a]['previous_booking_start_date'] : $all_transaction_data[$a]['booking_start_date'];?></td>
+                          <td><?= $all_transaction_data[$a]['booking_end_date'] == null ? $all_transaction_data[$a]['previous_booking_end_date'] : $all_transaction_data[$a]['booking_end_date'];?></td>
+                          <td><?= $all_transaction_data[$a]['transaction_type_id'] == 2 ? 'Return deposit' : '';?></td>
+                          <td><?= $all_transaction_data[$a]['room_name'];?></td>
+                          <td>-</td>
+                          <td class="text-right"><?= $all_transaction_data[$a]['transaction_type_id'] == 2 ? $all_transaction_data[$a]['previous_deposit'] : $all_transaction_data[$a]['transaction_cost'];?></td>
+                        </tr>
+                        <?php if($all_transaction_data[$a]['transaction_type_id'] == 1):?>
+                          <tr>
+                          <td></td>
+                          <td>Deposit</td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td>-</td>
+                          <td class="text-right"><?= $all_transaction_data[$a]['deposit'];?></td>
+                        </tr>
+                        <?php endif;?>
+                        <?php if(isset($fined_items_detail[0]['transaction_id'])):?>
+                        <?php for($b = 0; $b < count($fined_items_detail); $b++):?>
+                          <tr>
+                            <td><?= $b != 0 ? '' : (isset($fined_items_detail[$b]['transaction_code']) ? $fined_items_detail[$b]['transaction_code'] : '');?></td>
+                            <td><?= $b != 0 ? '' : (isset($fined_items_detail[$b]['transaction_type_name']) ? $fined_items_detail[$b]['transaction_type_name'] : '');?></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>-</td>
+                            <td><?= isset($fined_items_detail[$b]['equipment_name']) ? $fined_items_detail[$b]['equipment_name'] : '-';?></td>
+                            <td class="text-right"><?= isset($fined_items_detail[$b]['fine_cost']) ? $fined_items_detail[$b]['fine_cost'] : '-';?></td>
+                          </tr>
+                        <?php endfor;?>
+                        <?php endif;?>
+                      <?php endfor;?>
+                    </tbody>
+                    <tfoot>
+                      <tr>
+                        <td colspan="7" class="text-center font-weight-bold">Total</td>
+                        <td class="text-right font-weight-bold"><?= $payment_history_master_data['total_payment'];?></td>
+                      </tr>
+                    </tfoot>
+                  </table>
                 </div>
             </div>
 
@@ -176,6 +284,36 @@
   <a class="scroll-to-top rounded" href="#page-top">
     <i class="fas fa-angle-up"></i>
   </a>
+
+  <!-- Modal -->
+  <div class="modal fade" id="returnTenantMoneyPopup" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="returnTenantMoneyPopupLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="returnTenantMoneyPopupLabel">Return Amount to Tenant</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form method="POST" action="" id="returnTenantMoneyForm">
+                        <div class="form-group">
+                          <label for="total_payment" class="col-form-label font-weight-bold">Total Payment</label>
+                          <input type="text" readonly name="total_payment" id="total_payment" class="form-control" value="<?= $payment_history_master_data['total_payment'];?>">
+                        </div>
+                        <div class="form-group">
+                          <label for="destination_bank" class="col-form-label font-weight-bold">Transfer To</label>
+                          <input type="hidden" name="bank_id" value="<?= $bank_data['bank_id'];?>">
+                          <input type="text" readonly class="form-control" name="bank_detail" value="<?= $bank_data['bank_id'] == null ? '' : ($bank_data['owner_account'] . ' ' . $bank_data['owner_name'] . '(' .$bank_data['bank_name'] . ')');?>">
+                        </div>
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary mykosan-signature-button-color" onclick="document.getElementById('returnTenantMoneyForm').submit();">Return</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
   <?php include "../logout_modal.php";?>
 

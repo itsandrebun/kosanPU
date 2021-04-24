@@ -13,7 +13,7 @@ if (isset($_POST['submitLogin'])){
         $con = $database->getConnection();
 
         $check_email_or_phone_number = "SELECT us.user_id, us.user_code, us.first_name, us.last_name, 
-        us.password, us.email, us.phone_number, us.gender, tn.tenant_id, us.dob FROM user AS us LEFT JOIN tenant AS tn ON tn.user_id = us.user_id WHERE us.email = '".$user_name."' OR us.phone_number = '".$user_name."'";
+        us.password, us.email, us.phone_number, us.gender, tn.tenant_id, us.dob, us.bank_id, us.owner_name, us.owner_account_number FROM user AS us LEFT JOIN tenant AS tn ON tn.user_id = us.user_id WHERE us.email = '".$user_name."' OR us.phone_number = '".$user_name."'";
 
         $check_email_or_phone_number = $con->query($check_email_or_phone_number);
         
@@ -33,7 +33,10 @@ if (isset($_POST['submitLogin'])){
                         "email" => $check_email_or_phone_number['email'],
                         "phone_number" => $check_email_or_phone_number['phone_number'],
                         "tenant_id" => $check_email_or_phone_number['tenant_id'],
-                        "dob" => $check_email_or_phone_number['dob']
+                        "dob" => $check_email_or_phone_number['dob'],
+                        "bank_id" => $check_email_or_phone_number['bank_id'],
+                        "owner_name" => $check_email_or_phone_number['owner_name'],
+                        "owner_account_number" => $check_email_or_phone_number['owner_account_number']
                     );
 
                     $_SESSION['user'] = $logged_in_user;

@@ -45,7 +45,7 @@
                 $internal_parameter_data = array();
 
                 if(!empty($_GET['id'])){
-                    $booking_sql = "SELECT tr.transaction_id, tr.transaction_code, tr.room_id, tr.user_id, rm.room_name, tr.price, tr.booking_start_date, tr.booking_end_date, tr.terminated_date, us.user_id, us.first_name, us.last_name, us.user_code, us.email, us.phone_number, tr.terminated_reason, tr.invoice_id, inv.deposit, inv.finalized_draft FROM transaction AS tr JOIN user AS us ON us.user_id = tr.user_id JOIN room AS rm ON rm.room_id = tr.room_id JOIN invoice AS inv ON inv.invoice_id = tr.invoice_id WHERE tr.transaction_id = ".$_GET['id'];
+                    $booking_sql = "SELECT tr.transaction_id, tr.transaction_code, tr.room_id, tr.user_id, rm.room_name, tr.price, tr.booking_start_date, tr.booking_end_date, tr.terminated_date, us.user_id, us.first_name, us.last_name, us.user_code, us.email, us.phone_number, tr.terminated_reason, tr.invoice_id, inv.deposit, (SELECT (CASE WHEN inv2.finalized_draft IS NULL THEN 0 ELSE inv2.finalized_draft END) FROM invoice AS inv2 WHERE inv2.parent_invoice_id = inv.invoice_id) AS finalized_draft FROM transaction AS tr JOIN user AS us ON us.user_id = tr.user_id JOIN room AS rm ON rm.room_id = tr.room_id JOIN invoice AS inv ON inv.invoice_id = tr.invoice_id WHERE tr.transaction_id = ".$_GET['id'];
                     $bookings = $con->query($booking_sql);
                     $booking_data = $bookings->fetch_assoc();
                 }
@@ -246,13 +246,12 @@
                         
                     </form>
                 </div>
+                <?php if($booking_data['finalized_draft'] == 0):?>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <?php if($booking_data['finalized_draft'] == 0):?>
                     <button type="button" class="btn btn-primary mykosan-signature-danger-button-color" onclick="document.getElementById('submitFineStatus').value = 2;document.getElementById('fineStatusForm').submit();">Finalize</button>
-                    <?php endif;?>
                     <button type="button" class="btn btn-primary mykosan-signature-button-color" onclick="document.getElementById('fineStatusForm').submit();">Submit</button>
                 </div>
+                <?php endif;?>
             </div>
         </div>
     </div>
