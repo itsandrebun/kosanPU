@@ -50,7 +50,7 @@
                     $booking_data = $bookings->fetch_assoc();
                 }
                 
-                $equipment_sql = "SELECT eq.equipment_id, eq.equipment_name, (CASE WHEN eq.equipment_id IN (SELECT ftd.equipment_id FROM fine_transaction_detail AS ftd JOIN transaction AS trs ON trs.transaction_id = ftd.transaction_id JOIN invoice AS iv ON iv.invoice_id = trs.invoice_id WHERE iv.parent_invoice_id = tr.invoice_id) THEN 1 ELSE 0 END) AS fine_status from equipment as eq JOIN room_equipment_mapping AS rem ON rem.equipment_id = eq.equipment_id JOIN transaction AS tr ON tr.room_id = rem.room_id WHERE tr.transaction_id = ".$_GET['id'];
+                $equipment_sql = "SELECT eq.equipment_id, eq.equipment_name, (select fn.price from fine AS fn WHERE fn.item_id = eq.equipment_id) AS fine_cost, (CASE WHEN eq.equipment_id IN (SELECT ftd.equipment_id FROM fine_transaction_detail AS ftd JOIN transaction AS trs ON trs.transaction_id = ftd.transaction_id JOIN invoice AS iv ON iv.invoice_id = trs.invoice_id WHERE iv.parent_invoice_id = tr.invoice_id) THEN 1 ELSE 0 END) AS fine_status from equipment as eq JOIN room_equipment_mapping AS rem ON rem.equipment_id = eq.equipment_id JOIN transaction AS tr ON tr.room_id = rem.room_id WHERE tr.transaction_id = ".$_GET['id'];
                 $equipment = $con->query($equipment_sql);
 
                 $internal_parameter_query = "SELECT * FROM internal_parameter AS itp WHERE itp.parameter_name IN ('company_name','company_address')";
@@ -166,7 +166,7 @@
                         <?php else:?>
                             <?php for($b = 0; $b < count($equipment_data); $b++):?>
                             <tr<?= $equipment_data[$b]['fine_status'] == 0 ? ' class="table-success"' : ' class="table-danger"';?>>
-                                <td><?= $equipment_data[$b]['equipment_name'];?></td>
+                                <td><?= $equipment_data[$b]['equipment_name'].' ('.$equipment_data[$b]['fine_cost'].')';?></td>
                                 <td class="text-center"><?= $equipment_data[$b]['fine_status'] == 0 ? 'No' : 'Yes';?></td>
                             </tr>
                             <?php endfor;?>
@@ -229,7 +229,7 @@
                         <input type="hidden" name="company_address" value="<?= $internal_parameter_data[1]['parameter_value'];?>">
                         <ul class="list-group">
                             <?php for($k = 0; $k < count($equipment_data); $k++):?>
-                                <li class="list-group-item"><input type="checkbox" class="mr-2" name="fined_equipment_status[]" value="<?= $equipment_data[$k]['equipment_id'];?>"<?= $equipment_data[$k]['fine_status'] == 0 ? ' ' : ' checked';?>><?= $equipment_data[$k]['equipment_name'];?></li>
+                                <li class="list-group-item"><input type="checkbox" class="mr-2" name="fined_equipment_status[]" value="<?= $equipment_data[$k]['equipment_id'];?>"<?= $equipment_data[$k]['fine_status'] == 0 ? ' ' : ' checked';?>><?= $equipment_data[$k]['equipment_name'].' ('.$equipment_data[$k]['fine_cost'].')';?></li>
                             <?php endfor;?>
                         </ul>
                     </form>
