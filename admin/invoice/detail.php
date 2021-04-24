@@ -144,6 +144,10 @@
                       </tbody>
                     </table>
                 </div>
+                <hr>
+                <div class="d-flex justify-content-end">
+                    <input type="button" value="Return amount to admin" class="btn btn-primary mykosan-signature-button-color">
+                </div>
             </div>
 
         </div>

@@ -110,9 +110,6 @@
                             </div>
                         </div>
                     </div>
-                    <div class="d-flex justify-content-end">
-                        <input type="submit" value="Return amount to admin" class="btn btn-primary mykosan-signature-button-color">
-                    </div>
                 </form>
                 <hr>
                 <div class="d-sm-flex align-items-center justify-content-between mb-3 mt-3">
