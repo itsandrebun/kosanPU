@@ -24,7 +24,6 @@
             $database = new Database();
             $con = $database->getConnection();
             
-            
             $check_email_or_phone_number = "SELECT us.user_id, us.user_code, us.first_name, us.last_name, 
             us.password, us.email, us.phone_number, us.gender, tn.tenant_id FROM user AS us LEFT JOIN tenant AS tn ON tn.user_id = us.user_id WHERE (us.email = '".$email."' OR us.phone_number = '".$phone_number."') ";
 

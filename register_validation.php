@@ -73,7 +73,7 @@
             if(empty($user_last_name)){
                 $last_name_validation= "Last name is required!";
             }elseif(!preg_match('/^[\p{L} ]+$/u', $user_last_name)){
-                $first_name_validation = "First name must contain alphabets and space";
+                $last_name_validation = "First name must contain alphabets and space";
             }
             $_SESSION['user_last_name'] = $user_last_name;
             if(empty($user_email)){
