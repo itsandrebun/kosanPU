@@ -27,7 +27,7 @@
             $con = $database->getConnection();
             $booking_start_month = date('m',strtotime($booking_start_date));
             $booking_end_month = date('m',strtotime($booking_end_date));
-            $booking_sql = "SELECT tr.transaction_id, tr.transaction_code, tr.booking_start_date, tr.booking_end_date, tr.room_id FROM transaction AS tr WHERE (tr.user_id = ".$logged_in_user['user_id']." AND MONTH(tr.booking_start_date) = '".$booking_start_month."' AND MONTH(tr.booking_end_date) = '".$booking_end_month."' AND tr.transaction_type_id = 1) OR (tr.room_id = ".$room_parameter." AND MONTH(tr.booking_start_date) = '".$booking_start_month."' AND MONTH(tr.booking_end_date) = '".$booking_end_month."' AND tr.transaction_type_id = 1)";
+            $booking_sql = "SELECT tr.transaction_id, tr.transaction_code, tr.booking_start_date, tr.booking_end_date, tr.room_id FROM transaction AS tr WHERE (tr.user_id = ".$logged_in_user['user_id']." AND (MONTH(tr.booking_start_date) = '".$booking_start_month."' OR MONTH(tr.booking_end_date) = '".$booking_end_month."') AND tr.transaction_type_id = 1) OR (tr.room_id = ".$room_parameter." AND (MONTH(tr.booking_start_date) = '".$booking_start_month."' OR MONTH(tr.booking_end_date) = '".$booking_end_month."') AND tr.transaction_type_id = 1) OR (tr.user_id = ".$logged_in_user['user_id']." AND (MONTH(tr.booking_start_date) = '".$booking_end_month."') AND tr.transaction_type_id = 1) OR (tr.room_id = ".$room_parameter." AND (MONTH(tr.booking_end_date) = '".$booking_start_month."') AND tr.transaction_type_id = 1) OR (tr.user_id = ".$logged_in_user['user_id']." AND (MONTH(tr.booking_end_date) = '".$booking_start_month."') AND tr.transaction_type_id = 1)";
             
             $booking = $con->query($booking_sql);
             $due_start_date = date("Y-m-01",strtotime($booking_end_date));
@@ -49,6 +49,7 @@
                     }
                 }
             }else{
+                
                 $booking_validation = "Sorry, you cannot book this room between these dates because it has been booked by you or other tenant or you might have booked another room between these dates.";
             }
         }

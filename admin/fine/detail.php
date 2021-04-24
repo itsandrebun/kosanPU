@@ -37,7 +37,7 @@
 
             <!-- Page Heading -->
             <div class="d-sm-flex align-items-center justify-content-between mb-4">
-                <h1 class="h3 mb-0 text-gray-800">Booking Detail</h1>
+                <h1 class="h3 mb-0 text-gray-800">Fine Detail</h1>
             </div>
             <?php
                 $booking_data = array();
@@ -70,7 +70,7 @@
                 $con->close();
             ?>
             <div class="data-list">
-                <form action="../booking_termination" method="POST">
+                <form action="" method="POST">
                     <div class="form-group">
                         <label for="transaction_code" class="col-form-label font-weight-bold">Code</label>
                         <input class="form-control" readonly name="transaction_code" type="text" value="<?= $booking_data['transaction_code'];?>">
@@ -110,6 +110,9 @@
                             </div>
                         </div>
                     </div>
+                    <div class="d-flex justify-content-end">
+                        <input type="submit" value="Return amount to admin" class="btn btn-primary mykosan-signature-button-color">
+                    </div>
                 </form>
                 <hr>
                 <div class="d-sm-flex align-items-center justify-content-between mb-3 mt-3">
@@ -119,7 +122,7 @@
                     <thead>
                         <tr>
                             <th>Equipment Name</th>
-                            <th class="text-center">Fine Cost</th>
+                            <th class="text-right">Fine Cost</th>
                         </tr>
                     </thead>
                     <tbody>

@@ -11,10 +11,10 @@
         $room_id = $_POST['room_id'];
         $parent_invoice_id = $_POST['parent_invoice_id'];
         $logged_in_user = $_SESSION['user'];
-        $first_name = $logged_in_user['first_name'];
-        $last_name = $logged_in_user['last_name'];
-        $email = $logged_in_user['email'];
-        $phone_number = $logged_in_user['phone_number'];
+        $first_name = $_POST['first_name'];
+        $last_name = $_POST['last_name'];
+        $email = $_POST['email'];
+        $phone_number = $_POST['phone_number'];
         $company_name = $_POST['company_name'];
         $company_address = $_POST['company_address'];
         $notification_msg = "";
@@ -32,6 +32,9 @@
             
             // $equipment_mapping_query = "CALL submit_fine(".$equipment_id.",'".$equipment_string."',".count($checked_items).")";
             $fined_equipment_query = "CALL submit_fine(".$tenant_id.", ".$parent_invoice_id.", '".$first_name."', '".$last_name."', '".$email."', '".$phone_number."', '".$company_name."', '".$company_address."', ".$room_id.", '".$fined_equipment_string."', ".count($checked_items).", '".$notification_msg."','".$due_start_date."','".$due_end_date."')";
+            if($fined_status == 2){
+                $fined_equipment_query = "CALL finalize_fine(".$tenant_id.", ".$parent_invoice_id.", '".$first_name."', '".$last_name."', '".$email."', '".$phone_number."', '".$company_name."', '".$company_address."', ".$room_id.", '".$fined_equipment_string."', ".count($checked_items).", '".$notification_msg."','".$due_start_date."','".$due_end_date."')";
+            }
 
             // echo $fined_equipment_query;
             // exit;
