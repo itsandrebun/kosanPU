@@ -22,12 +22,13 @@
     <div class="image-login-register d-flex justify-content-end">
     <?php
         $payment_data=array();
+        $all_payment_data = array();
         $master_data=array();
         include "DB_connection.php";
         $database = new Database();
         $con = $database->getConnection();
 
-        $payment_sql="SELECT trs.transaction_id, trs.transaction_code, trs.price, trs.room_id, roo.room_name, trs.transaction_type_id, typ.transaction_type_name, fin.fine_transaction_id, fin.price AS fine_price, equ.equipment_name FROM transaction AS trs JOIN transaction_type AS typ ON trs.transaction_type_id = typ.transaction_type_id LEFT JOIN room AS roo on trs.room_id=roo.room_id LEFT JOIN fine_transaction_detail AS fin on trs.transaction_id=fin.fine_transaction_id LEFT JOIN equipment as equ on equ.equipment_id=fin.equipment_id where trs.invoice_id =" .$_GET['invoice_id'];
+        $payment_sql="SELECT trs.transaction_id, trs.transaction_code, trs.price, trs.room_id, roo.room_name, trs.transaction_type_id, typ.transaction_type_name, fin.fine_transaction_id, inv.deposit, fin.price AS fine_price, trs.price AS transaction_price, equ.equipment_name FROM transaction AS trs JOIN transaction_type AS typ ON trs.transaction_type_id = typ.transaction_type_id JOIN invoice AS inv ON inv.invoice_id = trs.invoice_id LEFT JOIN room AS roo on trs.room_id=roo.room_id LEFT JOIN fine_transaction_detail AS fin on trs.transaction_id=fin.transaction_id LEFT JOIN equipment as equ on equ.equipment_id=fin.equipment_id where trs.invoice_id =" .$_GET['invoice_id']." ORDER BY trs.transaction_type_id DESC";
 
         $master_sql = "SELECT usr.first_name, usr.last_name, pys.payment_status_id, pys.payment_status_name, inv.invoice_number, inv.payment_date, inv.created_date, inv.total_payment, inv.due_start_date, inv.due_end_date FROM user as usr JOIN invoice AS inv ON usr.user_id=inv.user_id join payment_status AS pys ON pys.payment_status_id=inv.payment_status WHERE inv.invoice_id=" .$_GET['invoice_id'];
 
@@ -92,7 +93,7 @@
                             </tbody>
                     </table>
                 <div>
-                    <button type="button" class="btn btn-primary d-block mt-2 w-100" data-toggle="modal" data-target="#transactionModalCenter" style="background:#aa6d5a!important;border-color:#aa6d5a!important;">Detail Transaction</button>
+                    <button type="button" class="btn btn-primary d-block mt-2 w-100" data-toggle="modal" data-target="#transactionModalCenter" style="background:#aa6d5a!important;border-color:#aa6d5a!important;"> Transaction Detail</button>
                 </div>
                 <div>
                 <a href="payment-evidence.php?invoice_id=<?=$_GET['invoice_id'];?>" class="btn btn-primary d-block mt-2">Pay Now!</a>
@@ -117,6 +118,7 @@
                             <th scope="col">Total Price:</th>
                             <th scope="col">Room No:</th>
                             <th scope="col">Fine Items:</th>
+                            <th scope="col">Price:</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -127,8 +129,19 @@
                             <td><?= $payment_data[$d]['transaction_type_name'];?></td>
                             <td><?= $payment_data[$d]['price'];?></td>
                             <td><?= $payment_data[$d]['room_name'];?></td>
-                            <td><?= $payment_data[$d]['equipment_name'];?>-</td>
+                            <td><?= $payment_data[$d]['equipment_name'];?></td>
+                            <td class="text-right"><?= $payment_data[$d]['fine_price'] == null ? $payment_data[$d]['transaction_price'] : $payment_data[$d]['fine_price'];?></td>
                         </tr>
+                        <?php if($payment_data[$d]['transaction_type_id'] == 1):?>
+                        <tr>
+                            <td><?= $payment_data[$d]['transaction_code'];?></td>
+                            <td>Deposit</td>
+                            <td><?= $payment_data[$d]['price'];?></td>
+                            <td><?= $payment_data[$d]['room_name'];?></td>
+                            <td><?= $payment_data[$d]['equipment_name'];?></td>
+                            <td class="text-right"><?= $payment_data[$d]['deposit'] ;?></td>
+                        </tr>
+                        <?php endif;?>
                     <?php endfor;?>
                     <?php else:?>
                         <tr>
