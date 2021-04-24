@@ -28,7 +28,7 @@
         $database = new Database();
         $con = $database->getConnection();
 
-        $payment_sql="SELECT trs.transaction_id, trs.transaction_code, trs.price, trs.room_id, roo.room_name, trs.transaction_type_id, typ.transaction_type_name, fin.fine_transaction_id, inv.deposit, fin.price AS fine_price, trs.price AS transaction_price, equ.equipment_name FROM transaction AS trs JOIN transaction_type AS typ ON trs.transaction_type_id = typ.transaction_type_id JOIN invoice AS inv ON inv.invoice_id = trs.invoice_id LEFT JOIN room AS roo on trs.room_id=roo.room_id LEFT JOIN fine_transaction_detail AS fin on trs.transaction_id=fin.transaction_id LEFT JOIN equipment as equ on equ.equipment_id=fin.equipment_id where trs.invoice_id =" .$_GET['invoice_id']." ORDER BY trs.transaction_type_id DESC";
+        $payment_sql="SELECT trs.transaction_id, trs.transaction_code, trs.room_id, trs.booking_start_date, trs.booking_end_date, roo.room_name, trs.transaction_type_id, typ.transaction_type_name, fin.fine_transaction_id, inv.deposit, fin.price AS fine_price, trs.price AS transaction_price, equ.equipment_name FROM transaction AS trs JOIN transaction_type AS typ ON trs.transaction_type_id = typ.transaction_type_id JOIN invoice AS inv ON inv.invoice_id = trs.invoice_id LEFT JOIN room AS roo on trs.room_id=roo.room_id LEFT JOIN fine_transaction_detail AS fin on trs.transaction_id=fin.transaction_id LEFT JOIN equipment as equ on equ.equipment_id=fin.equipment_id where trs.invoice_id =" .$_GET['invoice_id']." ORDER BY trs.transaction_type_id DESC";
 
         $master_sql = "SELECT usr.first_name, usr.last_name, pys.payment_status_id, pys.payment_status_name, inv.invoice_number, inv.payment_date, inv.created_date, inv.total_payment, inv.due_start_date, inv.due_end_date FROM user as usr JOIN invoice AS inv ON usr.user_id=inv.user_id join payment_status AS pys ON pys.payment_status_id=inv.payment_status WHERE inv.invoice_id=" .$_GET['invoice_id'];
 
@@ -100,6 +100,30 @@
                 </div>
             </div>
         </div>
+        <?php foreach($payment_data AS $payment_per_index):?>
+            <?php
+                    // echo $payment_per_index['transaction_type_id'];
+                    // // exit;
+                    $payment_obj = array();
+                    $all_payment_data[$payment_per_index['transaction_id']]['transaction_id'] = $payment_per_index['transaction_id'];
+                    $all_payment_data[$payment_per_index['transaction_id']]['transaction_code'] = $payment_per_index['transaction_code'];
+                    $all_payment_data[$payment_per_index['transaction_id']]['transaction_type_id'] = $payment_per_index['transaction_type_id'];
+                    $all_payment_data[$payment_per_index['transaction_id']]['transaction_type_name'] = $payment_per_index['transaction_type_name'];
+                    // $payment_per_index[$payment_per_index['transaction_id']]['equipment_id'] = $payment_per_index['equipment_id'];
+                    $all_payment_data[$payment_per_index['transaction_id']]['equipment_name'] = $payment_per_index['equipment_name'];
+                    $all_payment_data[$payment_per_index['transaction_id']]['booking_start_date'] = $payment_per_index['booking_start_date'];
+                    $all_payment_data[$payment_per_index['transaction_id']]['booking_end_date'] = $payment_per_index['booking_end_date'];
+                    $all_payment_data[$payment_per_index['transaction_id']]['deposit'] = $payment_per_index['deposit'];
+                    $all_payment_data[$payment_per_index['transaction_id']]['transaction_cost'] = $payment_per_index['transaction_price'];
+                    $all_payment_data[$payment_per_index['transaction_id']]['room_name'] = $payment_per_index['room_name'];
+                    $all_payment_data[$payment_per_index['transaction_id']]['fine_cost'] = $payment_per_index['fine_price'];
+                    if($payment_per_index['transaction_type_id'] == 2){
+                      $payment_obj = $payment_per_index;
+                    }
+                    $all_payment_data[$payment_per_index['transaction_id']]['fined_items_detail'][] = $payment_obj;
+            ?>
+        <?php endforeach;?>
+        <?php $all_payment_data = array_values($all_payment_data);?>
         <div class="modal fade" id="transactionModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
             <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
                 <div class="modal-content">
@@ -115,32 +139,40 @@
                         <tr>
                             <th scope="col">Transaction Code:</th>
                             <th scope="col">Transaction Type:</th>
-                            <th scope="col">Total Price:</th>
                             <th scope="col">Room No:</th>
                             <th scope="col">Fine Items:</th>
                             <th scope="col">Price:</th>
                         </tr>
                     </thead>
                     <tbody>
-                    <?php if(count($payment_data) > 0):?>
-                    <?php for($d = 0; $d < count($payment_data); $d++):?>
+                    <?php if(count($all_payment_data) > 0):?>
+                    <?php for($d = 0; $d < count($all_payment_data); $d++):?>
+                        <?php if($all_payment_data[$d]['transaction_type_id'] == 1):?>
                         <tr>
-                            <td><?= $payment_data[$d]['transaction_code'];?></td>
-                            <td><?= $payment_data[$d]['transaction_type_name'];?></td>
-                            <td><?= $payment_data[$d]['price'];?></td>
-                            <td><?= $payment_data[$d]['room_name'];?></td>
-                            <td><?= $payment_data[$d]['equipment_name'];?></td>
-                            <td class="text-right"><?= $payment_data[$d]['fine_price'] == null ? $payment_data[$d]['transaction_price'] : $payment_data[$d]['fine_price'];?></td>
+                            <td><?= $all_payment_data[$d]['transaction_code'];?></td>
+                            <td><?= $all_payment_data[$d]['transaction_type_name'];?></td>
+                            <td><?= $all_payment_data[$d]['room_name'];?></td>
+                            <td><?= $all_payment_data[$d]['equipment_name'];?></td>
+                            <td class="text-right"><?= $all_payment_data[$d]['fine_cost'] == null ? $all_payment_data[$d]['transaction_cost'] : $all_payment_data[$d]['fine_cost'];?></td>
                         </tr>
-                        <?php if($payment_data[$d]['transaction_type_id'] == 1):?>
                         <tr>
-                            <td><?= $payment_data[$d]['transaction_code'];?></td>
+                            <td></td>
                             <td>Deposit</td>
-                            <td><?= $payment_data[$d]['price'];?></td>
-                            <td><?= $payment_data[$d]['room_name'];?></td>
-                            <td><?= $payment_data[$d]['equipment_name'];?></td>
-                            <td class="text-right"><?= $payment_data[$d]['deposit'] ;?></td>
+                            <td><?= $all_payment_data[$d]['room_name'];?></td>
+                            <td><?= $all_payment_data[$d]['equipment_name'];?></td>
+                            <td class="text-right"><?= $all_payment_data[$d]['deposit'] ;?></td>
                         </tr>
+                        <?php else:?>
+                        <?php $fined_items_detail = $all_payment_data[$d]['fined_items_detail'];?>
+                            <?php for($h = 0; $h < count($fined_items_detail); $h++):?>
+                            <tr>
+                                <td><?= $h == 0 ? $fined_items_detail[$h]['transaction_code'] : '';?></td>
+                                <td><?= $h == 0 ? $fined_items_detail[$h]['transaction_type_name'] : '';?></td>
+                                <td><?= $h == 0 ? $fined_items_detail[$h]['room_name'] : '';?></td>
+                                <td><?= $fined_items_detail[$h]['equipment_name'];?></td>
+                                <td class="text-right"><?= $fined_items_detail[$h]['fine_price'] ;?></td>
+                            </tr>
+                            <?php endfor;?>
                         <?php endif;?>
                     <?php endfor;?>
                     <?php else:?>
