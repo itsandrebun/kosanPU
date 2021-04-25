@@ -117,19 +117,17 @@
                     <div class="form-group">
                         <label for="payment_date" class="col-form-label font-weight-bold">Payment Date</label>
                         <div class="input-group date" data-provide="datepicker">
-                          <input type="text" name="payment_date" class="datepicker form-control" value="<?= $payment_history_master_data['payment_status'] >= 2 ? ($payment_history_master_data['payment_date'] != null ? date('Y-m-d',strtotime($payment_history_master_data['payment_date'])) : '') : '';?>" <?= $payment_history_master_data['payment_status'] >= 3 || $payment_history_master_data['payment_status'] == 1 ? 'readonly' : '';?>>
+                          <input type="text" name="payment_date" class="datepicker form-control" value="<?= $payment_history_master_data['payment_status'] >= 2 ? ($payment_history_master_data['payment_date'] != null ? date('Y-m-d',strtotime($payment_history_master_data['payment_date'])) : '') : '';?>" <?= $payment_history_master_data['payment_status'] == 1 || $payment_history_master_data['payment_status'] == 3 ? 'readonly' : '';?>>
                           <div class="input-group-addon">
                               <span class="glyphicon glyphicon-th"></span>
                           </div>
                         </div>
                     </div>
-                    <?php if($payment_history_master_data['payment_status'] == 4):?>
                     <div class="form-group">
                         <label for="rejected_reason" class="col-form-label font-weight-bold">Rejected Reason</label>
-                        <textarea style="resize:none" class="form-control <?= (!empty($_SESSION['rejected_reason_validation']) ? ('is-invalid') : '') ;?>" name="rejected_reason"><?= (!empty($_SESSION['rejected_reason_error']) ? $_SESSION['rejected_reason_error'] : '') ;?></textarea>
+                        <textarea style="resize:none" class="form-control <?= (!empty($_SESSION['rejected_reason_validation']) ? ('is-invalid') : '') ;?>" name="rejected_reason" <?= $payment_history_master_data['payment_status'] == 3 || $payment_history_master_data['payment_status'] == 4 ? 'readonly' : '';?>><?= (!empty($_SESSION['rejected_reason_error']) ? $_SESSION['rejected_reason_error'] : '') ;?></textarea>
                         <?= (!empty($_SESSION['rejected_reason_validation']) ? ('<div class="invalid-feedback">'.$_SESSION['rejected_reason_validation'].'</div>') : '') ;?>
                     </div>
-                    <?php endif;?>
                     <div class="btn-group d-flex justify-content-end" role="group" aria-label="Basic example">
                       <div>
                         <input type="submit" name="confirmEvidenceButton" class="btn btn-primary mykosan-signature-button-color" value="Approve"<?= ($payment_history_master_data['payment_status'] == 3 || $payment_history_master_data['payment_status'] == 1 ? ' disabled' : '');?>>

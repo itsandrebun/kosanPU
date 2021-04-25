@@ -7,7 +7,7 @@
         $con = $database->getConnection();
         $notification_msg = "Invoice with number: [invoice_code] was approved. Thank you!";
         $payment_date = $_POST['payment_date'];
-        $approve_payment_query = "CALL approve_evidence(".$invoice_id.", 3, '".$payment_date."')";
+        $approve_payment_query = "CALL approve_evidence(".$invoice_id.", 3, '".$payment_date."', '".$notification_msg."')";
 
         $approve_payment = $con->query($approve_payment_query);
         header("Location:invoice/list");

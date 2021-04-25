@@ -74,6 +74,7 @@
                 <?php endfor;?>
                 <?= (!empty($_SESSION['bank_validation']) ? ('<div class="invalid-feedback d-block">'.$_SESSION['bank_validation'].'</div>') : '') ;?>
             </div>
+            <input type="hidden" name="invoice_created_date" value="<?= date("Y-m-d",strtotime($payment_data['created_date']));?>">
             <div class="form-group">
                 <label class="control-label">Payment Date</label>
                 <div class="col-xs-4">

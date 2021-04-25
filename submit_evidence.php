@@ -10,6 +10,7 @@
         $invoice_id = $_POST['invoice_id'];
         $bank_id = $_POST['bank_id'];
         $payment_date = $_POST['payment_date'];
+        $invoice_created_date = $_POST['invoice_created_date'];
         $target_dir = "assets/photo/uploads/";
         $target_subdir = "assets/photo/uploads/payment_evidence";
         $target_file = $target_subdir . basename($evidence_file["name"]);
@@ -19,7 +20,7 @@
         // exit;
         $filename = $evidence_file["tmp_name"];
 
-        if($filename != "" && isset($bank_id) && (!empty($payment_date) && date('Y-m-d') >= $payment_date)){
+        if($filename != "" && isset($bank_id) && ((!empty($payment_date) && date('Y-m-d') >= $payment_date) || $invoice_created_date <= $payment_date)){
             $check = getimagesize($filename);
             if($check !== false){
                 if(!file_exists($target_dir)){
@@ -60,8 +61,8 @@
             $_SESSION['bank_id'] = $bank_id;
             if(empty($payment_date)){
                 $payment_date_validation = "Payment Date is required";
-            }elseif(date('Y-m-d') < $payment_date){
-                $payment_date_validation = "Payment Date must be less than equal to current date";
+            }elseif(date('Y-m-d') < $payment_date || $invoice_created_date > $payment_date){
+                $payment_date_validation = "Payment Date must be less than equal to current date and greater than invoice created date";
             }
             $_SESSION['payment_date'] = $payment_date;
             $evidence_link = "Location:payment-evidence?invoice_id=".$invoice_id;
