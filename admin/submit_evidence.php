@@ -2,7 +2,7 @@
 
     if(isset($_POST['confirmEvidenceButton'])){
         $invoice_id = $_POST['invoice_id'];
-        include "../DB_connection";
+        include "../../DB_connection";
         $database = new Database();
         $con = $database->getConnection();
         $notification_msg = "Invoice with number: [invoice_code] was approved. Thank you!";
