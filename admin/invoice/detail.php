@@ -113,9 +113,15 @@
                         <label for="payment_evidence" class="col-form-label font-weight-bold">Payment Evidence</label>
                         <img class="d-block payment_evidence_image" src="<?= '/../../'.$payment_history_master_data['payment_evidence'];?>" alt="" onError="this.onerror=null;this.src='../../assets/photo/invoice-icon-line-style-symbol-shopping-icon-collection-invoice-creative-element-logo-infographic-ux-ui-invoice-icon-169076566.jpg';">
                     </div>
+                    <!-- <?= ($payment_history_master_data['payment_date']);?> -->
                     <div class="form-group">
                         <label for="payment_date" class="col-form-label font-weight-bold">Payment Date</label>
-                        <input type="date" name="payment_date" class="form-control" value="<?= $payment_history_master_data['payment_status'] >= 3 ? ($payment_history_master_data['payment_date'] != null ? date('Y-m-d',strtotime($payment_history_master_data['payment_date'])) : '') : '';?>" <?= $payment_history_master_data['payment_status'] >= 3 || $payment_history_master_data['payment_status'] == 1 ? 'readonly' : '';?>>
+                        <div class="input-group date" data-provide="datepicker">
+                          <input type="text" name="payment_date" class="datepicker form-control" value="<?= $payment_history_master_data['payment_status'] >= 2 ? ($payment_history_master_data['payment_date'] != null ? date('Y-m-d',strtotime($payment_history_master_data['payment_date'])) : '') : '';?>" <?= $payment_history_master_data['payment_status'] >= 3 || $payment_history_master_data['payment_status'] == 1 ? 'readonly' : '';?>>
+                          <div class="input-group-addon">
+                              <span class="glyphicon glyphicon-th"></span>
+                          </div>
+                        </div>
                     </div>
                     <?php if($payment_history_master_data['payment_status'] == 4):?>
                     <div class="form-group">

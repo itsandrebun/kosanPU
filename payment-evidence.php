@@ -79,19 +79,19 @@
                 <div class="col-xs-4">
                     <!-- <input type="date" class="form-control <?= (!empty($_SESSION['payment_date_validation']) ? ('is-invalid') : '') ;?>" name="payment_date" <?= (!empty($_SESSION['payment_date']) ? ('value="'.$_SESSION['payment_date'].'"') : '') ;?>/> -->
                     <div class="input-group date" data-provide="datepicker">
-                        <input type="text" autocomplete="off" name="payment_date" class="datepicker form-control <?= (!empty($_SESSION['payment_validation']) ? ('is-invalid') : '') ;?>" <?= (!empty($_SESSION['payment_date']) ? ('value="'.$_SESSION['payment_date'].'"') : '') ;?> data-date-format="mm/dd/yyyy">
+                        <input type="text" autocomplete="off" name="payment_date" class="datepicker form-control <?= (!empty($_SESSION['payment_date_validation']) ? ('is-invalid') : '') ;?>" <?= (!empty($_SESSION['payment_date']) ? ('value="'.$_SESSION['payment_date'].'"') : '') ;?> data-date-format="yyyy-mm-dd">
                         <div class="input-group-addon">
                             <span class="glyphicon glyphicon-th"></span>
                         </div>
+                        <?= (!empty($_SESSION['payment_date_validation']) ? ('<div class="invalid-feedback">'.$_SESSION['payment_date_validation'].'</div>') : '') ;?>
                     </div>
-                    <?= (!empty($_SESSION['payment_date_validation']) ? ('<div class="invalid-feedback">'.$_SESSION['payment_date_validation'].'</div>') : '') ;?>
                 </div>
             </div>
             <div class="form-group">
                 <label class="control-label">Upload</label>
                 <div class="col-xs-3">
                     <input type="file" name="evidence" class="<?= (!empty($_SESSION['evidence_file_validation']) ? ('is-invalid') : '') ;?>" />
-                    <?= (!empty($_SESSION['evidence_file_validation']) ? ('<div class="invalid-feedback">'.$_SESSION['evidence_file_validation'].'</div>') : '') ;?>
+                    <?= (!empty($_SESSION['evidence_file_validation']) ? ('<div class="invalid-feedback d-block">'.$_SESSION['evidence_file_validation'].'</div>') : '') ;?>
                 </div>
             </div>
             <div>

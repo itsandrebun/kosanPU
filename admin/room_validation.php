@@ -12,7 +12,9 @@
         $room_id = !empty($_POST['room_id']) ? $_POST['room_id'] : null;
         if(!empty($room_name) && (!empty($room_floor) && is_numeric($room_floor) && $room_floor > 0) && !empty($room_gender)){
             include "../DB_connection.php";
-
+            $database = new Database();
+            $con = $database->getConnection();
+            
             $check_room_name_sql = "SELECT * FROM room WHERE room_name = '".$room_name."'";
 
             if($room_id != null){

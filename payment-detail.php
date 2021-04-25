@@ -30,7 +30,7 @@
 
         $payment_sql="SELECT trs.transaction_id, trs.transaction_code, trs.room_id, trs.booking_start_date, trs.booking_end_date, roo.room_name, trs.transaction_type_id, typ.transaction_type_name, fin.fine_transaction_id, inv.deposit, fin.price AS fine_price, trs.price AS transaction_price, equ.equipment_name, (SELECT inv2.deposit FROM invoice AS inv2 where inv2.invoice_id = inv.parent_invoice_id) AS previous_deposit, (SELECT rm2.room_name FROM room AS rm2 JOIN transaction AS tr2 ON tr2.room_id = rm2.room_id JOIN invoice AS inv2 ON inv2.invoice_id = tr2.invoice_id where inv2.invoice_id = inv.parent_invoice_id) AS previous_room_name FROM transaction AS trs JOIN transaction_type AS typ ON trs.transaction_type_id = typ.transaction_type_id JOIN invoice AS inv ON inv.invoice_id = trs.invoice_id LEFT JOIN room AS roo on trs.room_id=roo.room_id LEFT JOIN fine_transaction_detail AS fin on trs.transaction_id=fin.transaction_id LEFT JOIN equipment as equ on equ.equipment_id=fin.equipment_id where trs.invoice_id =" .$_GET['invoice_id']." ORDER BY trs.transaction_type_id DESC";
 
-        $master_sql = "SELECT usr.first_name, usr.last_name, pys.payment_status_id, pys.payment_status_name, inv.invoice_number, inv.payment_date, inv.created_date, inv.total_payment, inv.due_start_date, inv.due_end_date FROM user as usr JOIN invoice AS inv ON usr.user_id=inv.user_id join payment_status AS pys ON pys.payment_status_id=inv.payment_status WHERE inv.invoice_id=" .$_GET['invoice_id'];
+        $master_sql = "SELECT usr.first_name, usr.last_name, pys.payment_status_id, pys.payment_status_name, inv.invoice_number, inv.payment_date, inv.created_date, inv.total_payment, inv.due_start_date, inv.due_end_date, inv.payment_status FROM user as usr JOIN invoice AS inv ON usr.user_id=inv.user_id join payment_status AS pys ON pys.payment_status_id=inv.payment_status WHERE inv.invoice_id=" .$_GET['invoice_id'];
 
         $payments=$con->query($payment_sql);
 
@@ -100,9 +100,11 @@
                 <div>
                     <button type="button" class="btn btn-primary d-block mt-2 w-100" data-toggle="modal" data-target="#transactionModalCenter" style="background:#aa6d5a!important;border-color:#aa6d5a!important;"> Transaction Detail</button>
                 </div>
+                <?php if($master_data['payment_status'] != 2 && $master_data['payment_status'] != 4):?>
                 <div>
                 <a href="payment-evidence?invoice_id=<?=$_GET['invoice_id'];?>" class="btn btn-primary d-block mt-2">Pay Now!</a>
                 </div>
+                <?php endif;?>
             </div>
         </div>
         <?php foreach($payment_data AS $payment_per_index):?>

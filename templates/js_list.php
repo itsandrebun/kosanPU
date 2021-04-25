@@ -17,10 +17,8 @@
 <?php endif;?>
 <script>
     $(function() {
-        $('.datepicker').datepicker({
-            format: 'dd/mm/yyyy',
-            startDate: '-3d'
-        });
+        $.fn.datepicker.defaults.format = "yyyy-mm-dd";
+        $('.datepicker').datepicker();
     });
 </script>
 <!-- Option 2: Separate Popper and Bootstrap JS -->

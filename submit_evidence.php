@@ -12,14 +12,15 @@
         $payment_date = $_POST['payment_date'];
         $target_dir = "assets/photo/uploads/";
         $target_subdir = "assets/photo/uploads/payment_evidence";
-        $target_file = $target_subdir . basename($_FILES["evidence"]["name"]);
+        $target_file = $target_subdir . basename($evidence_file["name"]);
         $imageFileType = strtolower(pathinfo($target_file,PATHINFO_EXTENSION));
         
-        // echo $evidence_file == null ? 1 : 0;
+        // echo $evidence_file['tmp_name'] == "" ? 1 : 0;
         // exit;
+        $filename = $evidence_file["tmp_name"];
 
-        if(isset($evidence_file) && isset($bank_id) && !empty($payment_date)){
-            $check = getimagesize($evidence_file["tmp_name"]);
+        if($filename != "" && isset($bank_id) && (!empty($payment_date) && date('Y-m-d') >= $payment_date)){
+            $check = getimagesize($filename);
             if($check !== false){
                 if(!file_exists($target_dir)){
                     mkdir($target_dir,0777);
@@ -48,7 +49,7 @@
                 $evidence_link = "Location:payment-evidence?invoice_id=".$invoice_id;
             }
         }else{
-            if(!isset($evidence_file)){
+            if($filename == ""){
                 $evidence_file_validation = "Evidence file is required";
             }
             
@@ -59,6 +60,8 @@
             $_SESSION['bank_id'] = $bank_id;
             if(empty($payment_date)){
                 $payment_date_validation = "Payment Date is required";
+            }elseif(date('Y-m-d') < $payment_date){
+                $payment_date_validation = "Payment Date must be less than equal to current date";
             }
             $_SESSION['payment_date'] = $payment_date;
             $evidence_link = "Location:payment-evidence?invoice_id=".$invoice_id;

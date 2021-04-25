@@ -71,8 +71,13 @@
                   </div>
                   <div class="form-group">
                       <label for="tenant_dob" class="col-form-label font-weight-bold">Date of Birth</label>
-                      <input type="date" name="dob" class="form-control <?= (!empty($_SESSION['date_of_birth_validation']) ? ('is-invalid') : '') ;?>" value="<?= (!empty($_SESSION['user_dob_error']) ? $_SESSION['user_dob_error']: $admin_data['dob']) ;?>">
-                      <?= (!empty($_SESSION['date_of_birth_validation']) ? ('<div class="invalid-feedback">'.$_SESSION['date_of_birth_validation'].'</div>') : '') ;?>
+                      <div class="input-group date" data-provide="datepicker">
+                        <input type="text" autocomplete="off" name="dob" class="datepicker form-control <?= (!empty($_SESSION['date_of_birth_validation']) ? ('is-invalid') : '') ;?>" value="<?= (!empty($_SESSION['user_dob_error']) ? $_SESSION['user_dob_error']: $admin_data['dob']) ;?>" data-date-format="yyyy-mm-dd">
+                        <div class="input-group-addon">
+                            <span class="glyphicon glyphicon-th"></span>
+                        </div>
+                        <?= (!empty($_SESSION['date_of_birth_validation']) ? ('<div class="invalid-feedback">'.$_SESSION['date_of_birth_validation'].'</div>') : '') ;?>
+                      </div>
                   </div>
                   <div class="form-group">
                       <label for="tenant_gender" class="col-form-label font-weight-bold">Gender</label>

@@ -7,6 +7,7 @@
 
 <!-- Custom scripts for all pages-->
 <script src="<?=(isset($inside_folder) ? '../../assets/js/sb-admin-2.min.js' : '../assets/js/sb-admin-2.min.js');?>"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.3.0/js/bootstrap-datepicker.js"></script>
 <?php if(isset($_SESSION['user'])):?>
 <script>
     var fullUrl = "<?= $actual_link;?>";
@@ -15,6 +16,12 @@
 </script>
 <script src="<?=(isset($inside_folder) ? '../../assets/js/notification.js' : '../assets/js/notification.js');?>"></script>
 <?php endif;?>
+<script>
+    $(function() {
+        $.fn.datepicker.defaults.format = "yyyy-mm-dd";
+        $('.datepicker').datepicker();
+    });
+</script>
 <!-- Page level plugins -->
 <script src="<?=(isset($inside_folder) ? '../../assets/vendor/chart.js/Chart.min.js' : '../assets/vendor/chart.js/Chart.min.js');?>"></script>
 
