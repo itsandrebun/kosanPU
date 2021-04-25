@@ -111,7 +111,7 @@
                     ?>
                     <div class="form-group">
                         <label for="payment_evidence" class="col-form-label font-weight-bold">Payment Evidence</label>
-                        <img class="d-block payment_evidence_image" src="<?= '/../../'.$payment_history_master_data['payment_evidence'];?>" alt="" onError="this.onerror=null;this.src='../../assets/photo/invoice-icon-line-style-symbol-shopping-icon-collection-invoice-creative-element-logo-infographic-ux-ui-invoice-icon-169076566.jpg';">
+                        <img class="d-block payment_evidence_image" src="<?= $payment_evidence_src;?>" alt="" onError="this.onerror=null;this.src='../../assets/photo/invoice-icon-line-style-symbol-shopping-icon-collection-invoice-creative-element-logo-infographic-ux-ui-invoice-icon-169076566.jpg';">
                     </div>
                     <!-- <?= ($payment_history_master_data['payment_date']);?> -->
                     <div class="form-group">
