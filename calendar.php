@@ -202,12 +202,6 @@
             <div class="row">
                 <div class="col-md-6">
                     <label class="col-sm-label">Start Date</label>
-                    <!-- <div class="input-group date" data-provide="datepicker">
-                        <input type="text" autocomplete="off" readonly class="datepicker form-control" data-date-format="dd/mm/yyyy" name="booking_start_date">
-                        <div class="input-group-addon">
-                            <span class="glyphicon glyphicon-th"></span>
-                        </div>
-                    </div> -->
                     <input type="text" readonly class="form-control <?= (!empty($_SESSION['booking_start_date_validation']) ? ('is-invalid') : '') ;?>" name="booking_start_date" id="booking_start_date" <?= (!empty($_SESSION['booking_start_date_error']) ? ('value="'.$_SESSION['booking_start_date_error'].'"') : '') ;?>>
                     <!-- <?= (!empty($_SESSION['booking_start_date_validation']) ? ('<div class="invalid-feedback">'.$_SESSION['booking_start_date_validation'].'</div>') : '') ;?> -->
                 </div>

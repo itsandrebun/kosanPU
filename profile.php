@@ -117,7 +117,13 @@
                                     <?= (!empty($_SESSION['gender_validation']) ? ('<div class="invalid-feedback d-block">'.$_SESSION['gender_validation'].'</div>') : '') ;?>
                                 </td>
                                 <td class="pb-3">
-                                    <input type="date" name="user_dob" class="form-control <?= (!empty($_SESSION['user_dob_validation']) ? ('is-invalid') : '') ;?>" value="<?= $logged_in_user['dob'];?>">
+                                    <div class="input-group date" data-provide="datepicker">
+                                        <input type="text" autocomplete="off" readonly name="user_dob" class="datepicker form-control <?= (!empty($_SESSION['user_dob_validation']) ? ('is-invalid') : '') ;?>" value="<?= $logged_in_user['dob'];?>" data-date-format="dd/mm/yyyy">
+                                        <div class="input-group-addon">
+                                            <span class="glyphicon glyphicon-th"></span>
+                                        </div>
+                                    </div>
+                                    <!-- <input type="date" > -->
                                     <?= (!empty($_SESSION['user_dob_validation']) ? ('<div class="invalid-feedback">'.$_SESSION['user_dob_validation'].'</div>') : '') ;?>
                                 </td>
                             </tr>
