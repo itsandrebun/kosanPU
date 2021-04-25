@@ -93,7 +93,7 @@
           <form method="GET" class="mb-4 p-3" style="border:0.5px solid #c5c3c3;border-radius:1%;">
             <h5>Filter</h5>
             <div class="row mb-2">
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <select name="month" id="" class="form-control">
                       <option value="all">Choose Month</option>
                       <option value="01" <?= !empty($chosen_month) && $chosen_month == '01' ? 'selected' : '' ;?>>January</option>
@@ -110,7 +110,7 @@
                       <option value="12" <?= !empty($chosen_month) && $chosen_month == '12' ? 'selected' : '' ;?>>December</option>
                     </select>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-6">
                     <?php
                         $year = date('Y');
                     ?>
