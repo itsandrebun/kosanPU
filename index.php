@@ -3,7 +3,6 @@
   <head>
     <?php
       $page_title = "Landing Page";
-      // session_start();
       
       include "templates/header.php";
     ?>
