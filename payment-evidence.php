@@ -79,7 +79,7 @@
                 <div class="col-xs-4">
                     <!-- <input type="date" class="form-control <?= (!empty($_SESSION['payment_date_validation']) ? ('is-invalid') : '') ;?>" name="payment_date" <?= (!empty($_SESSION['payment_date']) ? ('value="'.$_SESSION['payment_date'].'"') : '') ;?>/> -->
                     <div class="input-group date" data-provide="datepicker">
-                        <input type="text" autocomplete="off" name="payment_date" class="datepicker form-control <?= (!empty($_SESSION['user_dob_validation']) ? ('is-invalid') : '') ;?>" <?= (!empty($_SESSION['payment_date']) ? ('value="'.$_SESSION['payment_date'].'"') : '') ;?> data-date-format="dd/mm/yyyy">
+                        <input type="text" autocomplete="off" name="payment_date" class="datepicker form-control <?= (!empty($_SESSION['payment_validation']) ? ('is-invalid') : '') ;?>" <?= (!empty($_SESSION['payment_date']) ? ('value="'.$_SESSION['payment_date'].'"') : '') ;?> data-date-format="mm/dd/yyyy">
                         <div class="input-group-addon">
                             <span class="glyphicon glyphicon-th"></span>
                         </div>
