@@ -44,20 +44,8 @@
           </div>
 
           <?php
-            // $tenant_data = array();
-
-            // $tenant_sql = "SELECT us.* FROM user AS us JOIN tenant AS tn ON tn.user_id = us.user_id";
-
-            // $tenants = $con->query($tenant_sql);
-
-            //     // echo $room_sql;
-            //     // print_r($rooms['num_rows']);
-            // if($tenants->num_rows > 0){
-            //     while($row = $tenants->fetch_assoc()) {
-            //         array_push($tenant_data, $row);
-            //     }
-            // }
-            // $con->close();
+            $top_tenant_list_array = array();
+            $top_booked_room_list_array = array();
             $chosen_month = date('m');
             if(isset($_GET['month'])){
               $chosen_month = $_GET['month'];
@@ -66,6 +54,10 @@
             if(isset($_GET['year'])){
               $chosen_year = $_GET['year'];
             }
+            $top_booked_room_sql = "SELECT rm.room_id, rm.room_name, (CASE WHEN COUNT(tr.room_id) IS NULL THEN 0 ELSE COUNT(tr.room_id) END) AS total_booked_room FROM room AS rm JOIN transaction AS tr ON tr.room_id = rm.room_id WHERE tr.transaction_type_id = 1 AND ((MONTH(tr.booking_start_date) = '".$chosen_month."' AND YEAR(tr.booking_start_date) = '".$chosen_year."') OR (MONTH(tr.booking_end_date) = '".$chosen_month."' AND YEAR(tr.booking_end_date) = '".$chosen_year."')) GROUP BY rm.room_id ORDER BY total_booked_room DESC LIMIT 5";
+
+            $top_tenant_list_sql = "SELECT us.user_id, us.first_name, us.last_name, us.email, us.phone_number, (CASE WHEN COUNT(inv.invoice_id) IS NULL THEN 0 ELSE COUNT(inv.invoice_id) END) AS total_transaction FROM user AS us JOIN invoice AS inv ON inv.user_id = us.user_id WHERE (MONTH(inv.created_date) = '".$chosen_month."' AND YEAR(inv.created_date) = '".$chosen_year."') GROUP BY us.user_id ORDER BY total_transaction DESC LIMIT 5";
+
             $booking_statistics_sql = "SELECT (SELECT (CASE WHEN COUNT(tr.transaction_id) IS NULL THEN 0 ELSE COUNT(tr.transaction_id) END) FROM transaction AS tr WHERE tr.transaction_type_id = 1 AND CURRENT_TIMESTAMP < tr.booking_start_date AND ((MONTH(tr.booking_start_date) = '".$chosen_month."' AND YEAR(tr.booking_start_date) = '".$chosen_year."') OR (MONTH(tr.booking_end_date) = '".$chosen_month."' AND YEAR(tr.booking_end_date) = '".$chosen_year."'))) AS total_pending_booking, (SELECT (CASE WHEN COUNT(tr.transaction_id) IS NULL THEN 0 ELSE COUNT(tr.transaction_id) END) FROM transaction AS tr WHERE tr.transaction_type_id = 1 AND CURRENT_TIMESTAMP BETWEEN tr.booking_start_date AND tr.booking_end_date AND ((MONTH(tr.booking_start_date) = '".$chosen_month."' AND YEAR(tr.booking_start_date) = '".$chosen_year."') OR (MONTH(tr.booking_end_date) = '".$chosen_month."' AND YEAR(tr.booking_end_date) = '".$chosen_year."'))) AS total_active_booking, (SELECT (CASE WHEN COUNT(tr.transaction_id) IS NULL THEN 0 ELSE COUNT(tr.transaction_id) END) FROM transaction AS tr WHERE tr.transaction_type_id = 1 AND CURRENT_TIMESTAMP > tr.booking_end_date AND ((MONTH(tr.booking_start_date) = '".$chosen_month."' AND YEAR(tr.booking_start_date) = '".$chosen_year."') OR (MONTH(tr.booking_end_date) = '".$chosen_month."' AND YEAR(tr.booking_end_date) = '".$chosen_year."'))) AS total_expired_booking, (SELECT (CASE WHEN COUNT(tr.transaction_id) IS NULL THEN 0 ELSE COUNT(tr.transaction_id) END) FROM transaction AS tr WHERE tr.transaction_type_id = 1 AND terminated_date IS NOT NULL AND ((MONTH(tr.booking_start_date) = '".$chosen_month."' AND YEAR(tr.booking_start_date) = '".$chosen_year."') OR (MONTH(tr.booking_end_date) = '".$chosen_month."' AND YEAR(tr.booking_end_date) = '".$chosen_year."'))) AS total_terminated_booking";
 
             $payment_statistics_sql = "SELECT (SELECT (CASE WHEN SUM(inv.total_payment) IS NULL THEN 0 ELSE SUM(inv.total_payment) END) FROM invoice AS inv WHERE inv.payment_status <= 2 AND (MONTH(inv.created_date) = '".$chosen_month."' AND YEAR(inv.created_date) = '".$chosen_year."')) AS total_pending_payment, (SELECT (CASE WHEN SUM(inv.total_payment) IS NULL THEN 0 ELSE SUM(inv.total_payment) END) FROM invoice AS inv WHERE inv.payment_status = 3 AND (MONTH(inv.created_date) = '".$chosen_month."' AND YEAR(inv.created_date) = '".$chosen_year."')) AS total_approved_payment, (SELECT (CASE WHEN SUM(inv.total_payment) IS NULL THEN 0 ELSE SUM(inv.total_payment) END) FROM invoice AS inv WHERE inv.payment_status = 4 AND (MONTH(inv.created_date) = '".$chosen_month."' AND YEAR(inv.created_date) = '".$chosen_year."')) AS total_rejected_payment";
@@ -74,12 +66,29 @@
               $booking_statistics_sql = "SELECT (SELECT (CASE WHEN COUNT(tr.transaction_id) IS NULL THEN 0 ELSE COUNT(tr.transaction_id) END) FROM transaction AS tr WHERE tr.transaction_type_id = 1 AND CURRENT_TIMESTAMP < tr.booking_start_date AND ((YEAR(tr.booking_start_date) = '".$chosen_year."') OR (YEAR(tr.booking_end_date) = '".$chosen_year."'))) AS total_pending_booking, (SELECT (CASE WHEN COUNT(tr.transaction_id) IS NULL THEN 0 ELSE COUNT(tr.transaction_id) END) FROM transaction AS tr WHERE tr.transaction_type_id = 1 AND CURRENT_TIMESTAMP BETWEEN tr.booking_start_date AND tr.booking_end_date AND ((YEAR(tr.booking_start_date) = '".$chosen_year."') OR (YEAR(tr.booking_end_date) = '".$chosen_year."'))) AS total_active_booking, (SELECT (CASE WHEN COUNT(tr.transaction_id) IS NULL THEN 0 ELSE COUNT(tr.transaction_id) END) FROM transaction AS tr WHERE tr.transaction_type_id = 1 AND CURRENT_TIMESTAMP > tr.booking_end_date AND ((YEAR(tr.booking_start_date) = '".$chosen_year."') OR (YEAR(tr.booking_end_date) = '".$chosen_year."'))) AS total_expired_booking, (SELECT (CASE WHEN COUNT(tr.transaction_id) IS NULL THEN 0 ELSE COUNT(tr.transaction_id) END) FROM transaction AS tr WHERE tr.transaction_type_id = 1 AND terminated_date IS NOT NULL AND ((YEAR(tr.booking_start_date) = '".$chosen_year."') OR (YEAR(tr.booking_end_date) = '".$chosen_year."'))) AS total_terminated_booking";
 
               $payment_statistics_sql = "SELECT (SELECT (CASE WHEN SUM(inv.total_payment) IS NULL THEN 0 ELSE SUM(inv.total_payment) END) FROM invoice AS inv WHERE inv.payment_status <= 2 AND (YEAR(inv.created_date) = '".$chosen_year."')) AS total_pending_payment, (SELECT (CASE WHEN SUM(inv.total_payment) IS NULL THEN 0 ELSE SUM(inv.total_payment) END) FROM invoice AS inv WHERE inv.payment_status = 3 AND (YEAR(inv.created_date) = '".$chosen_year."')) AS total_approved_payment, (SELECT (CASE WHEN SUM(inv.total_payment) IS NULL THEN 0 ELSE SUM(inv.total_payment) END) FROM invoice AS inv WHERE inv.payment_status = 4 AND (YEAR(inv.created_date) = '".$chosen_year."')) AS total_rejected_payment";
+
+              $top_booked_room_sql = "SELECT rm.room_id, rm.room_name, (CASE WHEN COUNT(tr.room_id) IS NULL THEN 0 ELSE COUNT(tr.room_id) END) AS total_booked_room FROM room AS rm JOIN transaction AS tr ON tr.room_id = rm.room_id WHERE tr.transaction_type_id = 1 AND ((YEAR(tr.booking_start_date) = '".$chosen_year."') OR (YEAR(tr.booking_end_date) = '".$chosen_year."')) GROUP BY rm.room_id ORDER BY total_booked_room DESC LIMIT 5";
+
+              $top_tenant_list_sql = "SELECT us.user_id, us.first_name, us.last_name, us.email, us.phone_number, (CASE WHEN COUNT(inv.invoice_id) IS NULL THEN 0 ELSE COUNT(inv.invoice_id) END) AS total_transaction FROM user AS us JOIN invoice AS inv ON inv.user_id = us.user_id WHERE (YEAR(inv.created_date) = '".$chosen_year."') GROUP BY us.user_id ORDER BY total_transaction DESC LIMIT 5";
             }
 
             $booking_statistics = $con->query($booking_statistics_sql);
             $booking_statistics = $booking_statistics->fetch_assoc();
             $payment_statistics = $con->query($payment_statistics_sql);
             $payment_statistics = $payment_statistics->fetch_assoc();
+            $top_booked_room = $con->query($top_booked_room_sql);
+            if($top_booked_room->num_rows > 0){
+              while($row = $top_booked_room->fetch_assoc()){
+                array_push($top_booked_room_list_array,$row);
+              }
+            }
+            $top_tenant_list = $con->query($top_tenant_list_sql);
+            if($top_tenant_list->num_rows > 0){
+              while($row = $top_tenant_list->fetch_assoc()){
+                array_push($top_tenant_list_array,$row);
+              }
+            }
+            $con->close();
           ?>
           <form method="GET" class="mb-4 p-3" style="border:0.5px solid #c5c3c3;border-radius:1%;">
             <h5>Filter</h5>
@@ -260,81 +269,18 @@
               <!-- Project Card Example -->
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">Most Booked Rooms</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">5 Most Booked Rooms</h6>
                 </div>
-                <div class="card-body">
-                  <h4 class="small font-weight-bold">Server Migration <span class="float-right">20%</span></h4>
-                  <div class="progress mb-4">
-                    <div class="progress-bar bg-danger" role="progressbar" style="width: 20%" aria-valuenow="20" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                  <h4 class="small font-weight-bold">Sales Tracking <span class="float-right">40%</span></h4>
-                  <div class="progress mb-4">
-                    <div class="progress-bar bg-warning" role="progressbar" style="width: 40%" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                  <h4 class="small font-weight-bold">tenant Database <span class="float-right">60%</span></h4>
-                  <div class="progress mb-4">
-                    <div class="progress-bar" role="progressbar" style="width: 60%" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                  <h4 class="small font-weight-bold">Payout Details <span class="float-right">80%</span></h4>
-                  <div class="progress mb-4">
-                    <div class="progress-bar bg-info" role="progressbar" style="width: 80%" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                  <h4 class="small font-weight-bold">Account Setup <span class="float-right">Complete!</span></h4>
-                  <div class="progress">
-                    <div class="progress-bar bg-success" role="progressbar" style="width: 100%" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100"></div>
-                  </div>
-                </div>
-              </div>
-
-              <!-- Color System -->
-              <div class="row">
-                <div class="col-lg-6 mb-4">
-                  <div class="card bg-primary text-white shadow">
-                    <div class="card-body">
-                      Primary
-                      <div class="text-white-50 small">#4e73df</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-6 mb-4">
-                  <div class="card bg-success text-white shadow">
-                    <div class="card-body">
-                      Success
-                      <div class="text-white-50 small">#1cc88a</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-6 mb-4">
-                  <div class="card bg-info text-white shadow">
-                    <div class="card-body">
-                      Info
-                      <div class="text-white-50 small">#36b9cc</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-6 mb-4">
-                  <div class="card bg-warning text-white shadow">
-                    <div class="card-body">
-                      Warning
-                      <div class="text-white-50 small">#f6c23e</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-6 mb-4">
-                  <div class="card bg-danger text-white shadow">
-                    <div class="card-body">
-                      Danger
-                      <div class="text-white-50 small">#e74a3b</div>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-lg-6 mb-4">
-                  <div class="card bg-secondary text-white shadow">
-                    <div class="card-body">
-                      Secondary
-                      <div class="text-white-50 small">#858796</div>
-                    </div>
-                  </div>
+                <div class="card-body<?= count($top_booked_room_list_array) == 0 ? 'text-center p-4' : '';?>">
+                  <?php if(count($top_booked_room_list_array) == 0):?>
+                    <span>No data found</span>
+                  <?php else:?>
+                  <ul class="list-group">
+                    <?php for($k = 0; $k < count($top_booked_room_list_array); $k++):?>
+                      <li class="list-group-item"><?= $top_booked_room_list_array[$k]['room_name'] . ' ('.$top_booked_room_list_array[$k]['total_booked_room'].' times)';?></li>
+                    <?php endfor;?>
+                  </ul>
+                  <?php endif;?>
                 </div>
               </div>
 
@@ -345,25 +291,18 @@
               <!-- Illustrations -->
               <div class="card shadow mb-4">
                 <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">Most Active Tenants</h6>
+                  <h6 class="m-0 font-weight-bold text-primary">5 Most Active Tenants</h6>
                 </div>
-                <div class="card-body">
-                  <div class="text-center">
-                    <img class="img-fluid px-3 px-sm-4 mt-3 mb-4" style="width: 25rem;" src="../assets/img/undraw_posting_photo.svg" alt="">
-                  </div>
-                  <p>Add some quality, svg illustrations to your project courtesy of <a target="_blank" rel="nofollow" href="https://undraw.co/">unDraw</a>, a constantly updated collection of beautiful svg images that you can use completely free and without attribution!</p>
-                  <a target="_blank" rel="nofollow" href="https://undraw.co/">Browse Illustrations on unDraw &rarr;</a>
-                </div>
-              </div>
-
-              <!-- Approach -->
-              <div class="card shadow mb-4">
-                <div class="card-header py-3">
-                  <h6 class="m-0 font-weight-bold text-primary">Development Approach</h6>
-                </div>
-                <div class="card-body">
-                  <p>SB Admin 2 makes extensive use of Bootstrap 4 utility classes in order to reduce CSS bloat and poor page performance. Custom CSS classes are used to create custom components and custom utility classes.</p>
-                  <p class="mb-0">Before working with this theme, you should become familiar with the Bootstrap framework, especially the utility classes.</p>
+                <div class="card-body<?= count($top_tenant_list_array) == 0 ? 'text-center p-4' : '';?>">
+                  <?php if(count($top_tenant_list_array) == 0):?>
+                    <span>No data found</span>
+                  <?php else:?>
+                  <ul class="list-group">
+                    <?php for($k = 0; $k < count($top_tenant_list_array); $k++):?>
+                      <li class="list-group-item"><?= $top_tenant_list_array[$k]['first_name'] . ' ' . $top_tenant_list_array[$k]['last_name'] . ' - ' .$top_tenant_list_array[$k]['email'].' ('.$top_tenant_list_array[$k]['total_transaction'].' times)';?></li>
+                    <?php endfor;?>
+                  </ul>
+                  <?php endif;?>
                 </div>
               </div>
 
