@@ -18,6 +18,8 @@
 
         if(!empty($company_name) && !empty($company_address) && (!empty($rent_cost) && $rent_cost_temp > 0) && (!empty($deposit) && $deposit > 0)){
             include "../DB_connection.php";
+            $database = new Database();
+            $con = $database->getConnection();
             $modification_sql = "";
             if(!empty($internal_data_existence)){
                 $modification_sql = "UPDATE internal_parameter SET parameter_value = (CASE WHEN parameter_name = 'rent_cost' THEN ".$rent_cost_temp." WHEN parameter_name = 'deposit' THEN ".$deposit_temp." WHEN parameter_name = 'company_name' THEN '".$company_name."' WHEN parameter_name = 'company_address' THEN '".$company_address."' END)";
