@@ -158,6 +158,7 @@
                     <thead>
                         <tr>
                             <th>Equipment Name</th>
+                            <th class="text-right">Price per item</th>
                             <th class="text-center">Fine Status</th>
                         </tr>
                     </thead>
@@ -165,7 +166,7 @@
                         <?php $total_fine_cost = 0; ?>
                         <?php if(count($equipment_data) == 0):?>
                         <tr>
-                            <td colspan="2" class="text-center" style="font-size:11px">No data found!</td>
+                            <td colspan="3" class="text-center" style="font-size:11px">No data found!</td>
                         </tr>
                         <?php else:?>
                             <?php for($b = 0; $b < count($equipment_data); $b++):?>
@@ -174,8 +175,9 @@
                                     $total_fine_cost += $equipment_data[$b]['fine_cost'];
                                 }    
                             ?>
-                            <tr<?= $equipment_data[$b]['fine_status'] == 0 ? ' class="table-success"' : ' class="table-danger"';?>>
-                                <td><?= $equipment_data[$b]['equipment_name'].' ('.$equipment_data[$b]['fine_cost'].')';?></td>
+                            <tr<?= $equipment_data[$b]['fine_status'] == 0 ? ' class="table-success"' : ' class="table-danger font-weight-bold"';?>>
+                                <td><?= $equipment_data[$b]['equipment_name'];?></td>
+                                <td class="text-right"><?= $currency->convert($equipment_data[$b]['fine_cost']);?></td>
                                 <td class="text-center"><?= $equipment_data[$b]['fine_status'] == 0 ? 'No' : 'Yes';?></td>
                             </tr>
                             <?php endfor;?>
@@ -240,12 +242,30 @@
                         <input type="hidden" name="due_end_date" value="<?= $due_end_date;?>">
                         <input type="hidden" name="company_name" value="<?= $internal_parameter_data[0]['parameter_value'];?>">
                         <input type="hidden" name="company_address" value="<?= $internal_parameter_data[1]['parameter_value'];?>">
-                        <ul class="list-group">
-                            <?php for($k = 0; $k < count($equipment_data); $k++):?>
-                                <li class="list-group-item"><input type="checkbox" class="mr-2" name="fined_equipment_status[]" value="<?= $equipment_data[$k]['equipment_id'];?>"<?= $equipment_data[$k]['fine_status'] == 0 ? ' ' : ' checked';?>><?= $equipment_data[$k]['equipment_name'].' ('.$equipment_data[$k]['fine_cost'].')';?></li>
-                            <?php endfor;?>
-                            <li class="list-group-item font-weight-bold">Total Fine Cost: <?= $total_fine_cost;?></li>
-                        </ul>
+                        <table class="table table-striped">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Status</th>
+                                    <th scope="col">Equipment Name</th>
+                                    <th scope="col" class="text-right">Price per equipment</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php for($k = 0; $k < count($equipment_data); $k++):?>
+                                <tr<?= $equipment_data[$k]['fine_status'] == 0 ? ' ' : ' class="table-danger font-weight-bold"';?>>
+                                    <td><input type="checkbox" class="mr-2" name="fined_equipment_status[]" value="<?= $equipment_data[$k]['equipment_id'];?>"<?= $equipment_data[$k]['fine_status'] == 0 ? ' ' : ' checked';?>></td>
+                                    <td><?= $equipment_data[$k]['equipment_name'];?></td>
+                                    <td class="text-right"><?= $currency->convert($equipment_data[$k]['fine_cost']);?></td>
+                                </tr>
+                                <?php endfor;?>
+                            </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="2" class="font-weight-bold">Total Fine Cost</td>
+                                    <td class="text-right"><?= $currency->convert($total_fine_cost);?></td>
+                                </tr>
+                            </tfoot>
+                        </table>
                         
                     </form>
                 </div>
